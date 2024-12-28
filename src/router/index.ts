@@ -5,7 +5,7 @@ const publicRoutes = [
   {
     path: '/',
     name: 'main',
-    component: () => import('@/ui/views/public/Main.vue'),
+    component: () => import('@/ui/views/public/Home.vue'),
   },
 ];
 

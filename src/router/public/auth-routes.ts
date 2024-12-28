@@ -2,6 +2,11 @@ import type { RouteRecordRaw } from 'vue-router';
 
 const AuthRoutes: RouteRecordRaw[] = [
   {
+    path: '/login',
+    name: 'login',
+    component: () => import('@/ui/views/public/auth/Login.vue'),
+  },
+  {
     path: '/login/not-available',
     name: 'not-available',
     component: () => import('@/ui/views/public/auth/NotAvailable.vue'),

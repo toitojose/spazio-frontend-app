@@ -1,0 +1,12 @@
+{
+  "login": {
+    "title": "Iniciar sesión",
+    "email": "Correo electrónico",
+    "password": "Contraseña",
+    "login": "Ingresar",
+    "emptyEmail": "El correo electrónico no puede estar vacío.",
+    "emptyPassword": "La contraseña no puede estar vacía.",
+    "forgetPassword": "¿Olvidaste tu contraseña?",
+    "failed": "Error al iniciar sesión. Inténtalo de nuevo."
+  }
+}
