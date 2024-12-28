@@ -10,10 +10,7 @@ export default defineConfig(({ mode }) => {
   const editor = env.VITE_EDITOR || 'code';
 
   return {
-    plugins: [
-        vue(),
-      tsconfigPaths({ projects: ['./tsconfig.app.json'] }),
-      mode === 'dev' ? vueDevTools({ launchEditor: editor }) : null].filter(Boolean),
+    plugins: [vue(), tsconfigPaths({ projects: ['./tsconfig.app.json'] }), mode === 'dev' ? vueDevTools({ launchEditor: editor }) : null].filter(Boolean),
     resolve: {
       alias: {
         '@': fileURLToPath(new URL('./src', import.meta.url)),
@@ -23,7 +20,7 @@ export default defineConfig(({ mode }) => {
       'import.meta.vitest': mode === 'production' ? 'undefined' : 'import.meta.vitest',
     },
     css: {
-      // Configuración futura de preprocesadores o estilos globales
+      postcss: './postcss.config.cjs',
     },
     build: {
       minify: 'terser', // Minimiza el código para producción
