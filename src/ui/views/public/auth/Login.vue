@@ -1,9 +1,5 @@
 <template>
   <Auth :title="$t('login.title')" :subtitle="$t('login.subtitle')">
-    <template #seo>
-      <title>{{ $t('login.metaTitle') }}</title>
-      <meta name="description" content="{{ $t('login.metaDescription') }}" />
-    </template>
     <form @submit.prevent="onSubmit">
       <div class="mb-4">
         <InputText v-model="email" :placeholder="$t('login.email')" :class="{ 'p-invalid': email === '' && errorMessage !== '' }" size="small" class="w-full" />
