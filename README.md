@@ -36,7 +36,7 @@ Este proyecto utiliza Vue 3, Pinia, TypeScript, Vite y PrimeVue para construir u
     - Para levantar el entorno local, usa los scripts disponibles en `spazio-local-dev` que gestionan la base de datos y el backend.
     - Asegúrate de que las variables de entorno para conectarte al backend local estén configuradas correctamente en el archivo `.env`.
 
-3. Configuración de rutas en el archivo `router/index.ts`. Se han dividido en rutas públicas y privadas. Las rutas de autenticación se encuentran en `router/public/auth-routes.ts`.
+3. Configuración de rutas en el archivo `router/i18n.ts`. Se han dividido en rutas públicas y privadas. Las rutas de autenticación se encuentran en `router/public/auth-routes.ts`.
 
 ## Ejecución del proyecto
 
