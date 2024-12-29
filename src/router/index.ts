@@ -1,4 +1,5 @@
 import { createRouter, createWebHistory } from 'vue-router';
+import AuthRoutes from '@/router/public/auth-routes.ts';
 
 // Rutas públicas
 const publicRoutes = [
@@ -9,7 +10,7 @@ const publicRoutes = [
   },
 ];
 
-const routes = [...publicRoutes];
+const routes = [...publicRoutes, ...AuthRoutes];
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
