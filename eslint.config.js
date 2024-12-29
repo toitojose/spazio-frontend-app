@@ -58,13 +58,6 @@ export default [
         },
       ],
       'vue/attributes-order': 'error',
-      'vue/html-closing-bracket-newline': [
-        'error',
-        {
-          singleline: 'never',
-          multiline: 'never',
-        },
-      ],
       'vue/html-closing-bracket-spacing': 'error',
       'vue/max-attributes-per-line': [
         'error',
