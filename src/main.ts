@@ -6,20 +6,10 @@ import PrimeVue from 'primevue/config';
 import 'tailwindcss/tailwind.css';
 import 'public/spazio.css';
 import 'primeicons/primeicons.css';
-import messages from '@/locales';
-import { createI18n } from 'vue-i18n';
 import Aura from '@primevue/themes/aura';
-import { createHead } from '@vueuse/head';
-
-const i18n = createI18n({
-  locale: 'es',
-  fallbackLocale: 'en',
-  messages,
-});
-const headHtml = createHead();
+import { i18n } from '@/locales/i18n';
 
 const app = createApp(App);
-app.use(headHtml);
 app.use(router);
 app.use(createPinia());
 app.use(i18n);
