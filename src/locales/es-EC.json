@@ -1,4 +1,13 @@
 {
+  "default": {
+    "title": "Spazio",
+    "subtitle": "Gestiona tus propiedades e incentivos de manera segura",
+    "returnButton": "Regresar",
+    "submitButton": "Enviar",
+    "cancelButton": "Cancelar",
+    "metaTitle": "Spazio - Gestión de propiedades",
+    "metaDescription": "La plataforma ideal para gestionar propiedades, incentivos y mucho más de forma eficiente y segura."
+  },
   "login": {
     "title": "Iniciar sesión",
     "subtitle": "Ingresa tus datos para continuar",
