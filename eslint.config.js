@@ -27,7 +27,7 @@ export default [
     },
     rules: {
       'arrow-body-style': 'off',
-      'arrow-parens': ['error', 'as-needed'],
+      'arrow-parens': ['error', 'always'],
       'comma-dangle': ['error', 'always-multiline'],
       'func-names': 'off',
       'linebreak-style': 0,
@@ -86,7 +86,12 @@ export default [
           math: 'always',
         },
       ],
-      'prettier/prettier': 'error',
+      'prettier/prettier': [
+        'error',
+        {
+          arrowParens: 'always', // Permite omitir paréntesis en argumentos únicos
+        },
+      ],
     },
   },
   {
