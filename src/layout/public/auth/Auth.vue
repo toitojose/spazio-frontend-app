@@ -1,7 +1,4 @@
 <template>
-  <headHtml>
-    <slot name="seo"></slot>
-  </headHtml>
   <div class="bg-cover bg-center bg-img">
     <div class="min-h-screen flex flex-col justify-center items-center bg-opacity-70">
       <div class="font-logo text-white text-5xl drop-shadow-lg mb-3">SPAZ10</div>
