@@ -19,7 +19,10 @@
     "forgetPassword": "¿Olvidaste tu contraseña?",
     "failed": "Error al iniciar sesión. Inténtalo de nuevo.",
     "metaTitle": "Inicio de sesión - Spazio",
-    "metaDescription": "Accede a tu cuenta de Spazio para gestionar tus propiedades e incentivos de manera segura."
+    "metaDescription": "Accede a tu cuenta de Spazio para gestionar tus propiedades e incentivos de manera segura.",
+    "invalidEmail": "El correo ingresado no es válido.",
+    "weakPassword": "La contraseña debe tener al menos 8 caracteres.",
+    "shortPassword": "La contraseña es muy corta."
   },
   "notAvailable": {
     "title": "¡Ups!",
@@ -68,5 +71,23 @@
     "failed": "No se pudo restablecer la contraseña. Inténtalo nuevamente.",
     "metaTitle": "Restaurar contraseña - Spazio",
     "metaDescription": "Establece una nueva contraseña para acceder a tu cuenta de Spazio y mantenerla protegida."
+  },
+  "dashboard": {
+    "title": "Dashboard",
+    "subtitle": "Bienvenido a tu dashboard de control",
+    "properties": "Propiedades",
+    "incentives": "Incentivos",
+    "metaTitle": "Dashboard - Spazio",
+    "metaDescription": "Administra tus propiedades e incentivos de forma segura y eficiente desde tu tablero de control."
+  },
+  "error": {
+    "loginFailed": "Error al iniciar sesión",
+    "invalidCredential": "Credenciales inválidas",
+    "unauthorized": "No autorizado",
+    "forbidden": "Acceso denegado",
+    "notFound": "Recurso no encontrado.",
+    "serverError": "Error interno del servidor",
+    "noResponse": "No se recibió ninguna respuesta del servidor. Verifique su conexión",
+    "unhandled": "Error inesperado. Intente de nuevo más tarde"
   }
 }

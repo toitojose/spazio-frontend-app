@@ -1,6 +1,9 @@
 <template>
   <Auth :title="$t('login.title')" :subtitle="$t('login.subtitle')">
     <form @submit.prevent="onSubmit">
+      <div v-if="errorMessage" class="mb-4">
+        <Message severity="error" size="small">{{ errorMessage }}</Message>
+      </div>
       <div class="mb-4">
         <InputText v-model="email" :placeholder="$t('login.email')" :class="{ 'p-invalid': email === '' && errorMessage !== '' }" size="small" class="w-full" />
         <small v-if="email === '' && errorMessage !== ''" class="p-error">
@@ -44,7 +47,13 @@ import InputText from 'primevue/inputtext';
 import Password from 'primevue/password';
 import Button from 'primevue/button';
 import ProgressSpinner from 'primevue/progressspinner';
+import Message from 'primevue/message';
 import Auth from '@/layout/public/auth/Auth.vue';
+import { LoginService } from '@/services/login-service.ts';
+import { authBackendClient } from '@/services/auth-backend-client.ts';
+import { errorHandlerService } from '@/services/error-handler-service.ts';
+import { useUserStore } from '@/store/user.ts';
+import type { AxiosError } from 'axios';
 
 export default defineComponent({
   name: 'Login',
@@ -54,6 +63,7 @@ export default defineComponent({
     Password,
     Button,
     ProgressSpinner,
+    Message,
   },
   setup() {
     const email = ref('');
@@ -63,51 +73,44 @@ export default defineComponent({
     const router = useRouter();
     const { t } = useI18n();
 
+    const loginService = new LoginService(authBackendClient);
+
     const sanitizeMail = (mail: string): string => mail.toLowerCase().trim();
 
-    const isValidEmail = (email: string): boolean => {
-      const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-      return emailRegex.test(email);
-    };
-
-    const onSubmit = async () => {
-      errorMessage.value = '';
-
-      if (!isValidEmail(email.value)) {
-        errorMessage.value = t('login.invalidEmail');
-        return;
-      }
-
-      if (password.value.length < 8) {
-        errorMessage.value = t('login.weakPassword');
-        return;
-      }
-
-      isLoading.value = true;
-      const sanitizedMail = sanitizeMail(email.value);
-
+    const handleLogin = async () => {
       try {
-        const user = await fakeLoginService(sanitizedMail, password.value);
-        if (user) {
+        const sanitizedEmail = sanitizeMail(email.value);
+        const response = await loginService.login(sanitizedEmail, password.value);
+
+        if (response.result && response.data) {
+          const { user, token } = response.data;
+
+          // Guardar usuario en Pinia
+          const userStore = useUserStore();
+          userStore.setUser({ id: user.id, username: user.username, roles: user.roles }, token);
+
           router.push({ name: 'dashboard' });
+        } else if (response.error?.key) {
+          errorMessage.value = t(`error.${response.error.key}`) || t('error.unhandled');
+        } else {
+          errorMessage.value = t('error.unhandled');
         }
       } catch (error) {
-        errorMessage.value = t('login.failed');
+        const handledError = errorHandlerService.handleError(error as AxiosError);
+        errorMessage.value = t(`error.${handledError.key}`) || handledError.message || t('error.unhandled');
       } finally {
         isLoading.value = false;
       }
     };
 
-    const fakeLoginService = async (email: string, password: string): Promise<any> => {
-      return new Promise((resolve, reject) => {
-        setTimeout(() => {
-          if (email === 'test@spazio.com' && password === '123456') {
-            resolve({ name: 'Test User' });
-          } else {
-            reject();
-          }
-        }, 1000);
-      });
+    const onSubmit = async () => {
+      errorMessage.value = '';
+      if (!email.value.trim() || !password.value.trim()) {
+        errorMessage.value = t('login.emptyFields');
+        return;
+      }
+      isLoading.value = true;
+      await handleLogin();
     };
 
     return {

@@ -1,5 +1,6 @@
 import { createRouter, createWebHistory } from 'vue-router';
 import AuthRoutes from '@/router/public/auth-routes';
+import BackofficeRoutes from '@/router/private/backoffice-routes.ts';
 import { i18n } from '@/locales/i18n';
 
 // Rutas públicas
@@ -17,7 +18,7 @@ const publicRoutes = [
 ];
 
 // Consolidar rutas
-const routes = [...publicRoutes, ...AuthRoutes];
+const routes = [...publicRoutes, ...AuthRoutes, ...BackofficeRoutes];
 
 // Crear instancia del router
 const router = createRouter({
