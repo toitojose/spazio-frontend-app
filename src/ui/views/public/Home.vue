@@ -118,24 +118,22 @@
       </section>
 
       <!-- Beneficios -->
-      <section id="beneficios" class="p-20 h-screen flex items-left items-center relative">
-        <div id="tsparticles" class="absolute inset-0 -z-10"></div>
-
-        <div class="max-w-6xl mx-auto px-4 text-center relative z-10 text-white">
+      <section id="beneficios" class="h-screen bg-center bg-cover bg-img-5 flex items-left items-center relative">
+        <div class="max-w-6xl mx-auto py-10 px-20 text-center relative z-10 text-white bg-black/60">
           <h2 class="text-4xl font-logo font-bold mb-8">Beneficios: Más que solo resultados</h2>
           <div class="grid md:grid-cols-3 gap-10">
-            <div class="border border-white/25 bg-white/5 shadow-md p-6">
-              <div class="flex items-center justify-center bg-white text-secondary rounded-full p-3 icon">
-                <i class="pi pi-check-circle" style="font-size: 2rem"></i>
-              </div>
+            <div class="border border-white/20 backdrop-blur-sm shadow-md p-6">
+              <i class="pi pi-shield" style="font-size: 2rem"></i>
               <h3 class="text-xl font-semibold mb-2">Construimos confianza</h3>
               <p>Ayudamos a que inquilinos y propietarios vivan una experiencia transparente y sin fricciones.</p>
             </div>
-            <div class="border border-white/25 bg-white/5 shadow-md p-6">
+            <div class="border border-white/20 backdrop-blur-sm shadow-md p-6">
+              <i class="pi pi-star" style="font-size: 2rem"></i>
               <h3 class="text-xl font-semibold mb-2">Recompensas que motivan</h3>
               <p>Creamos un sistema de recompensas que premia la puntualidad y genera valor real.</p>
             </div>
-            <div class="border border-white/25 bg-white/5 shadow-md p-6">
+            <div class="border border-white/20 backdrop-blur-sm shadow-md p-6">
+              <i class="pi pi-clock" style="font-size: 2rem"></i>
               <h3 class="text-xl font-semibold mb-2">Impulsamos tu tranquilidad</h3>
               <p>Automatizamos procesos para que tengas tiempo para lo importante: disfrutar tu hogar.</p>
             </div>
@@ -144,7 +142,7 @@
       </section>
 
       <!-- Call to Action -->
-      <section id="unete" class="h-screen bg-center bg-cover bg-img-2 text-white py-20 flex items-left items-center">
+      <section id="unete" class="h-screen bg-center bg-cover bg-img-4 text-white py-20 flex items-left items-center">
         <div class="w-1/3 text-left p-8">
           <h2 class="text-4xl font-bold mb-8">Únete a Spazio</h2>
           <p class="text-lg mb-8">Sé parte de la revolución del mercado de arriendos. Regístrate gratis y comienza a transformar tus pagos en beneficios hoy mismo.</p>
@@ -266,8 +264,16 @@ export default defineComponent({
   background-image: url('@/assets/img/luz.jpg');
   background-position: right 30%;
 }
-.bg-img-2 {
+.bg-img-3 {
+  background-image: url('@/assets/img/3.jpg');
+  background-position: left center;
+}
+.bg-img-4 {
   background-image: url('@/assets/img/4.jpg');
+  background-position: left center;
+}
+.bg-img-5 {
+  background-image: url('@/assets/img/5.jpg');
   background-position: left center;
 }
 .bg-parallax-image {
