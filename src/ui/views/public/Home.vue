@@ -8,7 +8,9 @@
         </div>
         <ul>
           <li v-for="item in sidebarItems" :key="item.id">
-            <a :href="item.href" class="text-sm uppercase scroll-smooth" :class="{ active: isActive(item.href) }" @click="scrollToSection(item.href)">{{ item.label }}</a>
+            <a class="text-sm uppercase cursor-pointer scroll-smooth" :class="{ active: isActive(item.href) }" @click.prevent="scrollToSection(item.href)">
+              {{ item.label }}
+            </a>
           </li>
         </ul>
       </div>
@@ -184,11 +186,13 @@ export default defineComponent({
     };
 
     const scrollToSection = (id: string): void => {
-      isActive(id);
       const section = document.querySelector(id);
 
       if (section) {
-        section.scrollIntoView({ behavior: 'smooth' });
+        section.scrollIntoView({ behavior: 'smooth', block: 'start' }); // Asegura el desplazamiento suave
+        setTimeout(() => {
+          window.history.replaceState(null, '', id); // Actualiza el hash después de completar el desplazamiento
+        }, 800);
       }
     };
 
@@ -210,6 +214,15 @@ export default defineComponent({
         }
       });
     };
+    const debounce = (func: () => void, wait: number) => {
+      let timeout: ReturnType<typeof setTimeout> | null = null;
+      return () => {
+        if (timeout) clearTimeout(timeout);
+        timeout = setTimeout(func, wait);
+      };
+    };
+
+    const updateHashBasedOnScrollDebounced = debounce(updateHashBasedOnScroll, 100);
 
     const initializeHashAndScroll = () => {
       const initialHash = window.location.hash || sidebarItems[0].href;
@@ -218,22 +231,13 @@ export default defineComponent({
     };
 
     const smoothScrollOnWheel = () => {
-      let isScrolling = false;
-
       const handleWheel = (event: WheelEvent) => {
-        if (isScrolling) return;
-
         const direction = event.deltaY > 0 ? 1 : -1;
         const currentIndex = sidebarItems.findIndex((item) => window.location.hash === item.href);
+        const nextIndex = currentIndex + direction;
 
-        if ((direction === 1 && currentIndex < sidebarItems.length - 1) || (direction === -1 && currentIndex > 0)) {
-          const nextIndex = currentIndex + direction;
-          isScrolling = true;
+        if (nextIndex >= 0 && nextIndex < sidebarItems.length) {
           scrollToSection(sidebarItems[nextIndex].href);
-
-          setTimeout(() => {
-            isScrolling = false;
-          }, 800);
         }
       };
 
@@ -249,12 +253,14 @@ export default defineComponent({
       });
       initializeHashAndScroll();
       smoothScrollOnWheel();
-      window.addEventListener('scroll', updateHashBasedOnScroll);
+      window.addEventListener('scroll', updateHashBasedOnScrollDebounced);
 
       initializeVanta(vantaRef.value);
     });
 
     onBeforeUnmount(() => {
+      window.removeEventListener('scroll', updateHashBasedOnScrollDebounced);
+      window.removeEventListener('wheel', smoothScrollOnWheel);
       destroyVanta();
     });
 
@@ -281,10 +287,6 @@ export default defineComponent({
 }
 .bg-img-4 {
   background-image: url('@/assets/img/4.jpg');
-  background-position: left center;
-}
-.bg-img-5 {
-  background-image: url('@/assets/img/5.jpg');
   background-position: left center;
 }
 .bg-parallax-image {
