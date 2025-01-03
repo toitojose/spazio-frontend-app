@@ -90,7 +90,7 @@
           <p class="text-md mb-4">Imaginamos un mundo donde inquilinos y propietarios se relacionen desde la confianza, transformando juntos la visión del mercado inmobiliario.</p>
 
           <div class="py-8 flex items-start space-x-6">
-            <div class="border border-primary-400 flex items-center justify-center text-secondary rounded-full p-3 icon">
+            <div class="border border-gray-600 flex items-center justify-center text-secondary rounded-full p-3 icon">
               <i class="pi pi-star" style="font-size: 1.5rem"></i>
             </div>
             <div>
@@ -99,7 +99,7 @@
             </div>
           </div>
           <div class="py-8 flex items-start space-x-6">
-            <div class="border border-primary-400 flex items-center justify-center text-secondary rounded-full p-3 icon">
+            <div class="border border-gray-600 flex items-center justify-center text-secondary rounded-full p-3 icon">
               <i class="pi pi-cog" style="font-size: 1.5rem"></i>
             </div>
             <div>
@@ -108,7 +108,7 @@
             </div>
           </div>
           <div class="pt-8 flex items-start space-x-6">
-            <div class="border border-primary-400 flex items-center justify-center text-secondary rounded-full p-3 icon">
+            <div class="border border-gray-600 flex items-center justify-center text-secondary rounded-full p-3 icon">
               <i class="pi pi-share-alt" style="font-size: 1.5rem"></i>
             </div>
             <div>
@@ -120,7 +120,7 @@
       </section>
 
       <!-- Beneficios -->
-      <section id="benefits" class="h-screen flex items-left items-center relative">
+      <section id="benefits" class="h-screen flex items-left items-center relative bg-violet-500">
         <div ref="vantaRef" class="w-full h-screen absolute inset-0"></div>
         <div class="max-w-6xl mx-auto py-10 px-20 text-center relative z-10 text-white">
           <h2 class="text-4xl font-logo font-bold mb-8">Beneficios: Más que solo resultados</h2>
