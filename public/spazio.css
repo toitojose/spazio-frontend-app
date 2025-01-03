@@ -1,7 +1,16 @@
 @import url('https://fonts.googleapis.com/css2?family=Poiret+One&display=swap');
+@import "@/assets/css/spazio-logo.css";
 
 .font-logo{
     font-family: "Poiret One", serif;
     font-weight: 400;
     font-style: normal;
+}
+
+:root {
+    --primary-color: #1f1f1f; /* Fondo principal del sidebar */
+    --secondary-color: #333333; /* Fondo para hover o detalles */
+    --accent-color: #4d4d4d; /* Color para separadores o líneas */
+    --text-color: #f5f5f5; /* Texto en blanco/gris claro */
+    --muted-text-color: #aaaaaa; /* Texto menos destacado */
 }

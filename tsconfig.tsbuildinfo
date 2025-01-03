@@ -1,0 +1,1 @@
+{"root":["./src/main.ts","./src/shims-tsparticles.d.ts","./src/vite-env.d.ts","./src/locales/i18n.ts","./src/router/index.ts","./src/router/private/backoffice-routes.ts","./src/router/public/auth-routes.ts","./src/services/auth-backend-client.ts","./src/services/error-handler-service.ts","./src/services/login-service.ts","./src/store/user.ts"],"errors":true,"version":"5.6.3"}
