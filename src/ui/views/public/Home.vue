@@ -261,7 +261,7 @@ export default defineComponent({
       };
     };
 
-    const handleScroll = debounce(() => {
+    const handleScrollAndResize = debounce(() => {
       updateHashBasedOnScroll();
     }, 100);
 
@@ -275,13 +275,15 @@ export default defineComponent({
       const initialHash = window.location.hash || sidebarItems[0].href;
       scrollToSection(initialHash);
       window.history.replaceState(null, '', initialHash);
-      window.addEventListener('scroll', handleScroll);
+      window.addEventListener('scroll', handleScrollAndResize);
+      window.addEventListener('resize', handleScrollAndResize);
 
       initializeVanta(vantaRef.value);
     });
 
     onBeforeUnmount(() => {
-      window.removeEventListener('scroll', handleScroll);
+      window.removeEventListener('scroll', handleScrollAndResize);
+      window.removeEventListener('resize', handleScrollAndResize);
       destroyVanta();
     });
 
