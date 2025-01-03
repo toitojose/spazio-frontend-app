@@ -118,8 +118,9 @@
       </section>
 
       <!-- Beneficios -->
-      <section id="beneficios" class="h-screen bg-center bg-cover bg-img-5 flex items-left items-center relative">
-        <div class="max-w-6xl mx-auto py-10 px-20 text-center relative z-10 text-white bg-black/60">
+      <section id="beneficios" class="h-screen flex items-left items-center relative">
+        <div ref="vantaRef" class="w-full h-screen absolute inset-0"></div>
+        <div class="max-w-6xl mx-auto py-10 px-20 text-center relative z-10 text-white">
           <h2 class="text-4xl font-logo font-bold mb-8">Beneficios: Más que solo resultados</h2>
           <div class="grid md:grid-cols-3 gap-10">
             <div class="border border-white/20 backdrop-blur-sm shadow-md p-6">
@@ -154,10 +155,11 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, onMounted, ref } from 'vue';
+import { defineComponent, onBeforeUnmount, onMounted, ref } from 'vue';
 import Button from 'primevue/button';
 import Card from 'primevue/card';
 import Typed from 'typed.js';
+import { destroyVanta, initializeVanta } from '@/assets/anime/vantaHelper.ts';
 
 export default defineComponent({
   name: 'Home',
@@ -167,6 +169,7 @@ export default defineComponent({
   },
   setup() {
     const typedText = ref<HTMLElement | null>(null);
+    const vantaRef = ref<HTMLElement | null>(null);
     const sidebarItems = [
       { id: 'welcome', href: '#welcome', label: 'Bienvenidos' },
       { id: 'connection', href: '#connection', label: 'Más que un gasto' },
@@ -174,6 +177,7 @@ export default defineComponent({
       { id: 'beneficios', href: '#beneficios', label: 'Beneficios' },
       { id: 'unete', href: '#unete', label: 'Únete' },
     ];
+
     const isActive = (href: string): boolean => {
       const currentHash = window.location.hash;
       return currentHash === href;
@@ -236,7 +240,7 @@ export default defineComponent({
       window.addEventListener('wheel', handleWheel, { passive: false });
     };
 
-    onMounted(() => {
+    onMounted(async () => {
       new Typed(typedText.value, {
         strings: ['Transformamos espacios en hogares.', 'Un espacio para ti.'],
         typeSpeed: 40,
@@ -246,6 +250,12 @@ export default defineComponent({
       initializeHashAndScroll();
       smoothScrollOnWheel();
       window.addEventListener('scroll', updateHashBasedOnScroll);
+
+      initializeVanta(vantaRef.value);
+    });
+
+    onBeforeUnmount(() => {
+      destroyVanta();
     });
 
     return {
@@ -253,6 +263,7 @@ export default defineComponent({
       sidebarItems,
       scrollToSection,
       isActive,
+      vantaRef,
     };
   },
 });
