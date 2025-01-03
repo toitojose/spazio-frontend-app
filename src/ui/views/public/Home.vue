@@ -229,7 +229,7 @@ export default defineComponent({
 
       if (section) {
         section.scrollIntoView({ behavior: 'smooth', block: 'start' });
-        currentHash.value = id;
+        currentHash.value = id; // Actualiza el hash actual
       }
     };
 
@@ -252,6 +252,7 @@ export default defineComponent({
         }
       });
     };
+
     const debounce = (func: () => void, wait: number) => {
       let timeout: ReturnType<typeof setTimeout> | null = null;
       return () => {
@@ -260,27 +261,9 @@ export default defineComponent({
       };
     };
 
-    const updateHashBasedOnScrollDebounced = debounce(updateHashBasedOnScroll, 100);
-
-    const initializeHashAndScroll = () => {
-      const initialHash = window.location.hash || sidebarItems[0].href;
-      scrollToSection(initialHash);
-      window.history.replaceState(null, '', initialHash); // Update the hash without reloading
-    };
-
-    const smoothScrollOnWheel = () => {
-      const handleWheel = (event: WheelEvent) => {
-        const direction = event.deltaY > 0 ? 1 : -1;
-        const currentIndex = sidebarItems.findIndex((item) => window.location.hash === item.href);
-        const nextIndex = currentIndex + direction;
-
-        if (nextIndex >= 0 && nextIndex < sidebarItems.length) {
-          scrollToSection(sidebarItems[nextIndex].href);
-        }
-      };
-
-      window.addEventListener('wheel', handleWheel, { passive: false });
-    };
+    const handleScroll = debounce(() => {
+      updateHashBasedOnScroll();
+    }, 100);
 
     onMounted(async () => {
       new Typed(typedText.value, {
@@ -289,16 +272,16 @@ export default defineComponent({
         backSpeed: 40,
         loop: true,
       });
-      initializeHashAndScroll();
-      smoothScrollOnWheel();
-      window.addEventListener('scroll', updateHashBasedOnScrollDebounced);
+      const initialHash = window.location.hash || sidebarItems[0].href;
+      scrollToSection(initialHash);
+      window.history.replaceState(null, '', initialHash);
+      window.addEventListener('scroll', handleScroll);
 
       initializeVanta(vantaRef.value);
     });
 
     onBeforeUnmount(() => {
-      window.removeEventListener('scroll', updateHashBasedOnScrollDebounced);
-      window.removeEventListener('wheel', smoothScrollOnWheel);
+      window.removeEventListener('scroll', handleScroll);
       destroyVanta();
     });
 
