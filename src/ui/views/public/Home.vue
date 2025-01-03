@@ -8,7 +8,7 @@
         </div>
         <ul>
           <li v-for="item in sidebarItems" :key="item.id">
-            <a class="text-sm uppercase cursor-pointer scroll-smooth" :class="{ active: isActive(item.href) }" @click.prevent="scrollToSection(item.href)">
+            <a class="text-sm uppercase cursor-pointer scroll-smooth" :class="{ active: currentHash === item.href }" @click.prevent="scrollToSection(item.href)">
               {{ item.label }}
             </a>
           </li>
@@ -215,6 +215,7 @@ export default defineComponent({
   setup() {
     const typedText = ref<HTMLElement | null>(null);
     const vantaRef = ref<HTMLElement | null>(null);
+    const currentHash = ref<string>(window.location.hash || '#welcome');
     const sidebarItems = [
       { id: 'welcome', href: '#welcome', label: 'Bienvenidos' },
       { id: 'connection', href: '#connection', label: 'Más que un gasto' },
@@ -223,19 +224,12 @@ export default defineComponent({
       { id: 'contacts', href: '#contacts', label: 'Contáctanos' },
     ];
 
-    const isActive = (href: string): boolean => {
-      const currentHash = window.location.hash;
-      return currentHash === href;
-    };
-
     const scrollToSection = (id: string): void => {
       const section = document.querySelector(id);
 
       if (section) {
-        section.scrollIntoView({ behavior: 'smooth', block: 'start' }); // Asegura el desplazamiento suave
-        /*setTimeout(() => {
-          window.history.replaceState(null, '', id);
-        }, 800);*/
+        section.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        currentHash.value = id;
       }
     };
 
@@ -250,7 +244,8 @@ export default defineComponent({
 
           if (scrollPosition >= top && scrollPosition < bottom) {
             const newHash = sidebarItems[index].href;
-            if (window.location.hash !== newHash) {
+            if (currentHash.value !== newHash) {
+              currentHash.value = newHash; // Actualiza el hash actual
               window.history.replaceState(null, '', newHash);
             }
           }
@@ -311,7 +306,7 @@ export default defineComponent({
       typedText,
       sidebarItems,
       scrollToSection,
-      isActive,
+      currentHash,
       vantaRef,
     };
   },
