@@ -17,7 +17,7 @@
 
 <script lang="ts">
 import { defineComponent } from 'vue';
-import Footer from '@/components/public/Footer.vue';
+import Footer from '@/components/public/footer/Footer.vue';
 
 export default defineComponent({
   name: 'Generic',

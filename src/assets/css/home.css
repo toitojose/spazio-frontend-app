@@ -1,14 +1,19 @@
-#sidebar {
-    cursor: default;
-    left: 0;
-    overflow-x: hidden;
-    overflow-y: auto;
-    position: fixed;
-    text-align: right;
-    top: 0;
-    z-index: 10000;
+@media screen and (min-width: 500px) {
+    #home section {
+        height: auto !important;
+        display: block !important;
+    }
 }
 
+#sidebar{
+    color: var(--white-color);
+    width: 18rem;
+    background-color: var(--primary-color);
+    position: fixed;
+    height: 100vh;
+    text-align: right;
+    /* relative left-0 top-0 z-50 hidden h-screen w-72 cursor-default bg-sidebar pb-2 pl-10 pr-10 pt-10 sm:fixed sm:block sm:overflow-y-auto sm:overflow-x-hidden sm:text-right */
+}
 #sidebar > .inner {
     display: -moz-flex;
     display: -webkit-flex;
@@ -272,7 +277,7 @@ body.is-preload #sidebar ul li {
     opacity: 0;
 }
 
-@media screen and (max-width: 1280px) {
+/*@media screen and (max-width: 1280px) {
 
     #sidebar {
         height: 3.5em;
@@ -340,4 +345,4 @@ body.is-preload #sidebar ul li {
         display: none;
     }
 
-}
+}*/

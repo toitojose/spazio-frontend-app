@@ -23,7 +23,17 @@ html {
     --primary-color-900: #0c0c0c;
     --primary-color-950: #080808;
 
-
+    --p-primary-50: var(--primary-color-50);
+    --p-primary-100: var(--primary-color-100);
+    --p-primary-200: var(--primary-color-200);
+    --p-primary-300: var(--primary-color-300);
+    --p-primary-400: var(--primary-color-400);
+    --p-primary-500: var(--primary-color-500);
+    --p-primary-600: var(--primary-color-600);
+    --p-primary-700: var(--primary-color-700);
+    --p-primary-800: var(--primary-color-800);
+    --p-primary-900: var(--primary-color-900);
+    --p-primary-950: var(--primary-color-950);
 
     --accent-color-50: #fbf6fa;
     --accent-color-100: #eed5e5;
@@ -36,6 +46,33 @@ html {
     --accent-color-800: #652b50;
     --accent-color-900: #491f3a;
     --accent-color-950: #2e142;
+
+    --p-secondary-50: var(--accent-color-50);
+    --p-secondary-100: var(--accent-color-100);
+    --p-secondary-200: var(--accent-color-200);
+    --p-secondary-300: var(--accent-color-300);
+    --p-secondary-400: var(--accent-color-400);
+    --p-secondary-500: var(--accent-color-500);
+    --p-secondary-600: var(--accent-color-600);
+    --p-secondary-700: var(--accent-color-700);
+    --p-secondary-800: var(--accent-color-800);
+    --p-secondary-900: var(--accent-color-900);
+    --p-secondary-950: var(--accent-color-950);
+
+    --p-surface-0: var(--light-surface-0);
+    --p-surface-50: var(--light-surface-50);
+    --p-surface-100: var(--light-surface-100);
+    --p-surface-200: var(--light-surface-200);
+    --p-surface-300: var(--light-surface-300);
+    --p-surface-400: var(--light-surface-400);
+    --p-surface-500: var(--light-surface-500);
+    --p-surface-600: var(--light-surface-600);
+    --p-surface-700: var(--light-surface-700);
+    --p-surface-800: var(--light-surface-800);
+    --p-surface-900: var(--light-surface-900);
+    --p-surface-950: var(--light-surface-950);
+
+
 
     --red-50: #fef2f2;
     --red-100: #fee2e2;
@@ -51,6 +88,8 @@ html {
 
 
     --primary-color: var(--primary-color-500);
+    --secondary-color: var(--accent-color-500);
+    --accent-color: var(--light-surface-500);
 
     /*** LIGHT ***/
     --light-surface-0: #ffffff;

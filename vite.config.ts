@@ -10,7 +10,11 @@ export default defineConfig(({ mode }) => {
   const editor = env.VITE_EDITOR || 'code';
 
   return {
-    plugins: [vue(), tsconfigPaths({ projects: ['./tsconfig.app.json'] }), mode === 'dev' ? vueDevTools({ launchEditor: editor }) : null].filter(Boolean),
+    plugins: [
+      vue(),
+      tsconfigPaths({ projects: ['./tsconfig.app.json'] }),
+      mode === 'dev' ? vueDevTools({ launchEditor: editor }) : null,
+    ].filter(Boolean),
     resolve: {
       alias: {
         '@': fileURLToPath(new URL('./src', import.meta.url)),
@@ -36,6 +40,10 @@ export default defineConfig(({ mode }) => {
       globals: true,
       environment: 'jsdom',
       includeSource: ['src/**/*.{js,ts}'],
+    },
+    server: {
+      host: true, // Permite conexiones desde todas las interfaces
+      port: 5173, // Puerto predeterminado de Vite
     },
   };
 });

@@ -5,11 +5,12 @@
   "endOfLine": "lf",
   "semi": true,
   "tabWidth": 2,
-  "singleAttributePerLine": false,
+  "singleAttributePerLine": true,
   "bracketSameLine": true,
   "bracketSpacing": true,
   "htmlWhitespaceSensitivity": "strict",
   "jsxBracketSameLine": false,
   "arrowParens": "always",
-  "useTabs": false
+  "useTabs": false,
+  "plugins": ["prettier-plugin-tailwindcss"]
 }
