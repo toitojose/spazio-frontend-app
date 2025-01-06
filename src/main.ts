@@ -4,22 +4,24 @@ import router from '@/router';
 import { createPinia } from 'pinia';
 import PrimeVue from 'primevue/config';
 import 'tailwindcss/tailwind.css';
-import 'public/spazio.css';
 import 'primeicons/primeicons.css';
-import Aura from '@primevue/themes/aura';
+import { spazioThemePreset } from '@/assets/theme/spazio-theme-preset.ts';
+import 'public/spazio.css';
 import { i18n } from '@/locales/i18n';
+const isDarkMode = false;
 
 const app = createApp(App);
 app.use(router);
 app.use(createPinia());
 app.use(i18n);
+
 app.use(PrimeVue, {
   ripple: true,
   theme: {
-    preset: Aura,
+    preset: spazioThemePreset,
     options: {
-      cssLayer: false,
-      darkModeSelector: 'none',
+      prefix: 'sz',
+      darkModeSelector: isDarkMode ? '.dark' : 'none',
     },
   },
 });

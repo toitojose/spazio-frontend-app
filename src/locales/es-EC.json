@@ -89,5 +89,13 @@
     "serverError": "Error interno del servidor",
     "noResponse": "No se recibió ninguna respuesta del servidor. Verifique su conexión",
     "unhandled": "Error inesperado. Intente de nuevo más tarde"
+  },
+  "renter": {
+    "metaTitle": "Inquilino - Spazio",
+    "metaDescription": "Convierte tu arriendo en beneficios."
+  },
+  "propertyOwner": {
+    "metaTitle": "Propietario - Spazio",
+    "metaDescription": "Administra tus propiedades de forma segura y eficiente."
   }
 }

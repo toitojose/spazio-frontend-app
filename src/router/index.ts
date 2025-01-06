@@ -15,6 +15,24 @@ const publicRoutes = [
       metaDescription: 'default.metaDescription',
     },
   },
+  {
+    path: '/renter',
+    name: 'renter',
+    component: () => import('@/ui/views/public/Renter.vue'),
+    meta: {
+      metaTitle: 'renter.metaTitle',
+      metaDescription: 'renter.metaDescription',
+    },
+  },
+  {
+    path: '/property-owner',
+    name: 'property-owner',
+    component: () => import('@/ui/views/public/PropertyOwner.vue'),
+    meta: {
+      metaTitle: 'propertyOwner.metaTitle',
+      metaDescription: 'propertyOwner.metaDescription',
+    },
+  },
 ];
 
 // Consolidar rutas

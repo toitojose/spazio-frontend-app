@@ -6,11 +6,259 @@
     font-weight: 400;
     font-style: normal;
 }
-
-:root {
-    --primary-color: #1f1f1f; /* Fondo principal del sidebar */
-    --secondary-color: #333333; /* Fondo para hover o detalles */
-    --accent-color: #4d4d4d; /* Color para separadores o líneas */
-    --text-color: #f5f5f5; /* Texto en blanco/gris claro */
-    --muted-text-color: #aaaaaa; /* Texto menos destacado */
+html {
+    font-size: 14px;
 }
+:root {
+    --white-color: #ffffff;
+    --primary-color-50: #f4f4f4;
+    --primary-color-100: #c9c9c9;
+    --primary-color-200: #9f9f9f;
+    --primary-color-300: #747474;
+    --primary-color-400: #4a4a4a;
+    --primary-color-500: #1f1f1f;
+    --primary-color-600: #1a1a1a;
+    --primary-color-700: #161616;
+    --primary-color-800: #111111;
+    --primary-color-900: #0c0c0c;
+    --primary-color-950: #080808;
+
+
+
+    --accent-color-50: #fbf6fa;
+    --accent-color-100: #eed5e5;
+    --accent-color-200: #e0b3d0;
+    --accent-color-300: #d291bb;
+    --accent-color-400: #c570a6;
+    --accent-color-500: #b74e91;
+    --accent-color-600: #9c427b;
+    --accent-color-700: #803766;
+    --accent-color-800: #652b50;
+    --accent-color-900: #491f3a;
+    --accent-color-950: #2e142;
+
+    --red-50: #fef2f2;
+    --red-100: #fee2e2;
+    --red-200: #fecaca;
+    --red-300: #fca5a5;
+    --red-400: #f87171;
+    --red-500: #ef4444;
+    --red-600: #dc2626;
+    --red-700: #b91c1c;
+    --red-800: #991b1b;
+    --red-900: #7f1d1d;
+    --red-950: #450a0a;
+
+
+    --primary-color: var(--primary-color-500);
+
+    /*** LIGHT ***/
+    --light-surface-0: #ffffff;
+    --light-surface-50: #f7f6fb;
+    --light-surface-100: #d8d2ea;
+    --light-surface-200: #baaed9;
+    --light-surface-300: #9b8ac8;
+    --light-surface-400: #7d66b7;
+    --light-surface-500: #5e42a6;
+    --light-surface-600: #50388d;
+    --light-surface-700: #422e74;
+    --light-surface-800: #34245b;
+    --light-surface-900: #261a42;
+    --light-surface-950: #18112a;
+
+    --light-primary-color: var(--primary-color);
+    --light-primary-contrastColor: var(--white-color);
+    --light-primary-hoverColor: var(--primary-color-600);
+    --light-primary-activeColor: var(--primary-color-700);
+
+    --light-highlight-background: var(--primary-color-50);
+    --light-highlight-focusBackground: var(--primary-color-100);
+    --light-highlight-color: var(--primary-color-700);
+    --light-highlight-focusColor: var(--primary-color-800);
+
+    --light-mask-background: rgba(0,0,0,0.4);
+    --light-mask-color: var(--light-surface-200);
+
+
+    --light-formField-background: var(--light-surface-0);
+    --light-formField-disabledBackground: var(--light-surface-200);
+    --light-formField-filledBackground: var(--light-surface-50);
+    --light-formField-filledHoverBackground: var(--light-surface-50);
+    --light-formField-filledFocusBackground: var(--light-surface-50);
+    --light-formField-borderColor: var(--light-surface-300);
+    --light-formField-hoverBorderColor: var(--light-surface-400);
+    --light-formField-focusBorderColor: var(--light-primary-color);
+    --light-formField-invalidBorderColor: var(--red-400);
+    --light-formField-color: var(--light-surface-700);
+    --light-formField-disabledColor: var(--light-surface-500);
+    --light-formField-placeholderColor: var(--light-surface-500);
+    --light-formField-invalidPlaceholderColor: var(--red-600);
+    --light-formField-floatLabelColor: var(--light-surface-500);
+    --light-formField-floatLabelFocusColor: var(--primary-color-600);
+    --light-formField-floatLabelActiveColor: var(--light-surface-500);
+    --light-formField-floatLabelInvalidColor: var(--light-surface-500);
+    --light-formField-iconColor: var(--light-surface-400);
+    --light-formField-shadow: 0 0 #0000, 0 0 #0000, 0 1px 2px 0 rgba(18, 18, 23, 0.05);
+
+
+    --light-text-color: var(--light-surface-700);
+    --light-text-hoverColor: var(--light-surface-800);
+    --light-text-mutedColor: var(--light-surface-500);
+    --light-text-hoverMutedColor: var(--light-surface-600);
+
+
+    --light-content-background: var(--light-surface-0);
+    --light-content-hoverBackground: var(--light-surface-100);
+    --light-content-borderColor: var(--light-surface-200);
+    --light-content-color: var(--light-text-color);
+    --light-content-hoverColor: var(--light-text-hoverColor);
+
+    --light-overlay-select-background: var(--light-surface-0);
+    --light-overlay-select-borderColor: var(--light-surface-200);
+    --light-overlay-select-color: var(--light-text-color);
+
+
+    --light-overlay-popover-background: var(--light-surface-0);
+    --light-overlay-popover-borderColor: var(--light-surface-200);
+    --light-overlay-popover-color: var(--light-text-color);
+
+    --light-overlay-modal-background: var(--light-surface-0);
+    --light-overlay-modal-borderColor: var(--light-surface-200);
+    --light-overlay-modal-color: var(--light-text-color);
+
+    --light-list-option-focusBackground: var(--light-surface-100);
+    --light-list-option-selectedBackground: var(--light-highlight-background);
+    --light-list-option-selectedFocusBackground: var(--light-highlight-focusBackground);
+    --light-list-option-color: var(--light-text-color);
+    --light-list-option-focusColor: var(--light-text-hoverColor);
+    --light-list-option-selectedColor: var(--light-highlight-color);
+    --light-list-option-selectedFocusColor: var(--light-highlight-focusColor);
+
+    --light-list-option-icon-color: var(--light-surface-400);
+    --light-list-option-icon-focusColor: var(--light-surface-500);
+
+    --light-list-optionGroup-background: transparent;
+
+    --light-navigation-item-focusBackground: var(--light-surface-100);
+    --light-navigation-item-activeBackground: var(--light-surface-100);
+    --light-navigation-item-color: var(--light-text-color);
+    --light-navigation-item-focusColor: var(--light-text-hoverColor);
+    --light-navigation-item-activeColor: var(--light-text-hoverColor);
+
+    --light-navigation-item-icon-color: var(--light-surface-400);
+    --light-navigation-item-icon-focusColor: var(--light-surface-500);
+    --light-navigation-item-icon-activeColor: var(--light-surface-500);
+
+    --light-navigation-submenuLabel-background: transparent;
+    --light-navigation-submenuLabel-color: var(--light-text-mutedColor);
+
+    --light-navigation-submenuIcon-color: var(--light-surface-400);
+    --light-navigation-submenuIcon-focusColor: var(--light-surface-500);
+    --light-navigation-submenuIcon-activeColor: var(--light-surface-500);
+
+
+
+    /*** DARK ***/
+    --dark-surface-0: #ffffff;
+    --dark-surface-50: #f4f4f4;
+    --dark-surface-100: #c9c9c9;
+    --dark-surface-200: #9f9f9f;
+    --dark-surface-300: #747474;
+    --dark-surface-400: #4a4a4a;
+    --dark-surface-500: #1f1f1f;
+    --dark-surface-600: #1a1a1a;
+    --dark-surface-700: #161616;
+    --dark-surface-800: #111111;
+    --dark-surface-900: #0c0c0c;
+    --dark-surface-950: #080808;
+
+    --dark-primary-color: var(--primary-color-400);
+    --dark-primary-contrastColor: var(--dark-surface-900);
+    --dark-primary-hoverColor: var(--primary-color-300);
+    --dark-primary-activeColor: var(--primary-color-200);
+
+    --dark-highlight-background: color-mix(in srgb, var(--primary-color-400), transparent 84%);
+    --dark-highlight-focusBackground: color-mix(in srgb, var(--primary-color-400), transparent 76%);
+    --dark-highlight-color: rgba(255,255,255,.87);
+    --dark-highlight-focusColor: rgba(255,255,255,.87);
+
+    --dark-mask-background: rgba(0,0,0,0.6);
+    --dark-mask-color: var(--dark-surface-200);
+
+    --dark-formField-background: var(--dark-surface-950);
+    --dark-formField-disabledBackground: var(--dark-surface-700);
+    --dark-formField-filledBackground: var(--dark-surface-800);
+    --dark-formField-filledHoverBackground: var(--dark-surface-800);
+    --dark-formField-filledFocusBackground: var(--dark-surface-800);
+    --dark-formField-borderColor: var(--dark-surface-600);
+    --dark-formField-hoverBorderColor: var(--dark-surface-500);
+    --dark-formField-focusBorderColor: var(--dark-primary-color);
+    --dark-formField-invalidBorderColor: var(--red-300);
+    --dark-formField-color: var(--dark-surface-0);
+    --dark-formField-disabledColor: var(--dark-surface-400);
+    --dark-formField-placeholderColor: var(--dark-surface-400);
+    --dark-formField-invalidPlaceholderColor: var(--red-400);
+    --dark-formField-floatLabelColor: var(--dark-surface-400);
+    --dark-formField-floatLabelFocusColor: var(--primary-color);
+    --dark-formField-floatLabelActiveColor: var(--dark-surface-400);
+    --dark-formField-floatLabelInvalidColor: var(--dark-formField-invalidPlaceholderColor);
+    --dark-formField-iconColor: var(--dark-surface-400);
+    --dark-formField-shadow: 0 0 #0000, 0 0 #0000, 0 1px 2px 0 rgba(18, 18, 23, 0.05);
+
+    --dark-text-color: var(--dark-surface-0);
+    --dark-text-hoverColor: var(--dark-surface-0);
+    --dark-text-mutedColor: var(--dark-surface-400);
+    --dark-text-hoverMutedColor: var(--dark-surface-300);
+
+    --dark-content-background: var(--dark-surface-900);
+    --dark-content-hoverBackground: var(--dark-surface-800);
+    --dark-content-borderColor: var(--dark-surface-700);
+    --dark-content-color: var(--dark-text-color);
+    --dark-content-hoverColor: var(--dark-text-hoverColor);
+
+    --dark-overlay-select-background: var(--dark-surface-900);
+    --dark-overlay-select-borderColor: var(--dark-surface-700);
+    --dark-overlay-select-color: var(--dark-text-color);
+
+    --dark-popover-background: var(--dark-surface-900);
+    --dark-popover-borderColor: var(--dark-surface-700);
+    --dark-popover-color: var(--dark-text-color);
+
+    --dark-modal-background: var(--dark-surface-900);
+    --dark-modal-borderColor: var(--dark-surface-700);
+    --dark-modal-color: var(--dark-text-color);
+
+    --dark-list-option-focusBackground: var(--dark-surface-800);
+    --dark-list-option-selectedBackground: var(--dark-highlight-background);
+    --dark-list-option-selectedFocusBackground: var(--dark-highlight-focusBackground);
+    --dark-list-option-color: var(--dark-text-color);
+    --dark-list-option-focusColor: var(--dark-text-hoverColor);
+    --dark-list-option-selectedColor: var(--dark-highlight-color);
+    --dark-list-option-selectedFocusColor: var(--dark-highlight-focusColor);
+
+    --dark-list-option-icon-color: var(--dark-surface-500);
+    --dark-list-option-icon-focusColor: var(--dark-surface-400);
+
+    --dark-optionGroup-background: transparent;
+    --dark-optionGroup-color: var(--dark-text-mutedColor);
+
+    --dark-navigation-item-focusBackground: var(--dark-surface-800);
+    --dark-navigation-item-activeBackground: var(--dark-surface-800);
+    --dark-navigation-item-color: var(--dark-text-color);
+    --dark-navigation-item-focusColor: var(--dark-text-hoverColor);
+    --dark-navigation-item-activeColor: var(--dark-text-hoverColor);
+
+    --dark-navigation-item-icon-color: var(--dark-surface-500);
+    --dark-navigation-item-icon-focusColor: var(--dark-surface-400);
+    --dark-navigation-item-icon-activeColor: var(--dark-surface-400);
+
+    --dark-submenuLabel-background: transparent;
+    --dark-submenuLabel-color: var(--dark-text-mutedColor);
+
+    --dark-submenuIcon-color: var(--dark-surface-500);
+    --dark-submenuIcon-focusColor: var(--dark-surface-400);
+    --dark-submenuIcon-activeColor: var(--dark-surface-400);
+
+}
+
+

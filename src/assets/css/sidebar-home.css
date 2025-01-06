@@ -1,5 +1,4 @@
 #sidebar {
-    background: var(--primary-color);
     cursor: default;
     left: 0;
     overflow-x: hidden;
@@ -234,14 +233,14 @@ body.is-ie #sidebar > .inner {
 }
 
 #sidebar a:before {
-    background: #3c2c62;
+    background: var(--light-surface-800);
 }
 
 #sidebar a:after {
-    background-image: -moz-linear-gradient(to right, #5e42a6, #b74e91);
-    background-image: -webkit-linear-gradient(to right, #5e42a6, #b74e91);
-    background-image: -ms-linear-gradient(to right, #5e42a6, #b74e91);
-    background-image: linear-gradient(to right, #5e42a6, #b74e91);
+    background-image: -moz-linear-gradient(to right, var(--light-surface-500), var(--accent-color-500));
+    background-image: -webkit-linear-gradient(to right, var(--light-surface-500), var(--accent-color-500));
+    background-image: -ms-linear-gradient(to right, var(--light-surface-500), var(--accent-color-500));
+    background-image: linear-gradient(to right, var(--light-surface-500), var(--accent-color-500));
     -moz-transition: max-width 0.2s ease;
     -webkit-transition: max-width 0.2s ease;
     -ms-transition: max-width 0.2s ease;
@@ -330,7 +329,7 @@ body.is-preload #sidebar ul li {
 
     #sidebar a:after {
         background-image: none;
-        background-color: #b74e91;
+        background-color: var(--accent-color-500);
     }
 
 }

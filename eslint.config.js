@@ -4,7 +4,7 @@ import prettier from 'eslint-plugin-prettier';
 import tsParser from '@typescript-eslint/parser';
 import vueParser from 'vue-eslint-parser';
 
-const maxLineLength = 200;
+const maxLineLength = 120;
 
 export default [
   {
@@ -58,11 +58,18 @@ export default [
         },
       ],
       'vue/attributes-order': 'error',
-      'vue/html-closing-bracket-spacing': 'error',
+      'vue/html-closing-bracket-spacing': [
+        'error',
+        {
+          startTag: 'never',
+          endTag: 'never',
+          selfClosingTag: 'always',
+        },
+      ],
       'vue/max-attributes-per-line': [
         'error',
         {
-          singleline: 5,
+          singleline: 4,
           multiline: { max: 1 },
         },
       ],
@@ -89,7 +96,8 @@ export default [
       'prettier/prettier': [
         'error',
         {
-          arrowParens: 'always', // Permite omitir paréntesis en argumentos únicos
+          arrowParens: 'always',
+          trailingComma: 'all',
         },
       ],
     },
