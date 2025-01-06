@@ -1,15 +1,15 @@
 <template>
   <Generic>
     <!-- Sección Principal -->
-    <section class="bg-primary text-white h-screen px-12 flex items-center">
+    <section class="items-center bg-secondary px-12 text-white lg:flex lg:h-screen">
       <div class="flex">
-        <div class="flex flex-col justify-evenly w-full md:w-2/5">
+        <div class="flex w-full flex-col justify-evenly md:w-2/5">
           <div class="flex flex-col">
             <Carousel v-bind="carouselConfig">
               <Slide>
                 <div class="carousel__item">
-                  <h1 class="text-7xl font-logo">Convierte tu arriendo en beneficios</h1>
-                  <p class="text-2xl mt-6">
+                  <h1 class="font-logo text-6xl">Convierte tu arriendo en beneficios</h1>
+                  <p class="mt-6 text-2xl">
                     Disfruta de recompensas exclusivas por mantener tus pagos al día. Transformamos tu responsabilidad
                     en beneficios.
                   </p>
@@ -17,7 +17,7 @@
               </Slide>
               <Slide>
                 <div class="carousel__item">
-                  <h1 class="text-7xl font-logo">Cada pago se convierte en puntos acumulables</h1>
+                  <h1 class="font-logo text-6xl">Cada pago se convierte en puntos acumulables</h1>
                   <p class="">
                     Al pagar tu arriendo puntualmente, acumulas puntos que puedes usar para obtener premios. En Spazio,
                     cada transacción es una oportunidad para ganar.
@@ -26,7 +26,7 @@
               </Slide>
               <Slide>
                 <div class="carousel__item">
-                  <h1 class="text-7xl font-logo">Canjea puntos por experiencias y productos exclusivos</h1>
+                  <h1 class="font-logo text-6xl">Canjea puntos por experiencias y productos exclusivos</h1>
                   <p class="">
                     Usa tus puntos para disfrutar de increíbles experiencias, servicios únicos y productos que se
                     ajustan a tu estilo de vida. ¡Tus pagos valen más con Spazio!
@@ -39,25 +39,37 @@
               </template>
             </Carousel>
           </div>
-          <div class="text-center mt-4">
-            <PVButton class="carousel-btn-white"> CREA TU CUENTA </PVButton>
-            <p class="mt-2"> ¿Ya tienes tu cuenta? <a href="#" class="underline">Inicia sesión</a> </p>
+          <div class="mt-4 text-center">
+            <PVButton class="bg-white"> Crea tu cuenta </PVButton>
+            <p class="mt-2">
+              ¿Ya tienes tu cuenta?
+              <a
+                href="#"
+                class="underline"
+                >Inicia sesión</a
+              >
+            </p>
           </div>
         </div>
 
-        <div
-          class="w-full md:w-3/5 bg-primary relative flex flex-col justify-evenly items-center rounded-lg overflow-hidden">
+        <div class="relative flex w-full flex-col items-center justify-evenly overflow-hidden rounded-lg md:w-3/5">
           <!-- Fondo SVG -->
-          <SVGShape shape="bgPerson" color="#FFFFFF" class="absolute inset-0 mx-auto w-3/5 t-4" />
+          <SVGShape
+            shape="bgPerson"
+            color="#FFFFFF"
+            class="t-4 absolute inset-0 mx-auto w-3/5" />
 
           <!-- Imagen del inquilino -->
-          <img src="@/assets/img/inquilino-feliz.png" alt="Inquilino feliz" class="relative w-3/4 z-10" />
+          <img
+            src="@/assets/img/inquilino-feliz.png"
+            alt="Inquilino feliz"
+            class="relative z-10 w-3/4" />
 
           <!-- Cuadro de Texto -->
-          <div class="bg-white text-primary rounded-lg shadow-md p-4 w-10/12 z-20 text-center">
+          <div class="z-20 w-10/12 rounded-lg bg-white p-4 text-center text-primary shadow-md">
             <p class="text-sm leading-snug">
-              <span class="font-bold text-2xl block">José Padilla</span>
-              <span class="text-xl">¡Acumula puntos por su pago del arriendo mensual!</span>
+              <span class="block text-2xl font-bold">José Luis García</span>
+              <span class="text-xl">¡Recibe premios por su pago del arriendo mensual!</span>
             </p>
           </div>
         </div>
@@ -66,44 +78,52 @@
 
     <!-- Sección Explicativa -->
 
-    <section id="transform" class="relative bg-white h-screen flex">
-      <div class="hidden md:block bg-parallax-image bg-cover bg-no-repeat bg-img-inquilino-gana md:w-3/5 h-full"></div>
-      <div class="relative w-full md:w-3/5 flex flex-col justify-center items-start px-8 md:px-12 text-left">
-        <h2 class="text-5xl font-logo font-bold mb-6">¿Por qué Spazio es diferente?</h2>
+    <section
+      id="transform"
+      class="relative flex h-screen bg-white">
+      <div class="bg-parallax-image bg-img-inquilino-gana hidden h-full bg-cover bg-no-repeat md:block md:w-3/5"></div>
+      <div class="relative flex w-full flex-col items-start justify-center px-8 text-left md:w-3/5 md:px-12">
+        <h2 class="mb-6 font-logo text-5xl font-bold">¿Por qué Spazio es diferente?</h2>
         <p class="text-md mb-4">
           En Spazio, creemos que pagar el arriendo no tiene que ser solo un gasto. Con nuestro programa de recompensas,
           cada pago puntual se convierte en puntos acumulables que puedes canjear por productos, servicios y
           experiencias exclusivas.
         </p>
 
-        <div class="py-8 flex items-start space-x-6 border-b">
-          <div class="border border-gray-600 flex items-center justify-center text-secondary rounded-full p-3 icon">
-            <i class="pi pi-star" style="font-size: 1.5rem"></i>
+        <div class="flex items-start space-x-6 border-b py-8">
+          <div class="icon flex items-center justify-center rounded-full border border-gray-600 p-3 text-secondary">
+            <i
+              class="pi pi-star"
+              style="font-size: 1.5rem"></i>
           </div>
           <div>
-            <h3 class="text-xl font-semibold mb-2">Gana puntos con tus pagos puntuales</h3>
+            <h3 class="mb-2 text-xl font-semibold">Gana puntos con tus pagos puntuales</h3>
             <p class="text-gray-700"
               >Cada vez que pagas a tiempo, acumulas puntos que puedes usar en experiencias y productos únicos.</p
             >
           </div>
         </div>
 
-        <div class="py-8 flex items-start space-x-6 border-b">
-          <div class="border border-gray-600 flex items-center justify-center text-secondary rounded-full p-3 icon">
-            <i class="pi pi-cog" style="font-size: 1.5rem"></i>
+        <div class="flex items-start space-x-6 border-b py-8">
+          <div class="icon flex items-center justify-center rounded-full border border-gray-600 p-3 text-secondary">
+            <i
+              class="pi pi-cog"
+              style="font-size: 1.5rem"></i>
           </div>
           <div>
-            <h3 class="text-xl font-semibold mb-2">Canjea puntos por beneficios exclusivos</h3>
+            <h3 class="mb-2 text-xl font-semibold">Canjea puntos por beneficios exclusivos</h3>
             <p class="text-gray-700">Transforma tus puntos en productos, servicios o experiencias diseñadas para ti.</p>
           </div>
         </div>
 
-        <div class="pt-8 flex items-start space-x-6">
-          <div class="border border-gray-600 flex items-center justify-center text-secondary rounded-full p-3 icon">
-            <i class="pi pi-share-alt" style="font-size: 1.5rem"></i>
+        <div class="flex items-start space-x-6 pt-8">
+          <div class="icon flex items-center justify-center rounded-full border border-gray-600 p-3 text-secondary">
+            <i
+              class="pi pi-share-alt"
+              style="font-size: 1.5rem"></i>
           </div>
           <div>
-            <h3 class="text-xl font-semibold mb-2">Controla tus pagos de forma sencilla</h3>
+            <h3 class="mb-2 text-xl font-semibold">Controla tus pagos de forma sencilla</h3>
             <p class="text-gray-700">Gestiona tus pagos con nuestra plataforma digital moderna y fácil de usar.</p>
           </div>
         </div>
@@ -112,19 +132,23 @@
 
     <!-- ¿Cómo funciona? -->
     <section class="bg-gray-900 p-8 text-center text-gray-200">
-      <h2 class="text-3xl font-bold mb-10">¿Cómo funciona?</h2>
-      <div class="flex w-1/2 mx-auto">
-        <Timeline :value="steps" align="alternate" class="w-1/2 how-works">
+      <h2 class="mb-10 text-3xl font-bold">¿Cómo funciona?</h2>
+      <div class="mx-auto flex w-1/2">
+        <Timeline
+          :value="steps"
+          align="alternate"
+          class="how-works w-1/2">
           <!-- Marcador (número del paso) -->
           <template #marker="slotProps">
-            <span class="flex w-10 h-10 items-center justify-center text-white rounded-full z-10 shadow-sm bg-primary">
+            <span
+              class="z-10 flex h-10 w-10 items-center justify-center rounded-full bg-secondary text-white shadow-sm">
               {{ slotProps.index + 1 }}
             </span>
           </template>
 
           <!-- Contenido del paso -->
           <template #content="slotProps">
-            <div class="flex flex-col pb-10 content">
+            <div class="content flex flex-col pb-10">
               <h3 class="text-lg font-semibold">{{ slotProps.item.title }}</h3>
               <p class="text-sm">{{ slotProps.item.description }}</p>
               <PVButton
@@ -233,5 +257,14 @@ export default defineComponent({
 }
 .how-works .p-timeline-event:nth-child(even) {
   text-align: right;
+}
+.carousel__pagination-button::after {
+  background-color: var(--light-surface-500);
+}
+.carousel__pagination-button--active::after {
+  background-color: var(--white-color);
+}
+.carousel__pagination-button:hover::after {
+  background-color: var(--light-surface-800);
 }
 </style>

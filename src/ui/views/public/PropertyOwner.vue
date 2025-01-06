@@ -1,7 +1,7 @@
 <template>
   <Generic>
     <!-- Sección Principal -->
-    <section class="bg-primary-200 text-white h-screen px-12 py-10">
+    <section class="bg-accent text-white h-screen px-12 py-10">
       <div class="flex justify-evenly">
         <div class="flex flex-col justify-evenly w-full md:w-2/5">
           <div class="flex flex-col">
@@ -117,7 +117,8 @@
         <Timeline :value="steps" align="alternate" class="w-1/2 how-works">
           <!-- Marcador (número del paso) -->
           <template #marker="slotProps">
-            <span class="flex w-10 h-10 items-center justify-center text-white rounded-full z-10 shadow-sm bg-primary">
+            <span
+              class="flex w-10 h-10 items-center justify-center text-white rounded-full z-10 shadow-sm bg-secondary">
               {{ slotProps.index + 1 }}
             </span>
           </template>
@@ -209,5 +210,14 @@ export default defineComponent({
 }
 .how-works .p-timeline-event:nth-child(even) {
   text-align: right;
+}
+.carousel__pagination-button::after {
+  background-color: var(--accent-color-500);
+}
+.carousel__pagination-button--active::after {
+  background-color: var(--white-color);
+}
+.carousel__pagination-button:hover::after {
+  background-color: var(--accent-color-700);
 }
 </style>
