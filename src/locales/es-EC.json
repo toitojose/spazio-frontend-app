@@ -2,11 +2,32 @@
   "default": {
     "title": "Spazio",
     "subtitle": "Gestiona tus propiedades e incentivos de manera segura",
-    "returnButton": "Regresar",
-    "submitButton": "Enviar",
-    "cancelButton": "Cancelar",
+    "returnButton": "Regresa",
+    "submitButton": "Envia",
+    "cancelButton": "Cancela",
+    "contactAgent": "Contactar un agente",
     "metaTitle": "Spazio - Gestión de propiedades",
     "metaDescription": "La plataforma ideal para gestionar propiedades, incentivos y mucho más de forma eficiente y segura."
+  },
+  "register": {
+    "title": "Registro",
+    "subtitle": "Crea tu cuenta para comenzar",
+    "name": "Nombre",
+    "email": "Correo electrónico",
+    "password": "Contraseña",
+    "confirmPassword": "Confirmar contraseña",
+    "registerButton": "Registrarse",
+    "emptyName": "El nombre no puede estar vacío.",
+    "emptyEmail": "El correo electrónico no puede estar vacío.",
+    "emptyPassword": "La contraseña no puede estar vacía.",
+    "emptyConfirmPassword": "La confirmación de la contraseña no puede estar vacía.",
+    "invalidEmail": "El correo ingresado no es válido.",
+    "weakPassword": "La contraseña debe tener al menos 8 caracteres.",
+    "shortPassword": "La contraseña es muy corta.",
+    "passwordMismatch": "Las contraseñas no coinciden.",
+    "failed": "Error al registrar la cuenta. Inténtalo de nuevo.",
+    "metaTitle": "Registro - Spazio",
+    "metaDescription": "Crea tu cuenta de Spazio para gestionar tus propiedades e incentivos de manera segura y eficiente."
   },
   "login": {
     "title": "Iniciar sesión",
@@ -90,12 +111,95 @@
     "noResponse": "No se recibió ninguna respuesta del servidor. Verifique su conexión",
     "unhandled": "Error inesperado. Intente de nuevo más tarde"
   },
+  "paymentsMethods": {
+    "title": "Métodos de pago",
+    "subtitle": "Administra tus métodos de pago",
+    "addMethod": "Agregar método",
+    "noMethods": "No se han agregado métodos de pago.",
+    "callToAction": "Conoce los metodos de pago",
+    "metaTitle": "Métodos de pago - Spazio",
+    "metaDescription": "Administra tus métodos de pago de forma segura y eficiente desde tu cuenta de Spazio."
+  },
   "renter": {
     "metaTitle": "Inquilino - Spazio",
-    "metaDescription": "Convierte tu arriendo en beneficios."
+    "metaDescription": "Convierte tu arriendo en beneficios.",
+    "mainUser": {
+      "slides": [
+        {
+          "title": "Convierte tu arriendo en beneficios",
+          "desc": "Disfruta de recompensas exclusivas por mantener tus pagos al día. Transformamos tu responsabilidad en beneficios."
+        },
+        {
+          "title": "Cada pago se convierte en puntos acumulables",
+          "desc": "Al pagar tu arriendo puntualmente, acumulas puntos que puedes usar para obtener premios. En Spazio, cada transacción es una oportunidad para ganar."
+        },
+        {
+          "title": "Canjea puntos por experiencias y productos exclusivos",
+          "desc": "Usa tus puntos para disfrutar de increíbles experiencias, servicios únicos y productos que se ajustan a tu estilo de vida. ¡Tus pagos valen más con Spazio!"
+        }
+      ],
+      "buttonText": "Crea tu cuenta",
+      "userMessage": "¡Recibe premios por su pago de arriendo mensual!"
+    },
+    "whySpazio": {
+      "title": "¿Por qué Spazio es diferente?",
+      "content": "En Spazio, creemos que pagar el arriendo no tiene que ser solo un gasto. Con nuestro programa de recompensas, cada pago puntual se convierte en puntos acumulables que puedes canjear por productos, servicios y experiencias exclusivas.",
+      "benefits": [
+        {
+          "title": "Gana puntos con tus pagos puntuales",
+          "desc": "Cada vez que pagas a tiempo, acumulas puntos que puedes usar en experiencias y productos únicos."
+        },
+        {
+          "title": "Canjea puntos por beneficios exclusivos",
+          "desc": "Transforma tus puntos en productos, servicios o experiencias diseñadas para ti."
+        },
+        {
+          "title": "Controla tus pagos de forma sencilla",
+          "desc": "Gestiona tus pagos con nuestra plataforma digital moderna y fácil de usar."
+        }
+      ]
+    },
+    "howItWorks": {
+      "title": "¿Cómo funciona?",
+      "steps": [
+        {
+          "title": "Registrate en Spazio",
+          "desc": "Crea tu cuenta de inquilino en Spazio."
+        },
+        {
+          "title": "Encuentra tu nuevo hogar",
+          "desc": "Explora nuestra amplia oferta de propiedades y encuentra el lugar perfecto para ti. ¡Nuestros especialistas están aquí para ayudarte!"
+        },
+        {
+          "title": "Paga como prefieras",
+          "desc": "Realiza tus pagos de arriendo fácilmente con tarjeta de crédito, débito, transferencia bancaria o DeUna. ¡Tú eliges el método más conveniente!"
+        },
+        {
+          "title": "Acumula puntos con cada pago",
+          "desc": "Por cada pago puntual de tu arriendo, acumulas puntos que puedes usar para experiencias, productos y servicios exclusivos."
+        },
+        {
+          "title": "Canjea recompensas",
+          "desc": "Disfruta de experiencias y premios únicos con tus puntos."
+        }
+      ]
+    }
   },
   "propertyOwner": {
     "metaTitle": "Propietario - Spazio",
     "metaDescription": "Administra tus propiedades de forma segura y eficiente."
+  },
+  "agent": {
+    "metaTitle": "Agente - Spazio",
+    "metaDescription": "Gestiona tus propiedades e incentivos de manera segura y eficiente.",
+    "contactAgent": "Contactar un agente"
+  },
+  "catalog": {
+    "title": "Catálogo de productos",
+    "subtitle": "Explora nuestro catálogo de productos",
+    "noProducts": "No hay productos disponibles en este momento.",
+    "callToAction": "Explora el catálogo",
+    "metaTitle": "Catálogo - Spazio",
+    "metaDescription": "Explora nuestro catálogo de productos disponibles para canje de puntos y encuentra el premio perfecto para ti."
   }
 }

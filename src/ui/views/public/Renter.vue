@@ -3,13 +3,12 @@
     <!-- Sección Principal -->
     <MainUser
       :slides="slides"
-      :buttonText="buttonText"
+      :buttonText="$t('renter.mainUser.buttonText')"
       :buttonAction="createAccountAction"
       :link="link"
-      :image="image"
-      :svg="svgOpt"
+      image="inquilino-feliz.png"
       :userName="userName"
-      :userMessage="userMessage" />
+      :userMessage="$t('renter.mainUser.userMessage')" />
 
     <!-- Sección Explicativa -->
     <section
@@ -18,48 +17,23 @@
       <div
         class="bg-parallax-image bg-img-inquilino-gana hidden h-96 w-full bg-cover bg-no-repeat lg:block lg:h-screen lg:w-3/5"></div>
       <div class="relative flex w-full flex-col items-start justify-center p-8 text-left lg:w-3/5 lg:px-12 lg:py-0">
-        <h2 class="mb-6 font-logo text-5xl font-bold">¿Por qué Spazio es diferente?</h2>
+        <h2 class="mb-6 font-logo text-5xl font-bold">{{ $t('renter.whySpazio.title') }}</h2>
         <p class="text-md mb-4">
-          En Spazio, creemos que pagar el arriendo no tiene que ser solo un gasto. Con nuestro programa de recompensas,
-          cada pago puntual se convierte en puntos acumulables que puedes canjear por productos, servicios y
-          experiencias exclusivas.
+          {{ $t('renter.whySpazio.content') }}
         </p>
 
-        <div class="flex items-start space-x-6 border-b py-8">
+        <div
+          v-for="benefit in benefits"
+          class="flex items-start space-x-6 border-b py-8">
           <div class="icon flex items-center justify-center rounded-full border border-gray-600 p-3 text-secondary">
             <i
-              class="pi pi-star"
+              class="pi"
+              :class="benefit.icon"
               style="font-size: 1.5rem"></i>
           </div>
           <div>
-            <h3 class="mb-2 text-xl font-semibold">Gana puntos con tus pagos puntuales</h3>
-            <p class="text-gray-700"
-              >Cada vez que pagas a tiempo, acumulas puntos que puedes usar en experiencias y productos únicos.</p
-            >
-          </div>
-        </div>
-
-        <div class="flex items-start space-x-6 border-b py-8">
-          <div class="icon flex items-center justify-center rounded-full border border-gray-600 p-3 text-secondary">
-            <i
-              class="pi pi-cog"
-              style="font-size: 1.5rem"></i>
-          </div>
-          <div>
-            <h3 class="mb-2 text-xl font-semibold">Canjea puntos por beneficios exclusivos</h3>
-            <p class="text-gray-700">Transforma tus puntos en productos, servicios o experiencias diseñadas para ti.</p>
-          </div>
-        </div>
-
-        <div class="flex items-start space-x-6 pt-8">
-          <div class="icon flex items-center justify-center rounded-full border border-gray-600 p-3 text-secondary">
-            <i
-              class="pi pi-share-alt"
-              style="font-size: 1.5rem"></i>
-          </div>
-          <div>
-            <h3 class="mb-2 text-xl font-semibold">Controla tus pagos de forma sencilla</h3>
-            <p class="text-gray-700">Gestiona tus pagos con nuestra plataforma digital moderna y fácil de usar.</p>
+            <h3 class="mb-2 text-xl font-semibold">{{ benefit.title }}</h3>
+            <p class="text-gray-700">{{ benefit.description }}</p>
           </div>
         </div>
       </div>
@@ -86,6 +60,10 @@
             <div class="content flex flex-col pb-10">
               <h3 class="text-lg font-semibold">{{ slotProps.item.title }}</h3>
               <p class="text-sm">{{ slotProps.item.description }}</p>
+            </div>
+          </template>
+          <template #opposite="slotProps">
+            <div class="content flex flex-col pb-10">
               <PVButton
                 v-if="slotProps.item.button"
                 severity="secondary"
@@ -110,6 +88,8 @@ import { Checkbox, InputText, Timeline, Button as PVButton } from 'primevue';
 import { Carousel, Slide, Pagination, Navigation } from 'vue3-carousel';
 import MainUser from '@/components/public/MainUser.vue';
 import '@/assets/css/carousel-buyer-persona.css';
+import { useI18n } from 'vue-i18n';
+import { i18n } from '@/locales/i18n.ts';
 
 export default defineComponent({
   name: 'renter',
@@ -127,51 +107,48 @@ export default defineComponent({
     MainUser,
   },
   setup() {
+    const { t: $t } = useI18n();
     const checked1 = ref(true);
     const steps = ref([
       {
-        title: 'Registro',
-        description: 'Crea tu cuenta de inquilino en Spazio.',
+        title: $t('renter.howItWorks.steps.0.title'),
+        description: $t('renter.howItWorks.steps.0.desc'),
         button: {
-          text: 'Abrir registro',
+          text: $t('register.title'),
           action: () => {
             console.log('Ver puntos / Iniciar sesión');
           },
         },
       },
       {
-        title: 'Encuentra tu nuevo hogar',
-        description:
-          'Explora nuestra amplia oferta de propiedades y encuentra el lugar perfecto para ti. ¡Nuestros especialistas están aquí para ayudarte!',
+        title: $t('renter.howItWorks.steps.1.title'),
+        description: $t('renter.howItWorks.steps.0.desc'),
         button: {
-          text: 'contacta un agente',
+          text: $t('agent.contactAgent'),
           action: () => {
             console.log('Redirigiendo a la búsqueda de propiedades...');
           },
         },
       },
       {
-        title: 'Paga como prefieras',
-        description:
-          'Realiza tus pagos de arriendo fácilmente con tarjeta de crédito, débito, transferencia bancaria o DeUna. ¡Tú eliges el método más conveniente!',
+        title: $t('renter.howItWorks.steps.2.title'),
+        description: $t('renter.howItWorks.steps.2.desc'),
         button: {
-          text: 'Conoce los métodos de pago',
+          text: $t('paymentsMethods.callToAction'),
           action: () => {
             console.log('Mostrando opciones de métodos de pago...');
-            // Lógica para mostrar información sobre métodos de pago
           },
         },
       },
       {
-        title: 'Acumula puntos con cada pago',
-        description:
-          'Por cada pago puntual de tu arriendo, acumulas puntos que puedes usar para experiencias, productos y servicios exclusivos.',
+        title: $t('renter.howItWorks.steps.3.title'),
+        description: $t('renter.howItWorks.steps.3.desc'),
       },
       {
-        title: 'Canjea recompensas',
-        description: 'Disfruta de experiencias y premios únicos con tus puntos.',
+        title: $t('renter.howItWorks.steps.4.title'),
+        description: $t('renter.howItWorks.steps.4.desc'),
         button: {
-          text: 'Ver catálogo',
+          text: $t('catalog.callToAction'),
           action: () => {
             console.log('Ver catálogo');
           },
@@ -179,43 +156,51 @@ export default defineComponent({
       },
     ]);
 
-    const buttonText = 'Crea tu cuenta';
     const createAccountAction = () => {
       console.log('Crear cuenta clicada');
     };
 
     const link = {
       show: true,
-      text: 'Inicia sesión',
+      text: $t('login.title'),
       action: () => {
         console.log('Inicia sesión clicado');
       },
     };
 
-    const image = 'inquilino-feliz.png';
-    const svgOpt = {
-      color: '#FFFFFF',
-      shape: 'bgPerson',
-    };
     const userName = 'José Luis García';
     const userMessage = '¡Recibe premios por su pago del arriendo mensual!';
+    const currentLocale = i18n.global.locale.value;
+    const slides = i18n.global.getLocaleMessage(currentLocale)?.renter?.mainUser?.slides || [];
 
-    const slides = [
+    const benefits = [
       {
-        title: 'Convierte tu arriendo en beneficios',
-        desc: 'Disfruta de recompensas exclusivas por mantener tus pagos al día. Transformamos tu responsabilidad en beneficios.',
+        title: $t('renter.whySpazio.benefits.0.title'),
+        description: $t('renter.whySpazio.benefits.0.desc'),
+        icon: 'pi-star',
       },
       {
-        title: 'Cada pago se convierte en puntos acumulables',
-        desc: 'Al pagar tu arriendo puntualmente, acumulas puntos que puedes usar para obtener premios. En Spazio, cada transacción es una oportunidad para ganar.',
+        title: $t('renter.whySpazio.benefits.1.title'),
+        description: $t('renter.whySpazio.benefits.1.desc'),
+        icon: 'pi-cog',
       },
       {
-        title: 'Canjea puntos por experiencias y productos exclusivos',
-        desc: 'Usa tus puntos para disfrutar de increíbles experiencias, servicios únicos y productos que se ajustan a tu estilo de vida. ¡Tus pagos valen más con Spazio!',
+        title: $t('renter.whySpazio.benefits.2.title'),
+        description: $t('renter.whySpazio.benefits.2.desc'),
+        icon: 'pi-share-alt',
       },
     ];
 
-    return { checked1, steps, slides, buttonText, createAccountAction, link, image, svgOpt, userName, userMessage };
+    return {
+      checked1,
+      steps,
+      slides,
+      benefits,
+      createAccountAction,
+      link,
+      userName,
+      userMessage,
+    };
   },
 });
 </script>
