@@ -1,4 +1,11 @@
-@media screen and (min-width: 500px) {
+@media screen and (max-width: 500px) {
+    #home section {
+        height: auto !important;
+        display: block !important;
+    }
+}
+/* media query para landscape */
+@media screen  and (orientation: landscape) {
     #home section {
         height: auto !important;
         display: block !important;
