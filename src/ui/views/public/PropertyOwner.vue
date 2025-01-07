@@ -169,14 +169,13 @@
 
 <script lang="ts">
 import { defineComponent, ref } from 'vue';
-import SVGShape from '@/assets/models/SVGShape.vue';
 import Generic from '@/layout/public/Generic.vue';
 import { Checkbox, InputText, Timeline, Button as PVButton } from 'primevue';
 import { Carousel, Slide, Pagination } from 'vue3-carousel';
 
 export default defineComponent({
   name: 'PropertyOwner',
-  components: { Generic, SVGShape, Checkbox, InputText, PVButton, Carousel, Slide, Pagination, Timeline },
+  components: { Generic, Checkbox, InputText, PVButton, Carousel, Slide, Pagination, Timeline },
   setup() {
     const checked1 = ref(true);
     const carouselConfig = {

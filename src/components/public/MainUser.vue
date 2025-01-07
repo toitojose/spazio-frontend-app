@@ -61,12 +61,11 @@
 <script lang="ts">
 import { defineComponent } from 'vue';
 import type { PropType } from 'vue';
-import SVGShape from '@/assets/models/SVGShape.vue';
 import { Carousel, Button as PVButton } from 'primevue';
 
 export default defineComponent({
   name: 'MainUser',
-  components: { Carousel, PVButton, SVGShape },
+  components: { Carousel, PVButton },
   props: {
     slides: {
       type: Array as PropType<Array<{ title: string; desc: string }>>,
@@ -88,10 +87,6 @@ export default defineComponent({
       type: String,
       required: true,
       default: 'inquilino-feliz.png',
-    },
-    svg: {
-      type: Object as PropType<{ shape: string; color: string }>,
-      required: true,
     },
     userName: {
       type: String,
