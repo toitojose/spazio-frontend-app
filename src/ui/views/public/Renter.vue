@@ -2,6 +2,7 @@
   <Generic>
     <!-- Sección Principal -->
     <MainUser
+      class="bg-secondary"
       :slides="slides"
       :buttonText="$t('renter.mainUser.buttonText')"
       :buttonAction="createAccountAction"
@@ -82,12 +83,9 @@
 
 <script lang="ts">
 import { defineComponent, ref } from 'vue';
-import SVGShape from '@/assets/models/SVGShape.vue';
 import Generic from '@/layout/public/Generic.vue';
-import { Checkbox, InputText, Timeline, Button as PVButton } from 'primevue';
-import { Carousel, Slide, Pagination, Navigation } from 'vue3-carousel';
+import { Carousel, Checkbox, InputText, Timeline, Button as PVButton } from 'primevue';
 import MainUser from '@/components/public/MainUser.vue';
-import '@/assets/css/carousel-buyer-persona.css';
 import { useI18n } from 'vue-i18n';
 import { i18n } from '@/locales/i18n.ts';
 
@@ -95,18 +93,15 @@ export default defineComponent({
   name: 'renter',
   components: {
     Generic,
-    SVGShape,
     Checkbox,
     InputText,
     PVButton,
     Carousel,
-    Slide,
-    Pagination,
-    Navigation,
     Timeline,
     MainUser,
   },
   setup() {
+    const currentLocale = i18n.global.locale.value;
     const { t: $t } = useI18n();
     const checked1 = ref(true);
     const steps = ref([
@@ -168,9 +163,7 @@ export default defineComponent({
       },
     };
 
-    const userName = 'José Luis García';
     const userMessage = '¡Recibe premios por su pago del arriendo mensual!';
-    const currentLocale = i18n.global.locale.value;
     const slides = i18n.global.getLocaleMessage(currentLocale)?.renter?.mainUser?.slides || [];
 
     const benefits = [
@@ -198,7 +191,6 @@ export default defineComponent({
       benefits,
       createAccountAction,
       link,
-      userName,
       userMessage,
     };
   },

@@ -187,7 +187,64 @@
   },
   "propertyOwner": {
     "metaTitle": "Propietario - Spazio",
-    "metaDescription": "Administra tus propiedades de forma segura y eficiente."
+    "metaDescription": "Administra tus propiedades de forma segura y eficiente.",
+    "mainUser": {
+      "slides": [
+        {
+          "title": "Administra tus propiedades de forma segura",
+          "desc": "Gestiona tus propiedades de forma segura y eficiente con Spazio. Nuestra plataforma te permite controlar tus propiedades y recibir pagos de forma rápida y sencilla."
+        },
+        {
+          "title": "Recibe pagos de forma rápida y segura",
+          "desc": "Con Spazio, recibir pagos de tus arriendos es fácil y seguro. Olvídate de los trámites engorrosos y recibe tus pagos de forma rápida y segura."
+        },
+        {
+          "title": "Gestiona tus propiedades de forma eficiente",
+          "desc": "Con Spazio, puedes gestionar tus propiedades de forma eficiente y segura. Controla tus propiedades, recibe pagos y administra tus arriendos de forma sencilla."
+        }
+      ],
+      "buttonText": "Crea tu cuenta",
+      "userMessage": "Disfruta de pagos puntuales y sin preocupaciones"
+    },
+    "whySpazio": {
+      "title": "¿Por qué Spazio es diferente?",
+      "description": "Sabemos que encontrar inquilinos puntuales puede ser agotador. Con Spazio, olvídate de insistir en los pagos o de vivir mes a mes esperando la renta. Nuestra plataforma automatiza todo el proceso, desde el cobro hasta la gestión, para que puedas enfocarte en disfrutar los frutos de tus propiedades sin estrés.",
+      "features": [
+        {
+          "title": "Gestión Centralizada",
+          "description": "Accede a todos tus contratos, pagos y comunicaciones en un solo lugar, con tecnología avanzada y segura."
+        },
+        {
+          "title": "Pagos Seguros y Puntuales",
+          "description": "Evita los retrasos y asegura tus ingresos con nuestro sistema automatizado de cobros."
+        },
+        {
+          "title": "Ahorro de Tiempo",
+          "description": "Simplifica procesos complicados con herramientas diseñadas para optimizar tu tiempo y esfuerzo."
+        }
+      ]
+    },
+    "howItWorks": {
+      "title": "¿Cómo funciona?",
+      "steps": [
+        {
+          "title": "Registro de Propiedad",
+          "desc": "Registra tu propiedad en la plataforma y accede a todas las herramientas disponibles."
+        },
+        {
+          "title": "Configuración de Contratos Digitales",
+          "desc": "Descarga y firma contratos fácilmente desde nuestra plataforma, asegurando rapidez y legalidad en cada proceso."
+        },
+        {
+          "title": "Automatización de Pagos",
+          "desc": "Habilita cobros automáticos para asegurar pagos puntuales."
+        },
+        {
+          "title": "Recibe tu Dinero Puntualmente",
+          "desc": "No más esperas ni recordatorios. Spazio transfiere el pago directamente a tu cuenta en la fecha acordada."
+        }
+      ]
+    }
   },
   "agent": {
     "metaTitle": "Agente - Spazio",

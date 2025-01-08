@@ -1,6 +1,5 @@
 <template>
-  <section
-    class="flex flex-wrap items-center justify-evenly bg-secondary pt-4 text-white lg:h-screen lg:flex-nowrap lg:px-12">
+  <section class="flex flex-wrap items-center justify-evenly pt-4 text-white lg:h-screen lg:flex-nowrap lg:px-12">
     <!-- Sección del carrusel -->
     <div class="w-full flex-col justify-evenly md:w-1/2 lg:flex">
       <Carousel
