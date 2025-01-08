@@ -4,12 +4,12 @@
     <MainUser
       class="bg-accent"
       :slides="slides"
-      :buttonText="$t('renter.mainUser.buttonText')"
+      :buttonText="$t('propertyOwner.mainUser.buttonText')"
       :buttonAction="createAccountAction"
       :link="link"
       image="woman-happy.png"
       userName="Andrea Villalba"
-      :userMessage="$t('renter.mainUser.userMessage')" />
+      :userMessage="$t('propertyOwner.mainUser.userMessage')" />
 
     <!-- Sección Explicativa -->
     <section
@@ -19,48 +19,21 @@
       <div class="relative flex w-full flex-col items-start justify-center px-8 text-left md:w-3/5 md:px-12">
         <h2 class="mb-6 font-logo text-5xl font-bold">{{ $t('propertyOwner.whySpazio.title') }}</h2>
         <p class="text-md mb-4">
-          {{ $t('propertyOwner.whySpazio.description') }}
+          {{ $t('propertyOwner.whySpazio.content') }}
         </p>
 
-        <div class="flex items-start space-x-6 border-b py-8">
+        <div
+          v-for="benefit in benefits"
+          class="flex items-start space-x-6 border-b py-8">
           <div class="icon flex items-center justify-center rounded-full border border-gray-600 p-3 text-secondary">
             <i
-              class="pi pi-th-large"
+              class="pi"
+              :class="benefit.icon"
               style="font-size: 1.5rem"></i>
           </div>
           <div>
-            <h3 class="mb-2 text-xl font-semibold">Gestión Centralizada</h3>
-            <p class="text-gray-700">
-              Accede a todos tus contratos, pagos y comunicaciones en un solo lugar, con tecnología avanzada y segura.
-            </p>
-          </div>
-        </div>
-
-        <div class="flex items-start space-x-6 border-b py-8">
-          <div class="icon flex items-center justify-center rounded-full border border-gray-600 p-3 text-secondary">
-            <i
-              class="pi pi-money-bill"
-              style="font-size: 1.5rem"></i>
-          </div>
-          <div>
-            <h3 class="mb-2 text-xl font-semibold">Pagos Seguros y Puntuales</h3>
-            <p class="text-gray-700"
-              >Evita los retrasos y asegura tus ingresos con nuestro sistema automatizado de cobros.</p
-            >
-          </div>
-        </div>
-
-        <div class="flex items-start space-x-6 pt-8">
-          <div class="icon flex items-center justify-center rounded-full border border-gray-600 p-3 text-secondary">
-            <i
-              class="pi pi-clock"
-              style="font-size: 1.5rem"></i>
-          </div>
-          <div>
-            <h3 class="mb-2 text-xl font-semibold">Ahorro de Tiempo</h3>
-            <p class="text-gray-700">
-              Simplifica procesos complicados con herramientas diseñadas para optimizar tu tiempo y esfuerzo.
-            </p>
+            <h3 class="mb-2 text-xl font-semibold">{{ benefit.title }}</h3>
+            <p class="text-gray-700">{{ benefit.description }}</p>
           </div>
         </div>
       </div>
@@ -129,7 +102,7 @@ export default defineComponent({
         title: $t('propertyOwner.howItWorks.steps.0.title'),
         description: $t('propertyOwner.howItWorks.steps.0.desc'),
         button: {
-          text: 'Registrar Propiedad',
+          text: $t('property.callToAction'),
           action: () => {
             console.log('Redirigiendo al registro de propiedad...');
           },
@@ -163,7 +136,25 @@ export default defineComponent({
     const userMessage = 'Disfruta de pagos puntuales y sin preocupaciones';
     const slides = i18n.global.getLocaleMessage(currentLocale)?.propertyOwner?.mainUser?.slides || [];
 
-    return { checked1, carouselConfig, steps, slides, createAccountAction, link, userMessage };
+    const benefits = [
+      {
+        title: $t('propertyOwner.whySpazio.benefits.0.title'),
+        description: $t('propertyOwner.whySpazio.benefits.0.desc'),
+        icon: 'pi-star',
+      },
+      {
+        title: $t('propertyOwner.whySpazio.benefits.1.title'),
+        description: $t('propertyOwner.whySpazio.benefits.1.desc'),
+        icon: 'pi-cog',
+      },
+      {
+        title: $t('propertyOwner.whySpazio.benefits.2.title'),
+        description: $t('propertyOwner.whySpazio.benefits.2.desc'),
+        icon: 'pi-share-alt',
+      },
+    ];
+
+    return { benefits, checked1, carouselConfig, steps, slides, createAccountAction, link, userMessage };
   },
 });
 </script>

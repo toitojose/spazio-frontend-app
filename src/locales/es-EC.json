@@ -208,19 +208,19 @@
     },
     "whySpazio": {
       "title": "¿Por qué Spazio es diferente?",
-      "description": "Sabemos que encontrar inquilinos puntuales puede ser agotador. Con Spazio, olvídate de insistir en los pagos o de vivir mes a mes esperando la renta. Nuestra plataforma automatiza todo el proceso, desde el cobro hasta la gestión, para que puedas enfocarte en disfrutar los frutos de tus propiedades sin estrés.",
-      "features": [
+      "content": "Sabemos que encontrar inquilinos puntuales puede ser agotador. Con Spazio, olvídate de insistir en los pagos o de vivir mes a mes esperando la renta. Nuestra plataforma automatiza todo el proceso, desde el cobro hasta la gestión, para que puedas enfocarte en disfrutar los frutos de tus propiedades sin estrés.",
+      "benefits": [
         {
           "title": "Gestión Centralizada",
-          "description": "Accede a todos tus contratos, pagos y comunicaciones en un solo lugar, con tecnología avanzada y segura."
+          "desc": "Accede a todos tus contratos, pagos y comunicaciones en un solo lugar, con tecnología avanzada y segura."
         },
         {
           "title": "Pagos Seguros y Puntuales",
-          "description": "Evita los retrasos y asegura tus ingresos con nuestro sistema automatizado de cobros."
+          "desc": "Evita los retrasos y asegura tus ingresos con nuestro sistema automatizado de cobros."
         },
         {
           "title": "Ahorro de Tiempo",
-          "description": "Simplifica procesos complicados con herramientas diseñadas para optimizar tu tiempo y esfuerzo."
+          "desc": "Simplifica procesos complicados con herramientas diseñadas para optimizar tu tiempo y esfuerzo."
         }
       ]
     },
@@ -258,5 +258,14 @@
     "callToAction": "Explora el catálogo",
     "metaTitle": "Catálogo - Spazio",
     "metaDescription": "Explora nuestro catálogo de productos disponibles para canje de puntos y encuentra el premio perfecto para ti."
+  },
+  "property": {
+    "title": "Propiedades",
+    "subtitle": "Administra tus propiedades",
+    "addProperty": "Agregar propiedad",
+    "noProperties": "No se han agregado propiedades.",
+    "callToAction": "Registrar Propiedad",
+    "metaTitle": "Propiedades - Spazio",
+    "metaDescription": "Administra tus propiedades de forma segura y eficiente desde tu cuenta de Spazio."
   }
 }
