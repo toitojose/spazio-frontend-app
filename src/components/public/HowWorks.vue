@@ -27,7 +27,7 @@
               severity="secondary"
               size="small"
               class="my-4"
-              @click="slotProps.item.button.action()">
+              @click="slotProps.item.button.action">
               {{ slotProps.item.button.text }}
             </PButton>
           </div>
@@ -55,9 +55,7 @@ export default defineComponent({
       default: '¿Cómo funciona?',
     },
   },
-  setup() {
-    return {};
-  },
+  setup() {},
 });
 </script>
 <style scoped></style>

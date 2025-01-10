@@ -2,50 +2,10 @@ import { createRouter, createWebHistory } from 'vue-router';
 import AuthRoutes from '@/router/public/auth-routes';
 import BackofficeRoutes from '@/router/private/backoffice-routes.ts';
 import { i18n } from '@/locales/i18n';
-
-// Rutas públicas
-const publicRoutes = [
-  {
-    path: '/',
-    name: 'home',
-    component: () => import('@/ui/views/public/Home.vue'),
-    meta: {
-      title: 'default.title',
-      metaTitle: 'default.metaTitle',
-      metaDescription: 'default.metaDescription',
-    },
-  },
-  {
-    path: '/renter',
-    name: 'renter',
-    component: () => import('@/ui/views/public/Renter.vue'),
-    meta: {
-      metaTitle: 'renter.metaTitle',
-      metaDescription: 'renter.metaDescription',
-    },
-  },
-  {
-    path: '/property-owner',
-    name: 'property-owner',
-    component: () => import('@/ui/views/public/PropertyOwner.vue'),
-    meta: {
-      metaTitle: 'propertyOwner.metaTitle',
-      metaDescription: 'propertyOwner.metaDescription',
-    },
-  },
-  {
-    path: '/agent',
-    name: 'agent',
-    component: () => import('@/ui/views/public/Agent.vue'),
-    meta: {
-      metaTitle: 'agent.metaTitle',
-      metaDescription: 'agent.metaDescription',
-    },
-  },
-];
+import PublicRoutes from '@/router/public/public-routes.ts';
 
 // Consolidar rutas
-const routes = [...publicRoutes, ...AuthRoutes, ...BackofficeRoutes];
+const routes = [...AuthRoutes, ...PublicRoutes, ...BackofficeRoutes];
 
 // Crear instancia del router
 const router = createRouter({

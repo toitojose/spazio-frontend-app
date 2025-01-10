@@ -1,4 +1,4 @@
-import { createApp } from 'vue';
+import { createApp, ref } from 'vue';
 import { i18n } from '@/locales/i18n';
 import App from './App.vue';
 import router from '@/router';
@@ -24,6 +24,13 @@ app.use(PrimeVue, {
       darkModeSelector: isDarkMode ? '.dark' : 'none',
     },
   },
+});
+
+const showLoginDialog = ref(false);
+
+// Proveer globalmente la función
+app.provide('openLoginDialog', () => {
+  showLoginDialog.value = true;
 });
 
 app.mount('#app');

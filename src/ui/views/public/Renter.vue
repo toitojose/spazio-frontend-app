@@ -1,5 +1,5 @@
 <template>
-  <Generic>
+  <div>
     <!-- Sección Principal -->
     <MainUser
       class="bg-secondary"
@@ -78,7 +78,7 @@
         </Timeline>
       </div>
     </section>
-  </Generic>
+  </div>
 </template>
 
 <script lang="ts">

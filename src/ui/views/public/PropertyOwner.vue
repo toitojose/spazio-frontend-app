@@ -1,5 +1,5 @@
 <template>
-  <Generic>
+  <div>
     <!-- Sección Principal -->
     <MainUser
       class="bg-accent"
@@ -77,7 +77,7 @@
         </Timeline>
       </div>
     </section>
-  </Generic>
+  </div>
 </template>
 
 <script lang="ts">

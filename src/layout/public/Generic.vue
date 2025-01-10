@@ -41,7 +41,7 @@
   <main
     id="main"
     class="wrapper bg-gray-100">
-    <slot></slot>
+    <router-view />
   </main>
 
   <FooterSpazio />

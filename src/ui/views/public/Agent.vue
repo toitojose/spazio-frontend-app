@@ -1,5 +1,5 @@
 <template>
-  <Generic>
+  <div>
     <!-- Sección Principal -->
     <MainUser
       class="main-user"
@@ -67,7 +67,7 @@
         </div>
       </div>
     </section>
-  </Generic>
+  </div>
 </template>
 
 <script lang="ts">
@@ -92,13 +92,17 @@ export default defineComponent({
   setup() {
     const { t: $t, locale } = useI18n();
     const currentLocale = locale.value;
+    const openLoginDialog = inject<() => void>('openLoginDialog');
+    const openLogin = () => {
+      openLoginDialog?.();
+    };
     const steps = ref([
       {
         title: $t('agent.howItWorks.steps.0.title'),
         description: $t('agent.howItWorks.steps.0.desc'),
         button: {
           text: $t('register.title'),
-          action: () => openLogin,
+          action: () => openLogin(),
         },
       },
       {
@@ -141,19 +145,12 @@ export default defineComponent({
       },
     ];
 
-    const openLoginDialog = inject<() => void>('openLoginDialog');
-
-    const openLogin = () => {
-      openLoginDialog?.(); // Abre el diálogo global
-    };
-
     return {
       steps,
       slides,
       benefits,
       createAccountAction,
       offers,
-      openLogin,
     };
   },
 });
