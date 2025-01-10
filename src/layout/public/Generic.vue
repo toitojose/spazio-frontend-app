@@ -25,7 +25,7 @@
             text
             rounded
             :title="item.label"
-            @click="item.items ? toggleMenu(item.label, $event) : item.command" />
+            @click="item.items ? toggleMenu(item.label, $event) : item.command && item.command()" />
           <!-- Menú emergente -->
           <PMenu
             v-if="item.items"
@@ -69,9 +69,25 @@ export default defineComponent({
   setup() {
     const userStore = useUserStore();
 
-    const roleItems = computed<PublicMenuItemInterface[]>(() => {
-      return (
-        userStore.user?.roles
+    const menuItems = computed<PublicMenuItemInterface[]>(() => {
+      const items: PublicMenuItemInterface[] = [
+        { label: 'Más canjeados', icon: 'pi pi-thumbs-up', command: () => alert('Más canjeados') },
+        { label: 'Recientes', icon: 'pi pi-clock', command: () => alert('Recientes') },
+        {
+          label: 'Categorías',
+          icon: 'pi pi-list',
+          items: [
+            { label: 'Electrodomésticos', icon: 'pi pi-mobile', command: () => alert('Ver Electrodomésticos') },
+            { label: 'Muebles', icon: 'pi pi-home', command: () => alert('Ver Muebles') },
+            { label: 'Ropa', icon: 'pi pi-shopping-bag', command: () => alert('Ver Ropa') },
+            { label: 'Libros', icon: 'pi pi-book', command: () => alert('Ver Libros') },
+            { label: 'Tecnología', icon: 'pi pi-desktop', command: () => alert('Ver Tecnología') },
+          ],
+        },
+      ];
+
+      if (userStore.user) {
+        const roleItems = userStore.user.roles
           .map((role): PublicMenuItemInterface | null => {
             switch (role.name) {
               case 'ADMIN':
@@ -108,28 +124,11 @@ export default defineComponent({
                 return null;
             }
           })
-          .filter((item): item is PublicMenuItemInterface => item !== null) || []
-      );
-    });
+          .filter((item): item is PublicMenuItemInterface => item !== null);
 
-    const menuItems = computed<PublicMenuItemInterface[]>(() => {
-      const commonItems: PublicMenuItemInterface[] = [
-        { label: 'Más canjeados', icon: 'pi pi-thumbs-up', command: () => alert('Más canjeados') },
-        { label: 'Recientes', icon: 'pi pi-clock', command: () => alert('Recientes') },
-        {
-          label: 'Categorías',
-          icon: 'pi pi-list',
-          items: [
-            { label: 'Electrodomésticos', icon: 'pi pi-mobile', command: () => alert('Ver Electrodomésticos') },
-            { label: 'Muebles', icon: 'pi pi-home', command: () => alert('Ver Muebles') },
-            { label: 'Ropa', icon: 'pi pi-shopping-bag', command: () => alert('Ver Ropa') },
-            { label: 'Libros', icon: 'pi pi-book', command: () => alert('Ver Libros') },
-            { label: 'Tecnología', icon: 'pi pi-desktop', command: () => alert('Ver Tecnología') },
-          ],
-        },
-      ];
-
-      return [...commonItems, ...roleItems.value];
+        items.push(...roleItems);
+      }
+      return items;
     });
     const menuRefs = ref<{ [key: string]: any }>({});
     const setMenuRef = (key: string) => {
@@ -159,7 +158,13 @@ export default defineComponent({
           ],
         });
       } else {
-        items.push({ label: 'Iniciar sesión', icon: 'pi pi-sign-in', command: () => alert('Iniciar sesión') });
+        items.push({
+          label: 'Iniciar sesión',
+          icon: 'pi pi-sign-in',
+          command: () => {
+            showLoginDialog.value = true;
+          },
+        });
       }
       return items;
     });
