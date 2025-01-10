@@ -21,7 +21,7 @@
           <PButton
             type="button"
             :icon="item.icon"
-            severity="secondary"
+            severity="help"
             text
             rounded
             :title="item.label"
