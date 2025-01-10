@@ -40,58 +40,25 @@
     </section>
 
     <!-- ¿Cómo funciona? -->
-    <section class="bg-gray-900 py-8 text-center text-gray-200">
-      <h2 class="mb-10 text-3xl font-bold">¿Cómo funciona?</h2>
-      <div class="mx-auto flex lg:w-1/2">
-        <Timeline
-          :value="steps"
-          align="alternate"
-          class="how-works">
-          <!-- Marcador (número del paso) -->
-          <template #marker="slotProps">
-            <span
-              class="z-10 flex h-10 w-10 items-center justify-center rounded-full bg-secondary text-white shadow-sm">
-              {{ slotProps.index + 1 }}
-            </span>
-          </template>
-
-          <!-- Contenido del paso -->
-          <template #content="slotProps">
-            <div class="content flex flex-col pb-10">
-              <h3 class="text-lg font-semibold">{{ slotProps.item.title }}</h3>
-              <p class="text-sm">{{ slotProps.item.description }}</p>
-            </div>
-          </template>
-          <template #opposite="slotProps">
-            <div class="content flex flex-col pb-10">
-              <PVButton
-                v-if="slotProps.item.button"
-                severity="secondary"
-                size="small"
-                class="my-4"
-                @click="slotProps.item.button.action()">
-                {{ slotProps.item.button.text }}
-              </PVButton>
-            </div>
-          </template>
-        </Timeline>
-      </div>
-    </section>
+    <HowWorks
+      :title="$t('propertyOwner.howItWorks.title')"
+      :steps="steps" />
   </div>
 </template>
 
 <script lang="ts">
-import { defineComponent, ref } from 'vue';
+import { defineComponent, inject, ref } from 'vue';
 import Generic from '@/layout/public/Generic.vue';
 import { Carousel, Checkbox, InputText, Timeline, Button as PVButton } from 'primevue';
 import MainUser from '@/components/public/MainUser.vue';
 import { useI18n } from 'vue-i18n';
 import { i18n } from '@/locales/i18n.ts';
 import type { LocaleMessageInterface } from '@/interfaces/locale-message.interface.ts';
+import HowWorks from '@/components/public/HowWorks.vue';
 
 export default defineComponent({
   name: 'PropertyOwner',
-  components: { Generic, Checkbox, InputText, PVButton, Carousel, Timeline, MainUser },
+  components: { HowWorks, Generic, Checkbox, InputText, PVButton, Carousel, Timeline, MainUser },
   setup() {
     const { t: $t, locale } = useI18n();
     const currentLocale = locale.value;
@@ -102,15 +69,18 @@ export default defineComponent({
       wrapAround: true,
       pauseAutoplayOnHover: true,
     };
+
+    const openLoginDialog = inject<() => void>('openLoginDialog');
+    const openLogin = () => {
+      openLoginDialog?.();
+    };
     const steps = ref([
       {
         title: $t('propertyOwner.howItWorks.steps.0.title'),
         description: $t('propertyOwner.howItWorks.steps.0.desc'),
         button: {
           text: $t('property.callToAction'),
-          action: () => {
-            console.log('Redirigiendo al registro de propiedad...');
-          },
+          action: () => openLogin(),
         },
       },
       {
