@@ -1,15 +1,75 @@
-@media screen and (max-width: 500px) {
-    #home section {
-        height: auto !important;
-        display: block !important;
+/*#home section:not(:first-child) {*/
+/*    height: 100vh;*/
+/*    display: flex;*/
+/*}*/
+.bg-img-1 {
+    background-image: url('@/assets/img/luz.jpg');
+}
+.bg-img-3 {
+    background-image: url('@/assets/img/6.jpg');
+    background-position: left bottom;
+}
+.bg-img-2 {
+    background-image: url('@/assets/img/2.jpg');
+}
+.bg-img-4 {
+    background-image: url('@/assets/img/4.jpg');
+    background-position: left bottom;
+}
+.bg-img-abstract {
+    background-image: url('@/assets/img/bg.png');
+    background-position: right bottom;
+}
+.bg-parallax-image {
+    background-attachment: fixed;
+    background-size: cover;
+    background-position: center;
+}
+.text-shadow-white {
+    text-shadow: 1px 1px 1px var(--white-color);
+}
+
+.block-connection .icon {
+    @apply bg-transparent border-accent rounded-full border-2 p-2 mb-2;
+}
+.block-connection .p-button{
+    @apply bg-accent text-white mt-4 border-primary;
+}
+
+@keyframes scroll-dot {
+    0% {
+        transform: translateY(-0.5rem);
+        opacity: 1;
+    }
+    40% {
+        transform: translateY(0.5rem);
+        opacity: 0.8;
+    }
+    60% {
+        transform: translateY(0.5rem);
+        opacity: 0;
+    }
+    100% {
+        transform: translateY(0);
+        opacity: 0;
     }
 }
-/* media query para landscape */
-@media screen  and (orientation: landscape) {
-    #home section {
-        height: auto !important;
-        display: block !important;
-    }
+
+.scroll-indicator {
+    width: 1rem;
+    height: 2rem;
+    border: 2px solid var(--accent-color-500);
+    border-radius: 9999px;
+    position: absolute;
+}
+
+.scroll-dot {
+    animation: scroll-dot 1.5s infinite;
+    width: 0.5rem;
+    height: 0.5rem;
+    background-color: var(--accent-color-500);
+    border-radius: 9999px;
+    position: absolute;
 }
 
 #sidebar{
@@ -283,73 +343,16 @@ body.is-preload #sidebar ul li {
     transform: translateY(2em);
     opacity: 0;
 }
-
-/*@media screen and (max-width: 1280px) {
-
-    #sidebar {
-        height: 3.5em;
-        left: 0;
-        line-height: 3.5em;
-        overflow: hidden;
-        padding: 0;
-        text-align: center;
-        top: 0;
-        width: 100%;
+/*
+@media screen and (max-width: 500px) {
+    #home section:not(:first-child) {
+        @apply h-auto block;
     }
-
-    #sidebar > .inner {
-        -moz-flex-direction: row;
-        -webkit-flex-direction: row;
-        -ms-flex-direction: row;
-        flex-direction: row;
-        -moz-align-items: -moz-stretch;
-        -webkit-align-items: -webkit-stretch;
-        -ms-align-items: -ms-stretch;
-        align-items: stretch;
-        height: inherit;
-        line-height: inherit;
-    }
-
-    #sidebar {
-        height: inherit;
-        line-height: inherit;
-    }
-
-    #sidebar ul {
-        display: -moz-flex;
-        display: -webkit-flex;
-        display: -ms-flex;
-        display: flex;
-        height: inherit;
-        line-height: inherit;
-        margin: 0;
-    }
-
-    #sidebar ul li {
-        display: block;
-        height: inherit;
-        line-height: inherit;
-        margin: 0 0 0 2em;
-        padding: 0;
-    }
-
-    #sidebar a {
-        height: inherit;
-        line-height: inherit;
-        padding: 0;
-    }
-
-    #sidebar a:after {
-        background-image: none;
-        background-color: var(--accent-color-500);
-    }
-
 }
-
-@media screen and (max-width: 736px) {
-
-    #sidebar {
-        display: none;
+!* media query para landscape *!
+@media screen  and (orientation: landscape) {
+    #home section {
+        @apply h-auto block;
     }
-
-}*/
+}
+*/

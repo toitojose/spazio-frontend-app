@@ -22,7 +22,8 @@
           >WhatsApp:
           <a
             href="https://wa.me/593998665209"
-            class="text-secondary hover:underline"
+            target="_blank"
+            class="text-accent hover:underline"
             >+593 99 866 5209</a
           ></BlockFooter
         >
@@ -35,7 +36,7 @@
           >Escríbenos a:
           <a
             href="mailto:info@spazio.com.ec"
-            class="text-secondary hover:underline"
+            class="text-accent hover:underline"
             >info@spazio.com.ec</a
           ></BlockFooter
         >

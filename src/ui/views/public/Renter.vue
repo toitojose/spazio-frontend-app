@@ -6,9 +6,9 @@
       :slides="slides"
       :buttonText="$t('renter.mainUser.buttonText')"
       :buttonAction="createAccountAction"
-      :link="link"
+      userType="renter"
       image="inquilino-feliz.png"
-      :userName="userName"
+      userName="Fernanda Alarcón"
       :userMessage="$t('renter.mainUser.userMessage')" />
 
     <!-- Sección Explicativa -->
@@ -88,6 +88,7 @@ import { Carousel, Checkbox, InputText, Timeline, Button as PVButton } from 'pri
 import MainUser from '@/components/public/MainUser.vue';
 import { useI18n } from 'vue-i18n';
 import { i18n } from '@/locales/i18n.ts';
+import type { LocaleMessageInterface } from '@/interfaces/locale-message.interface.ts';
 
 export default defineComponent({
   name: 'renter',
@@ -101,8 +102,8 @@ export default defineComponent({
     MainUser,
   },
   setup() {
-    const currentLocale = i18n.global.locale.value;
-    const { t: $t } = useI18n();
+    const { t: $t, locale } = useI18n();
+    const currentLocale = locale.value;
     const checked1 = ref(true);
     const steps = ref([
       {
@@ -155,16 +156,8 @@ export default defineComponent({
       console.log('Crear cuenta clicada');
     };
 
-    const link = {
-      show: true,
-      text: $t('login.title'),
-      action: () => {
-        console.log('Inicia sesión clicado');
-      },
-    };
-
-    const userMessage = '¡Recibe premios por su pago del arriendo mensual!';
-    const slides = i18n.global.getLocaleMessage(currentLocale)?.renter?.mainUser?.slides || [];
+    const messages = i18n.global.getLocaleMessage(currentLocale) as LocaleMessageInterface;
+    const slides = messages.renter?.mainUser?.slides || [];
 
     const benefits = [
       {
@@ -190,8 +183,6 @@ export default defineComponent({
       slides,
       benefits,
       createAccountAction,
-      link,
-      userMessage,
     };
   },
 });

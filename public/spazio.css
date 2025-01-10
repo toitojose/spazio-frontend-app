@@ -6,9 +6,6 @@
     font-weight: 400;
     font-style: normal;
 }
-html {
-    font-size: 14px;
-}
 :root {
     --white-color: #ffffff;
     --primary-color-50: #f4f4f4;
@@ -23,18 +20,6 @@ html {
     --primary-color-900: #0c0c0c;
     --primary-color-950: #080808;
 
-    --p-primary-50: var(--primary-color-50);
-    --p-primary-100: var(--primary-color-100);
-    --p-primary-200: var(--primary-color-200);
-    --p-primary-300: var(--primary-color-300);
-    --p-primary-400: var(--primary-color-400);
-    --p-primary-500: var(--primary-color-500);
-    --p-primary-600: var(--primary-color-600);
-    --p-primary-700: var(--primary-color-700);
-    --p-primary-800: var(--primary-color-800);
-    --p-primary-900: var(--primary-color-900);
-    --p-primary-950: var(--primary-color-950);
-
     --accent-color-50: #fbf6fa;
     --accent-color-100: #eed5e5;
     --accent-color-200: #e0b3d0;
@@ -46,6 +31,30 @@ html {
     --accent-color-800: #652b50;
     --accent-color-900: #491f3a;
     --accent-color-950: #2e142;
+
+    --red-50: #fef2f2;
+    --red-100: #fee2e2;
+    --red-200: #fecaca;
+    --red-300: #fca5a5;
+    --red-400: #f87171;
+    --red-500: #ef4444;
+    --red-600: #dc2626;
+    --red-700: #b91c1c;
+    --red-800: #991b1b;
+    --red-900: #7f1d1d;
+    --red-950: #450a0a;
+
+    --p-primary-50: var(--primary-color-50);
+    --p-primary-100: var(--primary-color-100);
+    --p-primary-200: var(--primary-color-200);
+    --p-primary-300: var(--primary-color-300);
+    --p-primary-400: var(--primary-color-400);
+    --p-primary-500: var(--primary-color-500);
+    --p-primary-600: var(--primary-color-600);
+    --p-primary-700: var(--primary-color-700);
+    --p-primary-800: var(--primary-color-800);
+    --p-primary-900: var(--primary-color-900);
+    --p-primary-950: var(--primary-color-950);
 
     --p-secondary-50: var(--accent-color-50);
     --p-secondary-100: var(--accent-color-100);
@@ -73,23 +82,9 @@ html {
     --p-surface-950: var(--light-surface-950);
 
 
-
-    --red-50: #fef2f2;
-    --red-100: #fee2e2;
-    --red-200: #fecaca;
-    --red-300: #fca5a5;
-    --red-400: #f87171;
-    --red-500: #ef4444;
-    --red-600: #dc2626;
-    --red-700: #b91c1c;
-    --red-800: #991b1b;
-    --red-900: #7f1d1d;
-    --red-950: #450a0a;
-
-
     --primary-color: var(--primary-color-500);
-    --secondary-color: var(--accent-color-500);
-    --accent-color: var(--light-surface-500);
+    --accent-color: var(--accent-color-500);
+    --secondary-color: var(--light-surface-500);
 
     /*** LIGHT ***/
     --light-surface-0: #ffffff;

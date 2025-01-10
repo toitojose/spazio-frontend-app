@@ -6,7 +6,7 @@
       :slides="slides"
       :buttonText="$t('propertyOwner.mainUser.buttonText')"
       :buttonAction="createAccountAction"
-      :link="link"
+      userType="propertyOwner"
       image="woman-happy.png"
       userName="Andrea Villalba"
       :userMessage="$t('propertyOwner.mainUser.userMessage')" />
@@ -24,7 +24,7 @@
 
         <div
           v-for="benefit in benefits"
-          class="flex items-start space-x-6 border-b py-8">
+          class="flex items-start space-x-6 border-b py-4">
           <div class="icon flex items-center justify-center rounded-full border border-gray-600 p-3 text-secondary">
             <i
               class="pi"
@@ -40,13 +40,13 @@
     </section>
 
     <!-- ¿Cómo funciona? -->
-    <section class="bg-gray-900 p-8 text-center text-gray-200">
+    <section class="bg-gray-900 py-8 text-center text-gray-200">
       <h2 class="mb-10 text-3xl font-bold">¿Cómo funciona?</h2>
-      <div class="mx-auto flex w-1/2">
+      <div class="mx-auto flex lg:w-1/2">
         <Timeline
           :value="steps"
           align="alternate"
-          class="how-works w-1/2">
+          class="how-works">
           <!-- Marcador (número del paso) -->
           <template #marker="slotProps">
             <span
@@ -60,6 +60,10 @@
             <div class="content flex flex-col pb-10">
               <h3 class="text-lg font-semibold">{{ slotProps.item.title }}</h3>
               <p class="text-sm">{{ slotProps.item.description }}</p>
+            </div>
+          </template>
+          <template #opposite="slotProps">
+            <div class="content flex flex-col pb-10">
               <PVButton
                 v-if="slotProps.item.button"
                 severity="secondary"
@@ -83,13 +87,14 @@ import { Carousel, Checkbox, InputText, Timeline, Button as PVButton } from 'pri
 import MainUser from '@/components/public/MainUser.vue';
 import { useI18n } from 'vue-i18n';
 import { i18n } from '@/locales/i18n.ts';
+import type { LocaleMessageInterface } from '@/interfaces/locale-message.interface.ts';
 
 export default defineComponent({
   name: 'PropertyOwner',
   components: { Generic, Checkbox, InputText, PVButton, Carousel, Timeline, MainUser },
   setup() {
-    const currentLocale = i18n.global.locale.value;
-    const { t: $t } = useI18n();
+    const { t: $t, locale } = useI18n();
+    const currentLocale = locale.value;
     const checked1 = ref(true);
     const carouselConfig = {
       autoplay: 4000,
@@ -126,15 +131,8 @@ export default defineComponent({
       console.log('Crear cuenta clicada');
     };
 
-    const link = {
-      show: true,
-      text: $t('login.title'),
-      action: () => {
-        console.log('Inicia sesión clicado');
-      },
-    };
-    const userMessage = 'Disfruta de pagos puntuales y sin preocupaciones';
-    const slides = i18n.global.getLocaleMessage(currentLocale)?.propertyOwner?.mainUser?.slides || [];
+    const messages = i18n.global.getLocaleMessage(currentLocale) as LocaleMessageInterface;
+    const slides = messages.propertyOwner?.mainUser?.slides || [];
 
     const benefits = [
       {
@@ -154,7 +152,7 @@ export default defineComponent({
       },
     ];
 
-    return { benefits, checked1, carouselConfig, steps, slides, createAccountAction, link, userMessage };
+    return { benefits, checked1, carouselConfig, steps, slides, createAccountAction };
   },
 });
 </script>

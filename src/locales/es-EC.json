@@ -1,16 +1,16 @@
 {
   "default": {
-    "title": "Spazio",
+    "title": "SPAZIO",
     "subtitle": "Gestiona tus propiedades e incentivos de manera segura",
     "returnButton": "Regresa",
     "submitButton": "Envia",
     "cancelButton": "Cancela",
     "contactAgent": "Contactar un agente",
-    "metaTitle": "Spazio - Gestión de propiedades",
+    "metaTitle": "SPAZIO - Gestión de propiedades",
     "metaDescription": "La plataforma ideal para gestionar propiedades, incentivos y mucho más de forma eficiente y segura."
   },
   "register": {
-    "title": "Registro",
+    "title": "Registrate aquí",
     "subtitle": "Crea tu cuenta para comenzar",
     "name": "Nombre",
     "email": "Correo electrónico",
@@ -26,8 +26,8 @@
     "shortPassword": "La contraseña es muy corta.",
     "passwordMismatch": "Las contraseñas no coinciden.",
     "failed": "Error al registrar la cuenta. Inténtalo de nuevo.",
-    "metaTitle": "Registro - Spazio",
-    "metaDescription": "Crea tu cuenta de Spazio para gestionar tus propiedades e incentivos de manera segura y eficiente."
+    "metaTitle": "Registro - SPAZIO",
+    "metaDescription": "Crea tu cuenta de SPAZIO para gestionar tus propiedades e incentivos de manera segura y eficiente."
   },
   "login": {
     "title": "Iniciar sesión",
@@ -39,18 +39,19 @@
     "emptyPassword": "La contraseña no puede estar vacía.",
     "forgetPassword": "¿Olvidaste tu contraseña?",
     "failed": "Error al iniciar sesión. Inténtalo de nuevo.",
-    "metaTitle": "Inicio de sesión - Spazio",
-    "metaDescription": "Accede a tu cuenta de Spazio para gestionar tus propiedades e incentivos de manera segura.",
+    "metaTitle": "Inicio de sesión - SPAZIO",
+    "metaDescription": "Accede a tu cuenta de SPAZIO para gestionar tus propiedades e incentivos de manera segura.",
     "invalidEmail": "El correo ingresado no es válido.",
     "weakPassword": "La contraseña debe tener al menos 8 caracteres.",
-    "shortPassword": "La contraseña es muy corta."
+    "shortPassword": "La contraseña es muy corta.",
+    "emptyFields": "Los campos no pueden estar vacíos."
   },
   "notAvailable": {
     "title": "¡Ups!",
     "subtitle": "Esta página no está disponible.",
     "message": "Lo sentimos, pero la página que buscas no existe. Por favor, verifica la URL o regresa a la página de inicio.",
     "returnButton": "Ir a la página de inicio",
-    "metaTitle": "Página no disponible - Spazio",
+    "metaTitle": "Página no disponible - SPAZIO",
     "metaDescription": "La página que intentas acceder no está disponible en este momento. Por favor, vuelve a intentarlo más tarde."
   },
   "emailChange": {
@@ -64,7 +65,7 @@
     "invalidNewEmail": "El nuevo correo no es válido.",
     "submitButton": "Cambiar correo",
     "failed": "No se pudo cambiar el correo. Inténtalo de nuevo.",
-    "metaTitle": "Cambio de correo electrónico - Spazio",
+    "metaTitle": "Cambio de correo electrónico - SPAZIO",
     "metaDescription": "Actualiza tu dirección de correo electrónico para mantener tu cuenta segura y accesible."
   },
   "resetPassword": {
@@ -76,7 +77,7 @@
     "submitButton": "Enviar enlace",
     "successMessage": "Se ha enviado un enlace para restablecer tu contraseña.",
     "failed": "No se pudo enviar el enlace. Inténtalo nuevamente.",
-    "metaTitle": "Restablecer contraseña - Spazio",
+    "metaTitle": "Restablecer contraseña - SPAZIO",
     "metaDescription": "Ingresa tu correo electrónico para recibir un enlace que te permitirá restablecer tu contraseña."
   },
   "restorePassword": {
@@ -90,15 +91,15 @@
     "submitButton": "Restablecer contraseña",
     "successMessage": "Tu contraseña ha sido restablecida con éxito.",
     "failed": "No se pudo restablecer la contraseña. Inténtalo nuevamente.",
-    "metaTitle": "Restaurar contraseña - Spazio",
-    "metaDescription": "Establece una nueva contraseña para acceder a tu cuenta de Spazio y mantenerla protegida."
+    "metaTitle": "Restaurar contraseña - SPAZIO",
+    "metaDescription": "Establece una nueva contraseña para acceder a tu cuenta de SPAZIO y mantenerla protegida."
   },
   "dashboard": {
     "title": "Dashboard",
     "subtitle": "Bienvenido a tu dashboard de control",
     "properties": "Propiedades",
     "incentives": "Incentivos",
-    "metaTitle": "Dashboard - Spazio",
+    "metaTitle": "Dashboard - SPAZIO",
     "metaDescription": "Administra tus propiedades e incentivos de forma segura y eficiente desde tu tablero de control."
   },
   "error": {
@@ -117,11 +118,11 @@
     "addMethod": "Agregar método",
     "noMethods": "No se han agregado métodos de pago.",
     "callToAction": "Conoce los metodos de pago",
-    "metaTitle": "Métodos de pago - Spazio",
-    "metaDescription": "Administra tus métodos de pago de forma segura y eficiente desde tu cuenta de Spazio."
+    "metaTitle": "Métodos de pago - SPAZIO",
+    "metaDescription": "Administra tus métodos de pago de forma segura y eficiente desde tu cuenta de SPAZIO."
   },
   "renter": {
-    "metaTitle": "Inquilino - Spazio",
+    "metaTitle": "Inquilino - SPAZIO",
     "metaDescription": "Convierte tu arriendo en beneficios.",
     "mainUser": {
       "slides": [
@@ -131,19 +132,19 @@
         },
         {
           "title": "Cada pago se convierte en puntos acumulables",
-          "desc": "Al pagar tu arriendo puntualmente, acumulas puntos que puedes usar para obtener premios. En Spazio, cada transacción es una oportunidad para ganar."
+          "desc": "Al pagar tu arriendo puntualmente, acumulas puntos que puedes usar para obtener premios. En SPAZIO, cada transacción es una oportunidad para ganar."
         },
         {
           "title": "Canjea puntos por experiencias y productos exclusivos",
-          "desc": "Usa tus puntos para disfrutar de increíbles experiencias, servicios únicos y productos que se ajustan a tu estilo de vida. ¡Tus pagos valen más con Spazio!"
+          "desc": "Usa tus puntos para disfrutar de increíbles experiencias, servicios únicos y productos que se ajustan a tu estilo de vida. ¡Tus pagos valen más con SPAZIO!"
         }
       ],
       "buttonText": "Crea tu cuenta",
       "userMessage": "¡Recibe premios por su pago de arriendo mensual!"
     },
     "whySpazio": {
-      "title": "¿Por qué Spazio es diferente?",
-      "content": "En Spazio, creemos que pagar el arriendo no tiene que ser solo un gasto. Con nuestro programa de recompensas, cada pago puntual se convierte en puntos acumulables que puedes canjear por productos, servicios y experiencias exclusivas.",
+      "title": "¿Por qué SPAZIO es diferente?",
+      "content": "En SPAZIO, creemos que pagar el arriendo no tiene que ser solo un gasto. Con nuestro programa de recompensas, cada pago puntual se convierte en puntos acumulables que puedes canjear por productos, servicios y experiencias exclusivas.",
       "benefits": [
         {
           "title": "Gana puntos con tus pagos puntuales",
@@ -163,8 +164,8 @@
       "title": "¿Cómo funciona?",
       "steps": [
         {
-          "title": "Registrate en Spazio",
-          "desc": "Crea tu cuenta de inquilino en Spazio."
+          "title": "Registrate en SPAZIO",
+          "desc": "Crea tu cuenta de inquilino en SPAZIO."
         },
         {
           "title": "Encuentra tu nuevo hogar",
@@ -186,29 +187,29 @@
     }
   },
   "propertyOwner": {
-    "metaTitle": "Propietario - Spazio",
+    "metaTitle": "Propietario - SPAZIO",
     "metaDescription": "Administra tus propiedades de forma segura y eficiente.",
     "mainUser": {
       "slides": [
         {
           "title": "Administra tus propiedades de forma segura",
-          "desc": "Gestiona tus propiedades de forma segura y eficiente con Spazio. Nuestra plataforma te permite controlar tus propiedades y recibir pagos de forma rápida y sencilla."
+          "desc": "Gestiona tus propiedades de forma segura y eficiente con SPAZIO. Nuestra plataforma te permite controlar tus propiedades y recibir pagos de forma rápida y sencilla."
         },
         {
           "title": "Recibe pagos de forma rápida y segura",
-          "desc": "Con Spazio, recibir pagos de tus arriendos es fácil y seguro. Olvídate de los trámites engorrosos y recibe tus pagos de forma rápida y segura."
+          "desc": "Con SPAZIO, recibir pagos de tus arriendos es fácil y seguro. Olvídate de los trámites engorrosos y recibe tus pagos de forma rápida y segura."
         },
         {
           "title": "Gestiona tus propiedades de forma eficiente",
-          "desc": "Con Spazio, puedes gestionar tus propiedades de forma eficiente y segura. Controla tus propiedades, recibe pagos y administra tus arriendos de forma sencilla."
+          "desc": "Con SPAZIO, puedes gestionar tus propiedades de forma eficiente y segura. Controla tus propiedades, recibe pagos y administra tus arriendos de forma sencilla."
         }
       ],
       "buttonText": "Crea tu cuenta",
       "userMessage": "Disfruta de pagos puntuales y sin preocupaciones"
     },
     "whySpazio": {
-      "title": "¿Por qué Spazio es diferente?",
-      "content": "Sabemos que encontrar inquilinos puntuales puede ser agotador. Con Spazio, olvídate de insistir en los pagos o de vivir mes a mes esperando la renta. Nuestra plataforma automatiza todo el proceso, desde el cobro hasta la gestión, para que puedas enfocarte en disfrutar los frutos de tus propiedades sin estrés.",
+      "title": "¿Por qué SPAZIO es diferente?",
+      "content": "Sabemos que encontrar inquilinos puntuales puede ser agotador. Con SPAZIO, olvídate de insistir en los pagos o de vivir mes a mes esperando la renta. Nuestra plataforma automatiza todo el proceso, desde el cobro hasta la gestión, para que puedas enfocarte en disfrutar los frutos de tus propiedades sin estrés.",
       "benefits": [
         {
           "title": "Gestión Centralizada",
@@ -241,22 +242,119 @@
         },
         {
           "title": "Recibe tu Dinero Puntualmente",
-          "desc": "No más esperas ni recordatorios. Spazio transfiere el pago directamente a tu cuenta en la fecha acordada."
+          "desc": "No más esperas ni recordatorios. SPAZIO transfiere el pago directamente a tu cuenta en la fecha acordada."
         }
       ]
     }
   },
   "agent": {
-    "metaTitle": "Agente - Spazio",
+    "metaTitle": "Agente - SPAZIO",
     "metaDescription": "Gestiona tus propiedades e incentivos de manera segura y eficiente.",
-    "contactAgent": "Contactar un agente"
+    "contactAgent": "Contactar un agente",
+    "mainUser": {
+      "slides": [
+        {
+          "title": "¡El futuro del mercado inmobiliario comienza contigo!",
+          "desc": "Queremos impulsarte a cerrar más tratos y conectar con más clientes."
+        },
+        {
+          "title": "Más ingresos, menos complicaciones",
+          "desc": "Desde la captación de clientes hasta la gestión de contratos, nuestro sistema te respalda. Porque tu tiempo vale oro."
+        },
+        {
+          "title": "Tu esfuerzo merece más",
+          "desc": "Sabemos lo que implica tu trabajo. Estamos aquí para que ganes más, trabajando menos."
+        },
+        {
+          "title": "Únete y lleva tu carrera al siguiente nivel",
+          "desc": "Conecta con propietarios e inquilinos, y recibe recompensas que reflejan todo tu esfuerzo."
+        }
+      ],
+      "buttonText": "Crea tu cuenta",
+      "userMessage": "¡Triplicó ingresos cerrando 10 tratos con SPAZIO!"
+    },
+    "whySpazio": {
+      "title": "Herramientas inteligentes para maximizar tu potencial",
+      "content": "SPAZIO está diseñado para impulsar tu éxito como agente inmobiliario. Conecta con más clientes, gestiona tus propiedades de forma profesional y obtén recompensas exclusivas mientras simplificas tu trabajo. ¡Es hora de maximizar tu potencial y destacar en el mercado!",
+      "benefits": [
+        {
+          "title": "Obtención de puntos",
+          "desc": "Gana recompensas por cada propietario o inquilino que se una a la plataforma gracias a tu gestión."
+        },
+        {
+          "title": "Beneficios económicos",
+          "desc": "Recibe el 15% del primer mes de arriendo como comisión adicional."
+        },
+        {
+          "title": "Gestión sin complicaciones",
+          "desc": "Administra propiedades, clientes y contratos desde un único lugar, sin costos extras."
+        },
+        {
+          "title": "Publicidad dirigida",
+          "desc": "Atrae propietarios e inquilinos con nuestras campañas promocionales diseñadas para destacarte en el mercado."
+        },
+        {
+          "title": "Conexión directa con inquilinos",
+          "desc": "Redirigimos interesados directamente a ti o a tu inmobiliaria, simplificando el proceso de captación."
+        }
+      ]
+    },
+    "howItWorks": {
+      "title": "Cómo funciona",
+      "content": "Descubre lo fácil que es trabajar con SPAZIO. Simplificamos el proceso para que ganes más mientras gestionas tus propiedades y clientes de manera eficiente.",
+      "steps": [
+        {
+          "title": "Regístrate",
+          "desc": "Crea tu cuenta en minutos y comienza a usar la plataforma."
+        },
+        {
+          "title": "Registra propiedades e inquilinos",
+          "desc": "Añade propiedades y conecta con inquilinos interesados."
+        },
+        {
+          "title": "Cierra contratos",
+          "desc": "Gestiona contratos directamente desde la plataforma y empieza a ganar comisiones."
+        },
+        {
+          "title": "Gana y canjea puntos",
+          "desc": "Acumula puntos por cada contrato y cámbialos por productos exclusivos."
+        }
+      ]
+    },
+    "whatWeOffer": {
+      "title": "Impulsa tu carrera con SPAZIO",
+      "content": "Llevas tu carrera al siguiente nivel. Nuestro sistema está diseñado para ofrecerte las mejores herramientas y beneficios, sin complicaciones, ¡GRATIS!",
+      "features": [
+        {
+          "title": "Sistema gratuito de gestión profesional",
+          "desc": "Organiza tus propiedades y clientes sin pagar un centavo.",
+          "icon": "pi-wrench"
+        },
+        {
+          "title": "Base de datos amplia",
+          "desc": "Accede a una red de propiedades e inquilinos para encontrar la mejor combinación.",
+          "icon": "pi-database"
+        },
+        {
+          "title": "Soporte y capacitación",
+          "desc": "Nuestro equipo te respalda con formación y asistencia para que saques el máximo provecho de la plataforma.",
+          "icon": "pi-users"
+        },
+        {
+          "title": "Recompensas continuas",
+          "desc": "Aumenta tus ingresos mientras brindas un servicio excepcional a tus clientes.",
+          "icon": "pi-gift"
+        }
+      ]
+    }
+
   },
   "catalog": {
     "title": "Catálogo de productos",
     "subtitle": "Explora nuestro catálogo de productos",
     "noProducts": "No hay productos disponibles en este momento.",
     "callToAction": "Explora el catálogo",
-    "metaTitle": "Catálogo - Spazio",
+    "metaTitle": "Catálogo - SPAZIO",
     "metaDescription": "Explora nuestro catálogo de productos disponibles para canje de puntos y encuentra el premio perfecto para ti."
   },
   "property": {
@@ -265,7 +363,7 @@
     "addProperty": "Agregar propiedad",
     "noProperties": "No se han agregado propiedades.",
     "callToAction": "Registrar Propiedad",
-    "metaTitle": "Propiedades - Spazio",
-    "metaDescription": "Administra tus propiedades de forma segura y eficiente desde tu cuenta de Spazio."
+    "metaTitle": "Propiedades - SPAZIO",
+    "metaDescription": "Administra tus propiedades de forma segura y eficiente desde tu cuenta de SPAZIO."
   }
 }

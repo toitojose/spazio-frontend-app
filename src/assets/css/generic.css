@@ -1,0 +1,12 @@
+body .p-menubar {
+    @apply rounded-none border-none bg-primary text-white py-1 border border-b-white;
+}
+body .p-menubar .p-menubar-item-link {
+    @apply bg-primary text-white;
+}
+body .p-menubar .p-menubar-item-icon {
+    @apply text-accent;
+}
+body .p-menubar-item:not(.p-disabled) > .p-menubar-item-content:hover {
+    color: var(--accent-color-400);
+}

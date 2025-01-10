@@ -33,6 +33,15 @@ const publicRoutes = [
       metaDescription: 'propertyOwner.metaDescription',
     },
   },
+  {
+    path: '/agent',
+    name: 'agent',
+    component: () => import('@/ui/views/public/Agent.vue'),
+    meta: {
+      metaTitle: 'agent.metaTitle',
+      metaDescription: 'agent.metaDescription',
+    },
+  },
 ];
 
 // Consolidar rutas
@@ -42,7 +51,7 @@ const routes = [...publicRoutes, ...AuthRoutes, ...BackofficeRoutes];
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
   routes,
-  scrollBehavior(to, from, savedPosition) {
+  scrollBehavior(to, _from, savedPosition) {
     // Si se guarda la posición (retroceder/avanzar), úsala
     if (savedPosition) {
       return savedPosition;
