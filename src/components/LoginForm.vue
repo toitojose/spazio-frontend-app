@@ -37,7 +37,7 @@
         {{ $t('login.emptyPassword') }}
       </small>
     </div>
-    <div class="mb-4 text-center">
+    <div class="mb-4">
       <PButton
         id="loginButton"
         type="submit"
@@ -46,20 +46,66 @@
         class="w-full"
         size="small" />
     </div>
-    <div class="text-center">
+    <div class="mb-4 flex items-center justify-between">
+      <div class="flex items-center gap-2">
+        <Checkbox
+          v-model="rememberMe"
+          inputId="rememberMe"
+          name="rememberMe"
+          size="small"
+          value="true" />
+        <label
+          for="rememberMe"
+          class="text-sm"
+          >{{ $t('login.rememberMe') }}</label
+        >
+      </div>
       <router-link
         to="/reset-password"
         class="text-blue-500 hover:underline">
         {{ $t('login.forgetPassword') }}
       </router-link>
     </div>
+
+    <!-- Or with Email -->
+    <div class="my-4 flex items-center">
+      <div class="h-px flex-grow bg-gray-300"></div>
+      <span class="px-2 text-sm text-gray-500">{{ $t('register.withEmail') }}</span>
+      <div class="h-px flex-grow bg-gray-300"></div>
+    </div>
+
+    <!-- Google and Apple Buttons -->
+    <div class="flex space-x-4">
+      <Button
+        size="small"
+        :label="$t('login.loginGoogle')"
+        icon="pi pi-google"
+        class="w-full border-gray-300 bg-white text-gray-700 hover:bg-gray-100"
+        @click="cominSoon()" />
+      <Button
+        size="small"
+        :label="$t('login.loginFacebook')"
+        icon="pi pi-facebook"
+        class="w-full border-gray-300 bg-white text-gray-700 hover:bg-gray-100"
+        @click="cominSoon()" />
+    </div>
+
+    <!-- Sign In Link -->
+    <p class="mt-4 text-center text-sm">
+      {{ $t('login.noAccount') }}
+      <a
+        href="/register"
+        class="text-blue-600 hover:underline">
+        {{ $t('register.title') }}
+      </a>
+    </p>
   </form>
 </template>
 
 <script lang="ts">
 import { defineComponent, ref } from 'vue';
 import { useI18n } from 'vue-i18n';
-import { InputText, Password, Button as PButton, ProgressSpinner, Message } from 'primevue';
+import { InputText, Password, Button as PButton, ProgressSpinner, Message, Button, Checkbox } from 'primevue';
 
 import { LoginService } from '@/services/login-service.ts';
 import { authBackendClient } from '@/services/auth-backend-client.ts';
@@ -70,11 +116,13 @@ import type { AxiosError } from 'axios';
 export default defineComponent({
   name: 'LoginForm',
   components: {
+    Button,
     InputText,
     Password,
     PButton,
     ProgressSpinner,
     Message,
+    Checkbox,
   },
   emits: ['loginSuccess'],
   setup(_, { emit }) {
@@ -83,6 +131,7 @@ export default defineComponent({
     const errorMessage = ref('');
     const isLoading = ref(false);
     const { t } = useI18n();
+    const rememberMe = ref(false);
 
     const loginService = new LoginService(authBackendClient);
 
@@ -98,7 +147,10 @@ export default defineComponent({
 
           // Guardar usuario en Pinia
           const userStore = useUserStore();
-          userStore.setUser({ id: user.id, username: user.username, roles: user.roles }, token);
+          userStore.setUser(
+            { id: user.id, firstname: user.firstname, lastname: user.lastname, roles: user.roles },
+            token,
+          );
 
           emit('loginSuccess', { user, token });
         } else if (response.error?.key) {
@@ -124,12 +176,18 @@ export default defineComponent({
       await handleLogin();
     };
 
+    const cominSoon = () => {
+      alert('Coming soon');
+    };
+
     return {
       email,
       password,
       isLoading,
       errorMessage,
+      cominSoon,
       onSubmit,
+      rememberMe,
     };
   },
 });

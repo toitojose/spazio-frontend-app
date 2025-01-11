@@ -46,6 +46,15 @@ const AuthRoutes: RouteRecordRaw[] = [
       metaDescription: 'restorePassword.metaDescription',
     },
   },
+  {
+    path: '/register',
+    name: 'register',
+    component: () => import('@/ui/views/public/auth/Register.vue'),
+    meta: {
+      metaTitle: 'register.metaTitle',
+      metaDescription: 'register.metaDescription',
+    },
+  },
 ];
 
 export default AuthRoutes;

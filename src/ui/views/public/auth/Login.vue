@@ -9,11 +9,13 @@
 <script lang="ts">
 import { defineComponent } from 'vue';
 import Auth from '@/layout/public/auth/Auth.vue';
+import LoginForm from '@/components/LoginForm.vue';
 
 export default defineComponent({
   name: 'Login',
   components: {
     Auth,
+    LoginForm,
   },
   setup() {
     const handleLoginSuccess = (payload: { user: any; token: any }) => {
@@ -28,10 +30,3 @@ export default defineComponent({
   },
 });
 </script>
-
-<style scoped>
-.p-error {
-  color: var(--aura-error);
-  font-size: 0.875rem;
-}
-</style>

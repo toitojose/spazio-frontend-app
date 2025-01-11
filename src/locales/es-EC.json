@@ -12,11 +12,12 @@
   "register": {
     "title": "Registrate aquí",
     "subtitle": "Crea tu cuenta para comenzar",
-    "name": "Nombre",
+    "firstname": "Nombre",
+    "lastname": "Apellido",
     "email": "Correo electrónico",
     "password": "Contraseña",
     "confirmPassword": "Confirmar contraseña",
-    "registerButton": "Registrarse",
+    "signUpButton": "Registrarse",
     "emptyName": "El nombre no puede estar vacío.",
     "emptyEmail": "El correo electrónico no puede estar vacío.",
     "emptyPassword": "La contraseña no puede estar vacía.",
@@ -26,6 +27,11 @@
     "shortPassword": "La contraseña es muy corta.",
     "passwordMismatch": "Las contraseñas no coinciden.",
     "failed": "Error al registrar la cuenta. Inténtalo de nuevo.",
+    "hasAccount": "¿Ya tienes una cuenta?",
+    "withEmail": "O con correo electrónico",
+    "signUpGoogle": "Regístrate con Google",
+    "signUpFacebook": "Regístrate con Facebook",
+    "emptyFields": "Los campos no pueden estar vacíos.",
     "metaTitle": "Registro - SPAZIO",
     "metaDescription": "Crea tu cuenta de SPAZIO para gestionar tus propiedades e incentivos de manera segura y eficiente."
   },
@@ -44,7 +50,11 @@
     "invalidEmail": "El correo ingresado no es válido.",
     "weakPassword": "La contraseña debe tener al menos 8 caracteres.",
     "shortPassword": "La contraseña es muy corta.",
-    "emptyFields": "Los campos no pueden estar vacíos."
+    "emptyFields": "Los campos no pueden estar vacíos.",
+    "noAccount": "¿No tienes una cuenta?",
+    "rememberMe": "Recuérdame",
+    "loginGoogle": "Inicia sesión con Google",
+    "loginFacebook": "Inicia sesión con Facebook"
   },
   "notAvailable": {
     "title": "¡Ups!",
@@ -110,7 +120,9 @@
     "notFound": "Recurso no encontrado.",
     "serverError": "Error interno del servidor",
     "noResponse": "No se recibió ninguna respuesta del servidor. Verifique su conexión",
-    "unhandled": "Error inesperado. Intente de nuevo más tarde"
+    "unhandled": "Error inesperado. Intente de nuevo más tarde",
+    "user_already_exists": "Ya existe un usuario registrado con ese correo electrónico.",
+    "signup_success": "Usuario registrado con éxito. Por favor, inicie sesión."
   },
   "paymentsMethods": {
     "title": "Métodos de pago",

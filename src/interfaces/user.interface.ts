@@ -5,6 +5,7 @@ export interface Role {
 
 export interface User {
   id: number;
-  username: string;
-  roles: Role[];
+  firstname: string;
+  lastname: string;
+  roles?: Role[];
 }

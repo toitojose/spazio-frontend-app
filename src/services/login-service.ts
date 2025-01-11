@@ -6,7 +6,8 @@ interface LoginResult {
   data?: {
     user: {
       id: number;
-      username: string;
+      firstname: string;
+      lastname: string;
       email: string;
       lastLoginAt: string;
       created_at: string;
