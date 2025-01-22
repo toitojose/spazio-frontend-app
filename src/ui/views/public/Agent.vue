@@ -70,90 +70,75 @@
   </div>
 </template>
 
-<script lang="ts">
-import { defineComponent, inject, ref } from 'vue';
-import Generic from '@/layout/public/Generic.vue';
-import { Timeline, Button as PVButton } from 'primevue';
+<script setup lang="ts">
+import { inject, ref } from 'vue';
 import MainUser from '@/components/public/MainUser.vue';
 import { useI18n } from 'vue-i18n';
 import { i18n } from '@/locales/i18n.ts';
 import type { LocaleMessageInterface } from '@/interfaces/locale-message.interface.ts';
 import HowWorks from '@/components/public/HowWorks.vue';
+const { t: $t, locale } = useI18n();
+const currentLocale = locale.value;
 
-export default defineComponent({
-  name: 'Agent',
-  components: {
-    HowWorks,
-    Generic,
-    PVButton,
-    Timeline,
-    MainUser,
+// Open dialog for authentication (login or signup)
+const openAuthDialog = inject<(formType: 'login' | 'signup') => void>('openAuthDialog');
+
+const openSignUp = () => {
+  if (openAuthDialog) {
+    openAuthDialog('signup');
+  } else {
+    console.warn('openAuthDialog no está disponible');
+  }
+};
+
+const steps = ref([
+  {
+    title: $t('agent.howItWorks.steps.0.title'),
+    description: $t('agent.howItWorks.steps.0.desc'),
+    button: {
+      text: `${$t('register.callToAction')} ${$t('default.or')} ${$t('login.callToAction')}`,
+      action: () => openSignUp(),
+    },
   },
-  setup() {
-    const { t: $t, locale } = useI18n();
-    const currentLocale = locale.value;
-    const openLoginDialog = inject<() => void>('openLoginDialog');
-    const openLogin = () => {
-      openLoginDialog?.();
-    };
-    const steps = ref([
-      {
-        title: $t('agent.howItWorks.steps.0.title'),
-        description: $t('agent.howItWorks.steps.0.desc'),
-        button: {
-          text: $t('register.title'),
-          action: () => openLogin(),
-        },
-      },
-      {
-        title: $t('agent.howItWorks.steps.1.title'),
-        description: $t('agent.howItWorks.steps.1.desc'),
-      },
-      {
-        title: $t('agent.howItWorks.steps.2.title'),
-        description: $t('agent.howItWorks.steps.2.desc'),
-      },
-      {
-        title: $t('agent.howItWorks.steps.3.title'),
-        description: $t('agent.howItWorks.steps.3.desc'),
-      },
-    ]);
-
-    const createAccountAction = () => {
-      console.log('Crear cuenta clicada');
-    };
-
-    const messages = i18n.global.getLocaleMessage(currentLocale) as LocaleMessageInterface;
-    const slides = messages.agent?.mainUser?.slides || [];
-    const offers = messages.agent?.whatWeOffer?.features || [];
-
-    const benefits = [
-      {
-        title: $t('agent.whySpazio.benefits.0.title'),
-        description: $t('agent.whySpazio.benefits.0.desc'),
-        icon: 'pi-star',
-      },
-      {
-        title: $t('agent.whySpazio.benefits.1.title'),
-        description: $t('agent.whySpazio.benefits.1.desc'),
-        icon: 'pi-cog',
-      },
-      {
-        title: $t('agent.whySpazio.benefits.2.title'),
-        description: $t('agent.whySpazio.benefits.2.desc'),
-        icon: 'pi-share-alt',
-      },
-    ];
-
-    return {
-      steps,
-      slides,
-      benefits,
-      createAccountAction,
-      offers,
-    };
+  {
+    title: $t('agent.howItWorks.steps.1.title'),
+    description: $t('agent.howItWorks.steps.1.desc'),
   },
-});
+  {
+    title: $t('agent.howItWorks.steps.2.title'),
+    description: $t('agent.howItWorks.steps.2.desc'),
+  },
+  {
+    title: $t('agent.howItWorks.steps.3.title'),
+    description: $t('agent.howItWorks.steps.3.desc'),
+  },
+]);
+
+const createAccountAction = () => {
+  console.log('Crear cuenta clicada');
+};
+
+const messages = i18n.global.getLocaleMessage(currentLocale) as LocaleMessageInterface;
+const slides = messages.agent?.mainUser?.slides || [];
+const offers = messages.agent?.whatWeOffer?.features || [];
+
+const benefits = [
+  {
+    title: $t('agent.whySpazio.benefits.0.title'),
+    description: $t('agent.whySpazio.benefits.0.desc'),
+    icon: 'pi-star',
+  },
+  {
+    title: $t('agent.whySpazio.benefits.1.title'),
+    description: $t('agent.whySpazio.benefits.1.desc'),
+    icon: 'pi-cog',
+  },
+  {
+    title: $t('agent.whySpazio.benefits.2.title'),
+    description: $t('agent.whySpazio.benefits.2.desc'),
+    icon: 'pi-share-alt',
+  },
+];
 </script>
 
 <style scoped>

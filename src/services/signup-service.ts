@@ -36,6 +36,7 @@ export class SignupService {
       });
       return response.data;
     } catch (error: any) {
+      console.log('=>(signup-service.ts:39) error', error);
       if (error.response && error.response.data) {
         return {
           result: false,

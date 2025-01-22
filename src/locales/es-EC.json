@@ -6,12 +6,13 @@
     "submitButton": "Envia",
     "cancelButton": "Cancela",
     "contactAgent": "Contactar un agente",
+    "or": "o",
     "metaTitle": "SPAZIO - Gestión de propiedades",
     "metaDescription": "La plataforma ideal para gestionar propiedades, incentivos y mucho más de forma eficiente y segura."
   },
   "register": {
-    "title": "Registrate aquí",
-    "subtitle": "Crea tu cuenta para comenzar",
+    "title": "¡Únete a SPAZIO!",
+    "subtitle": "Crea tu cuenta y comienza a disfrutar de nuestros servicios.",
     "firstname": "Nombre",
     "lastname": "Apellido",
     "email": "Correo electrónico",
@@ -32,12 +33,15 @@
     "signUpGoogle": "Regístrate con Google",
     "signUpFacebook": "Regístrate con Facebook",
     "emptyFields": "Los campos no pueden estar vacíos.",
+    "callToAction": "Crea tu cuenta",
+    "successTitle": "¡Registro exitoso!",
+    "successMessage": "Tu cuenta ha sido creada con éxito. Por favor, verifica tu correo electrónico para continuar.",
     "metaTitle": "Registro - SPAZIO",
     "metaDescription": "Crea tu cuenta de SPAZIO para gestionar tus propiedades e incentivos de manera segura y eficiente."
   },
   "login": {
-    "title": "Iniciar sesión",
-    "subtitle": "Ingresa tus datos para continuar",
+    "title": "¡Bienvenido de nuevo!",
+    "subtitle": "Inicia sesión para continuar explorando",
     "email": "Correo electrónico",
     "password": "Contraseña",
     "loginButton": "Ingresar",
@@ -51,10 +55,22 @@
     "weakPassword": "La contraseña debe tener al menos 8 caracteres.",
     "shortPassword": "La contraseña es muy corta.",
     "emptyFields": "Los campos no pueden estar vacíos.",
+    "callToAction": "Inicia sesión",
     "noAccount": "¿No tienes una cuenta?",
     "rememberMe": "Recuérdame",
     "loginGoogle": "Inicia sesión con Google",
     "loginFacebook": "Inicia sesión con Facebook"
+  },
+  "auth": {
+    "title": "Bienvenido a Spazio",
+    "subtitle": "Accede a tu cuenta o regístrate para comenzar.",
+    "code": "Código de verificación",
+    "emptyCode": "El código no puede estar vacío.",
+    "invalidCode": "El código ingresado no es válido.",
+    "submitButton": "Verificar",
+    "failed": "Error al verificar el código. Inténtalo de nuevo.",
+    "metaTitle": "Autenticación - SPAZIO",
+    "metaDescription": "Verifica tu cuenta de SPAZIO para acceder a todas las funciones y beneficios de la plataforma."
   },
   "notAvailable": {
     "title": "¡Ups!",

@@ -11,10 +11,11 @@ import 'public/spazio.css';
 const isDarkMode = true;
 
 const app = createApp(App);
-app.use(router);
-app.use(createPinia());
-app.use(i18n);
+const pinia = createPinia();
 
+app.use(router);
+app.use(pinia);
+app.use(i18n);
 app.use(PrimeVue, {
   ripple: true,
   theme: {

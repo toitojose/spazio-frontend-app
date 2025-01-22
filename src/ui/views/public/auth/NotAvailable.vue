@@ -1,34 +1,26 @@
 <template>
-  <Auth :title="$t('notAvailable.title')" :subtitle="$t('notAvailable.subtitle')">
+  <Auth
+    :title="$t('notAvailable.title')"
+    :subtitle="$t('notAvailable.subtitle')">
     <div class="text-center">
       <p class="mb-6 text-gray-700">{{ $t('notAvailable.message') }}</p>
-      <Button :label="$t('notAvailable.returnButton')" class="p-button-primary w-full" size="small" @click="navigateToHome" />
+      <Button
+        :label="$t('notAvailable.returnButton')"
+        class="p-button-primary w-full"
+        size="small"
+        @click="navigateToHome" />
     </div>
   </Auth>
 </template>
 
-<script lang="ts">
-import { defineComponent } from 'vue';
+<script setup lang="ts">
 import { useRouter } from 'vue-router';
 import Button from 'primevue/button';
 import Auth from '@/layout/public/auth/Auth.vue';
 
-export default defineComponent({
-  name: 'NotAvailable',
-  components: {
-    Auth,
-    Button,
-  },
-  setup() {
-    const router = useRouter();
+const router = useRouter();
 
-    const navigateToHome = () => {
-      router.push({ name: 'home' }); // Cambia 'home' por la ruta correspondiente
-    };
-
-    return {
-      navigateToHome,
-    };
-  },
-});
+const navigateToHome = () => {
+  router.push({ name: 'home' });
+};
 </script>

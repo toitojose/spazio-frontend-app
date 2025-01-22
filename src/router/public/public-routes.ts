@@ -6,16 +6,6 @@ export default [
     component: Generic,
     children: [
       {
-        path: '',
-        name: 'home',
-        component: () => import('@/ui/views/public/Home.vue'),
-        meta: {
-          title: 'default.title',
-          metaTitle: 'default.metaTitle',
-          metaDescription: 'default.metaDescription',
-        },
-      },
-      {
         path: 'renter',
         name: 'renter',
         component: () => import('@/ui/views/public/Renter.vue'),

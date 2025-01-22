@@ -93,102 +93,76 @@
     <!-- Sign In Link -->
     <p class="mt-4 text-center text-sm">
       {{ $t('login.noAccount') }}
-      <a
-        href="/register"
-        class="text-blue-600 hover:underline">
-        {{ $t('register.title') }}
-      </a>
+      <Button
+        size="small"
+        severity="primary"
+        variant="text"
+        :label="$t('register.callToAction')"
+        class="hover:underline"
+        @click.prevent="$emit('toggleForm')" />
     </p>
   </form>
 </template>
 
-<script lang="ts">
-import { defineComponent, ref } from 'vue';
+<script setup lang="ts">
+import { ref } from 'vue';
 import { useI18n } from 'vue-i18n';
-import { InputText, Password, Button as PButton, ProgressSpinner, Message, Button, Checkbox } from 'primevue';
-
+import { InputText, Password, Button as PButton, Message, Button, Checkbox } from 'primevue';
 import { LoginService } from '@/services/login-service.ts';
 import { authBackendClient } from '@/services/auth-backend-client.ts';
 import { errorHandlerService } from '@/services/error-handler-service.ts';
 import { useUserStore } from '@/store/user.ts';
 import type { AxiosError } from 'axios';
 
-export default defineComponent({
-  name: 'LoginForm',
-  components: {
-    Button,
-    InputText,
-    Password,
-    PButton,
-    ProgressSpinner,
-    Message,
-    Checkbox,
-  },
-  emits: ['loginSuccess'],
-  setup(_, { emit }) {
-    const email = ref('');
-    const password = ref('');
-    const errorMessage = ref('');
-    const isLoading = ref(false);
-    const { t } = useI18n();
-    const rememberMe = ref(false);
+const email = ref('');
+const password = ref('');
+const errorMessage = ref('');
+const isLoading = ref(false);
+const { t } = useI18n();
+const rememberMe = ref(false);
 
-    const loginService = new LoginService(authBackendClient);
+const loginService = new LoginService(authBackendClient);
 
-    const sanitizeMail = (mail: string): string => mail.toLowerCase().trim();
+const sanitizeMail = (mail: string): string => mail.toLowerCase().trim();
 
-    const handleLogin = async () => {
-      try {
-        const sanitizedEmail = sanitizeMail(email.value);
-        const response = await loginService.login(sanitizedEmail, password.value);
+const handleLogin = async () => {
+  try {
+    const sanitizedEmail = sanitizeMail(email.value);
+    const response = await loginService.login(sanitizedEmail, password.value);
 
-        if (response.result && response.data) {
-          const { user, token } = response.data;
+    if (response.result && response.data) {
+      const { user, token } = response.data;
 
-          // Guardar usuario en Pinia
-          const userStore = useUserStore();
-          userStore.setUser(
-            { id: user.id, firstname: user.firstname, lastname: user.lastname, roles: user.roles },
-            token,
-          );
+      // Guardar usuario en Pinia
+      const userStore = useUserStore();
+      userStore.setUser({ id: user.id, firstname: user.firstname, lastname: user.lastname, roles: user.roles }, token);
 
-          emit('loginSuccess', { user, token });
-        } else if (response.error?.key) {
-          errorMessage.value = t(`error.${response.error.key}`) || t('error.unhandled');
-        } else {
-          errorMessage.value = t('error.unhandled');
-        }
-      } catch (error) {
-        const handledError = errorHandlerService.handleError(error as AxiosError);
-        errorMessage.value = t(`error.${handledError.key}`) || handledError.message || t('error.unhandled');
-      } finally {
-        isLoading.value = false;
-      }
-    };
+      const emit = defineEmits<{ (e: 'loginSuccess', data: { user: any; token: string }) }>();
+      emit('loginSuccess', { user, token });
+    } else if (response.error?.key) {
+      errorMessage.value = t(`error.${response.error.key}`) || t('error.unhandled');
+    } else {
+      errorMessage.value = t('error.unhandled');
+    }
+  } catch (error) {
+    const handledError = errorHandlerService.handleError(error as AxiosError);
+    errorMessage.value = t(`error.${handledError.key}`) || handledError.message || t('error.unhandled');
+  } finally {
+    isLoading.value = false;
+  }
+};
 
-    const onSubmit = async () => {
-      errorMessage.value = '';
-      if (!email.value.trim() || !password.value.trim()) {
-        errorMessage.value = t('login.emptyFields');
-        return;
-      }
-      isLoading.value = true;
-      await handleLogin();
-    };
+const onSubmit = async () => {
+  errorMessage.value = '';
+  if (!email.value.trim() || !password.value.trim()) {
+    errorMessage.value = t('login.emptyFields');
+    return;
+  }
+  isLoading.value = true;
+  await handleLogin();
+};
 
-    const cominSoon = () => {
-      alert('Coming soon');
-    };
-
-    return {
-      email,
-      password,
-      isLoading,
-      errorMessage,
-      cominSoon,
-      onSubmit,
-      rememberMe,
-    };
-  },
-});
+const cominSoon = () => {
+  alert('Coming soon');
+};
 </script>

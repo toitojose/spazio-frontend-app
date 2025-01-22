@@ -23,13 +23,13 @@
           :label="buttonText"
           icon="pi pi-user-plus"
           severity="Primary"
-          @click="buttonAction" />
+          @click="openSignUp()" />
         <p class="mt-2">
           <PButton
-            :label="$t('login.title')"
+            :label="$t('login.callToAction')"
             variant="link"
             class="underline"
-            @click.prevent="openLogin" />
+            @click.prevent="openLogin()" />
         </p>
       </div>
     </div>
@@ -59,57 +59,53 @@
   </section>
 </template>
 
-<script lang="ts">
-import { defineComponent, inject } from 'vue';
+<script setup lang="ts">
+import { inject } from 'vue';
 import type { PropType } from 'vue';
-import { Carousel, Button as PButton, Dialog as PDialog } from 'primevue';
-import LoginForm from '@/components/LoginForm.vue';
+import { Carousel, Button as PButton } from 'primevue';
 
-export default defineComponent({
-  name: 'MainUser',
-  components: { LoginForm, Carousel, PButton, PDialog },
-  props: {
-    slides: {
-      type: Array as PropType<Array<{ title: string; desc: string }>>,
-      required: true,
-    },
-    buttonText: {
-      type: String,
-      required: true,
-    },
-    buttonAction: {
-      type: Function as PropType<() => void>,
-      required: true,
-    },
-    userType: {
-      type: String,
-      required: true,
-    },
-    image: {
-      type: String,
-      required: true,
-      default: 'inquilino-feliz.png',
-    },
-    userName: {
-      type: String,
-      required: true,
-    },
-    userMessage: {
-      type: String,
-      required: true,
-    },
+defineProps({
+  slides: {
+    type: Array as PropType<Array<{ title: string; desc: string }>>,
+    required: true,
   },
-  setup() {
-    const openLoginDialog = inject<() => void>('openLoginDialog');
-
-    const openLogin = () => {
-      openLoginDialog?.(); // Abre el diálogo global
-    };
-
-    return { openLogin };
+  buttonText: {
+    type: String,
+    required: true,
+  },
+  buttonAction: {
+    type: Function as PropType<() => void>,
+    required: true,
+  },
+  userType: {
+    type: String,
+    required: true,
+  },
+  image: {
+    type: String,
+    required: true,
+    default: 'inquilino-feliz.png',
+  },
+  userName: {
+    type: String,
+    required: true,
+  },
+  userMessage: {
+    type: String,
+    required: true,
   },
 });
+
+// Open dialog for authentication (login or signup)
+const openAuthDialog = inject<(formType: 'login' | 'signup') => void>('openAuthDialog');
+const openLogin = () => {
+  openAuthDialog?.('login');
+};
+const openSignUp = () => {
+  openAuthDialog?.('signup');
+};
 </script>
+
 <style scoped>
 .bg-img-abstract {
   background-image: url('@/assets/img/bg.png');

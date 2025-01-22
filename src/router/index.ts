@@ -3,9 +3,32 @@ import AuthRoutes from '@/router/public/auth-routes';
 import BackofficeRoutes from '@/router/private/backoffice-routes.ts';
 import { i18n } from '@/locales/i18n';
 import PublicRoutes from '@/router/public/public-routes.ts';
+import renterRoutes from '@/router/private/renter-routes.ts';
+import AgentRoutes from '@/router/private/agent-routes.ts';
+import PropertyOwnerRoutes from '@/router/private/property-owner-routes.ts';
 
+const home = [
+  {
+    path: '',
+    name: 'home',
+    component: () => import('@/ui/views/public/Home.vue'),
+    meta: {
+      title: 'default.title',
+      metaTitle: 'default.metaTitle',
+      metaDescription: 'default.metaDescription',
+    },
+  },
+];
 // Consolidar rutas
-const routes = [...AuthRoutes, ...PublicRoutes, ...BackofficeRoutes];
+const routes = [
+  ...home,
+  ...AuthRoutes,
+  ...PublicRoutes,
+  ...BackofficeRoutes,
+  ...renterRoutes,
+  ...AgentRoutes,
+  ...PropertyOwnerRoutes,
+];
 
 // Crear instancia del router
 const router = createRouter({

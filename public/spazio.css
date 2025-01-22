@@ -1,5 +1,6 @@
 @import url('https://fonts.googleapis.com/css2?family=Poiret+One&display=swap');
 @import "@/assets/css/spazio-logo.css";
+@import "@/assets/css/spazio-icons.css";
 
 .font-logo{
     font-family: "Poiret One", serif;
