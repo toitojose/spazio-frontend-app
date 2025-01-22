@@ -49,7 +49,7 @@
 
 <script lang="ts">
 import { defineComponent, inject, ref } from 'vue';
-import Generic from '@/layout/public/Generic.vue';
+import Generic from '@/layout/Generic.vue';
 import { Carousel, Checkbox, InputText, Timeline, Button as PVButton } from 'primevue';
 import MainUser from '@/components/public/MainUser.vue';
 import { useI18n } from 'vue-i18n';

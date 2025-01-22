@@ -1,10 +1,20 @@
-import Generic from '@/layout/public/Generic.vue';
+import Generic from '@/layout/Generic.vue';
 
 export default [
   {
     path: '/',
     component: Generic,
     children: [
+      {
+        path: '',
+        name: 'home',
+        component: () => import('@/ui/views/public/Home.vue'),
+        meta: {
+          title: 'default.title',
+          metaTitle: 'default.metaTitle',
+          metaDescription: 'default.metaDescription',
+        },
+      },
       {
         path: 'renter',
         name: 'renter',

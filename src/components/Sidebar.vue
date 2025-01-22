@@ -23,6 +23,17 @@
       <nav class="sidebar-nav">
         <!-- Sección Inquilino -->
         <div>
+          <ul class="mt-2 space-y-2">
+            <li>
+              <a
+                href="/"
+                class="flex items-center space-x-3 rounded px-3 py-2 hover:bg-gray-100">
+                <i class="pi pi-home"></i>
+                <span>Portada</span>
+              </a>
+            </li>
+          </ul>
+
           <h3 class="sidebar-nav-title">Inquilino</h3>
           <ul class="mt-2 space-y-2">
             <li>
@@ -37,7 +48,7 @@
               <a
                 href="#"
                 class="flex items-center space-x-3 rounded px-3 py-2 hover:bg-gray-100">
-                <i class="pi pi-home"></i>
+                <i class="pi pi-key"></i>
                 <span>Mis arriendos</span>
               </a>
             </li>

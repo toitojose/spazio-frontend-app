@@ -1,24 +1,13 @@
 <template>
-  <!-- Header -->
-  <Menubar
-    id="main-sidebar"
-    :model="menuItems">
-    <template #start>
-      <a
-        href="/"
-        class="flex items-center">
-        <span class="sp-spazio-logotipo text-2xl"></span>
-      </a>
-    </template>
-
-    <!-- Carrito al final -->
-    <template #end>
-      <div class="flex items-center space-x-4">
+  <div class="relative">
+    <Sidebar />
+    <Header>
+      <nav class="flex items-center space-x-0">
         <div
           v-for="item in secondaryItems"
           :key="item.label"
           class="relative">
-          <PButton
+          <Button
             type="button"
             :icon="item.icon"
             severity="help"
@@ -26,24 +15,22 @@
             rounded
             :title="item.label"
             @click="item.items ? toggleMenu(item.label, $event) : item.command && item.command()" />
-          <PMenu
+          <Menu
             v-if="item.items"
             :ref="setMenuRef(item.label)"
             :model="item.items"
             :popup="true" />
         </div>
-      </div>
-    </template>
-  </Menubar>
+      </nav>
+    </Header>
+    <main
+      id="main"
+      class="wrapper ml-20 bg-gray-100">
+      <router-view />
+    </main>
 
-  <!-- Main Wrapper -->
-  <main
-    id="main"
-    class="wrapper bg-gray-100">
-    <router-view />
-  </main>
-
-  <FooterSpazio />
+    <FooterSpazio />
+  </div>
 
   <!-- Diálogo de Autenticación -->
   <PDialog
@@ -53,39 +40,37 @@
     :header="$t(authDialogTitle)"
     class="w-11/12 sm:w-5/12">
     <AuthForms
-      v-if="showAuthDialog"
       :formType="authFormType"
       @authSuccess="handleAuthSuccess" />
   </PDialog>
 </template>
 
 <script setup lang="ts">
-import { ref, computed, provide, watch } from 'vue';
+import { ref, computed, provide, watch, onMounted, onUnmounted } from 'vue';
 import FooterSpazio from '@/components/public/footer/FooterSpazio.vue';
-import { Menubar, Button as PButton, Dialog as PDialog, Menu as PMenu } from 'primevue';
-import { useUserStore } from '@/store/user';
+import { Dialog as PDialog, Button, Menu } from 'primevue';
+import { useUserStore } from '@/store/user.ts';
 import type { PublicMenuItemInterface } from '@/interfaces/public-menu-item.interface.ts';
 import AuthForms from '@/ui/views/public/auth/AuthForms.vue';
+import Header from '@/components/Header.vue';
+import Sidebar from '@/components/Sidebar.vue';
 
-const userStore = useUserStore();
+const logo = ref('sp-spazio-iso');
 
-const menuItems = computed<PublicMenuItemInterface[]>(() => {
-  const items: PublicMenuItemInterface[] = [
-    { label: 'Más canjeados', icon: 'pi pi-thumbs-up', command: () => alert('Más canjeados') },
-    { label: 'Recientes', icon: 'pi pi-clock', command: () => alert('Recientes') },
-    {
-      label: 'Categorías',
-      icon: 'pi pi-list',
-      items: [
-        { label: 'Electrodomésticos', icon: 'pi pi-mobile', command: () => alert('Ver Electrodomésticos') },
-        { label: 'Muebles', icon: 'pi pi-home', command: () => alert('Ver Muebles') },
-        { label: 'Ropa', icon: 'pi pi-shopping-bag', command: () => alert('Ver Ropa') },
-        { label: 'Libros', icon: 'pi pi-book', command: () => alert('Ver Libros') },
-        { label: 'Tecnología', icon: 'pi pi-desktop', command: () => alert('Ver Tecnología') },
-      ],
-    },
-  ];
-  return items;
+const updateClass = () => {
+  if (window.innerWidth >= 1024) {
+    logo.value = 'sp-spazio-logotipo';
+  } else {
+    logo.value = 'sp-spazio-iso';
+  }
+};
+onMounted(() => {
+  updateClass();
+  window.addEventListener('resize', updateClass);
+});
+
+onUnmounted(() => {
+  window.removeEventListener('resize', updateClass);
 });
 
 const menuRefs = ref<{ [key: string]: any }>({});
@@ -102,10 +87,12 @@ const toggleMenu = (key: string, event: Event) => {
     menu.value.toggle(event);
   }
 };
-
+const userStore = useUserStore();
 const secondaryItems = computed<PublicMenuItemInterface[]>(() => {
   const items: PublicMenuItemInterface[] = [
     { label: 'Carrito', icon: 'pi pi-shopping-cart', command: () => alert('Carrito de canje') },
+    { label: 'Tus productos', icon: 'pi pi-heart', command: () => alert('Tus productos') },
+    { label: 'Categorias', icon: 'pi pi-list', command: () => alert('Categorias') },
   ];
 
   if (!userStore.user) {
@@ -120,13 +107,15 @@ const authFormType = ref<'login' | 'signup'>('login');
 const showAuthDialog = ref(false);
 const authDialogTitle = ref('auth.title');
 
-// Proveer la función para abrir el diálogo
-provide('openAuthDialog', (formType: 'login' | 'signup') => {
+const openAuthDialog = (formType: 'login' | 'signup') => {
   console.log('Abrir formulario:', formType); // Debug
   authFormType.value = formType;
   authDialogTitle.value = formType === 'login' ? 'login.title' : 'register.title';
   showAuthDialog.value = true;
-});
+};
+
+// Proveer la función para abrir el diálogo
+provide('openAuthDialog', openAuthDialog);
 
 // Manejar autenticación exitosa
 const handleAuthSuccess = ({ user, token }: { user: any; token: string }) => {

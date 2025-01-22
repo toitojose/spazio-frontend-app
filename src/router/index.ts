@@ -7,21 +7,8 @@ import renterRoutes from '@/router/private/renter-routes.ts';
 import AgentRoutes from '@/router/private/agent-routes.ts';
 import PropertyOwnerRoutes from '@/router/private/property-owner-routes.ts';
 
-const home = [
-  {
-    path: '',
-    name: 'home',
-    component: () => import('@/ui/views/public/Home.vue'),
-    meta: {
-      title: 'default.title',
-      metaTitle: 'default.metaTitle',
-      metaDescription: 'default.metaDescription',
-    },
-  },
-];
 // Consolidar rutas
 const routes = [
-  ...home,
   ...AuthRoutes,
   ...PublicRoutes,
   ...BackofficeRoutes,

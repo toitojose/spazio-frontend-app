@@ -1,10 +1,10 @@
 <template>
   <section
-    class="relative flex flex-wrap items-center justify-evenly pt-4 text-white lg:h-screen lg:flex-nowrap lg:px-12 lg:pt-0">
+    class="relative flex flex-wrap items-center justify-evenly pt-20 text-white lg:h-screen lg:flex-nowrap lg:px-12 lg:pt-0">
     <div
       class="bg-img-abstract absolute inset-0 z-0 h-screen w-full bg-gradient-to-bl bg-cover bg-fixed md:block landscape:h-auto"></div>
     <!-- Sección del carrusel -->
-    <div class="z-10 w-full flex-col justify-evenly md:w-1/2 lg:flex">
+    <div class="z-1 w-full flex-col justify-evenly md:w-1/2 lg:flex">
       <Carousel
         :value="slides"
         :numVisible="1"
@@ -49,7 +49,7 @@
         :src="`/src/assets/img/${image}`"
         alt="Imagen ilustrativa"
         class="relative z-10 w-4/6" />
-      <div class="z-20 hidden w-10/12 rounded-lg bg-white p-4 text-center text-primary shadow-md md:block">
+      <div class="z-1 hidden w-10/12 rounded-lg bg-white p-4 text-center text-primary shadow-md md:block">
         <p class="text-sm leading-snug">
           <span class="block text-2xl font-bold">{{ userName }}</span>
           <span class="text-xl">{{ userMessage }}</span>

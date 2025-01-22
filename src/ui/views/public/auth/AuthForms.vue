@@ -1,7 +1,8 @@
 <template>
   <component
     :is="currentForm"
-    @authSuccess="$emit('authSuccess')" />
+    @authSuccess="$emit('authSuccess')"
+    @toggleForm="toggleForm" />
 </template>
 
 <script setup lang="ts">
@@ -19,11 +20,15 @@ const SignUpForm = markRaw(defineAsyncComponent(() => import('@/components/publi
 // Control del formulario actual
 const currentForm = ref(LoginForm);
 
-// Observa cambios en formType para actualizar el formulario
+// Cambiar formulario al alternar
+const toggleForm = () => {
+  currentForm.value = currentForm.value === LoginForm ? SignUpForm : LoginForm;
+};
+
+// Observa cambios en formType para inicializar el formulario
 watch(
   () => props.formType,
   (newFormType) => {
-    console.log('Cambiando formulario a:', newFormType); // DEBUG
     currentForm.value = newFormType === 'login' ? LoginForm : SignUpForm;
   },
   { immediate: true },
