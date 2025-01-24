@@ -1,7 +1,7 @@
 <template>
   <footer
     id="footer"
-    class="items-left relative flex w-full items-end border-t border-t-gray-300/20 text-white">
+    class="items-left relative flex w-full items-end border-t border-t-gray-300/20 pl-20 text-white">
     <div class="relative z-10 w-full bg-gray-900/90 p-6 backdrop-blur-sm">
       <div class="grid grid-cols-1 gap-8 md:grid-cols-3">
         <!-- Ubicación -->

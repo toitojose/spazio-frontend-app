@@ -8,6 +8,8 @@ const AgentRoutes: RouteRecordRaw[] = [
     meta: {
       metaTitle: 'agent.properties.metaTitle',
       metaDescription: 'agent.properties.metaDescription',
+      title: 'agent.properties.title',
+      icon: 'pi pi-send',
     },
   },
   {
@@ -17,6 +19,8 @@ const AgentRoutes: RouteRecordRaw[] = [
     meta: {
       metaTitle: 'agent.prospects.metaTitle',
       metaDescription: 'agent.prospects.metaDescription',
+      title: 'agent.prospects.title',
+      icon: 'pi pi-users',
     },
   },
   {
@@ -26,6 +30,8 @@ const AgentRoutes: RouteRecordRaw[] = [
     meta: {
       metaTitle: 'agent.contracts.metaTitle',
       metaDescription: 'agent.contracts.metaDescription',
+      title: 'agent.contracts.title',
+      icon: 'pi pi-file-export',
     },
   },
 ];

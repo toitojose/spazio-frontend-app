@@ -7,5 +7,7 @@ export interface User {
   id: number;
   firstname: string;
   lastname: string;
+  email?: string;
+  lastLoginAt?: string | null;
   roles?: Role[];
 }

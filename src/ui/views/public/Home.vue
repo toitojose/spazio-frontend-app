@@ -1,53 +1,248 @@
 <template>
-  <div class="min-h-16 px-6 pb-8 pt-20">
-    <h1>What is Lorem Ipsum?</h1>
-    <p
-      >Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's
-      standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a
-      type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting,
-      remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing
-      Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions
-      of Lorem Ipsum.</p
-    >
+  <div class="min-h-16 pb-8">
+    <!-- Banner promocional -->
+    <Banner />
 
-    <h2>Why do we use it?</h2>
-    <p
-      >It is a long established fact that a reader will be distracted by the readable content of a page when looking at
-      its layout. The point of using Lorem Ipsum is that it has a more-or-less normal distribution of letters, as
-      opposed to using 'Content here, content here', making it look like readable English. Many desktop publishing
-      packages and web page editors now use Lorem Ipsum as their default model text, and a search for 'lorem ipsum' will
-      uncover many web sites still in their infancy. Various versions have evolved over the years, sometimes by
-      accident, sometimes on purpose (injected humour and the like).</p
-    >
+    <!-- Garantías y servicios -->
+    <div class="mx-4 my-4 grid grid-cols-1 gap-6 md:mx-20 md:grid-cols-2 lg:grid-cols-4">
+      <FeatureCard
+        icon="pi pi-flag"
+        title="¿Listo para comenzar?"
+        subtitle="Conoce cómo funciona SPAZIO"
+        variant="info-secondary" />
+      <FeatureCard
+        icon="pi pi-gift"
+        title="¿Qué es SPAZIO?"
+        subtitle="Transforma tus pagos de arriendo en premios"
+        variant="info-accent" />
+      <FeatureCard
+        icon="pi pi-check-circle"
+        title="Garantía SPAZIO"
+        subtitle="Canje seguro y confiable"
+        variant="success" />
+      <FeatureCard
+        icon="pi pi-truck"
+        title="Entrega a tiempo"
+        subtitle="Directo a tu puerta"
+        variant="success" />
+    </div>
 
-    <h3>Where does it come from?</h3>
-    <p
-      >Contrary to popular belief, Lorem Ipsum is not simply random text. It has roots in a piece of classical Latin
-      literature from 45 BC, making it over 2000 years old. Richard McClintock, a Latin professor at Hampden-Sydney
-      College in Virginia, looked up one of the more obscure Latin words, consectetur, from a Lorem Ipsum passage, and
-      going through the cites of the word in classical literature, discovered the undoubtable source. Lorem Ipsum comes
-      from sections 1.10.32 and 1.10.33 of "de Finibus Bonorum et Malorum" (The Extremes of Good and Evil) by Cicero,
-      written in 45 BC. This book is a treatise on the theory of ethics, very popular during the Renaissance. The first
-      line of Lorem Ipsum, "Lorem ipsum dolor sit amet..", comes from a line in section 1.10.32.</p
-    >
-
-    <p
-      >The standard chunk of Lorem Ipsum used since the 1500s is reproduced below for those interested. Sections 1.10.32
-      and 1.10.33 from "de Finibus Bonorum et Malorum" by Cicero are also reproduced in their exact original form,
-      accompanied by English versions from the 1914 translation by H. Rackham.</p
-    >
-
-    <h3>Where can I get some?</h3>
-    <p
-      >There are many variations of passages of Lorem Ipsum available, but the majority have suffered alteration in some
-      form, by injected humour, or randomised words which don't look even slightly believable. If you are going to use a
-      passage of Lorem Ipsum, you need to be sure there isn't anything embarrassing hidden in the middle of text. All
-      the Lorem Ipsum generators on the Internet tend to repeat predefined chunks as necessary, making this the first
-      true generator on the Internet. It uses a dictionary of over 200 Latin words, combined with a handful of model
-      sentence structures, to generate Lorem Ipsum which looks reasonable. The generated Lorem Ipsum is therefore always
-      free from repetition, injected humour, or non-characteristic words etc.</p
-    >
+    <!-- Catálogo de productos -->
+    <div class="mx-4 md:mx-20">
+      <h2 class="mb-6 text-2xl font-bold">Premios al Vuelo</h2>
+      <div class="grid grid-cols-2 gap-4 md:grid-cols-4 md:gap-8">
+        <ProductCard
+          v-for="product in products"
+          :image="product.image"
+          :title="product.name"
+          :price="product.price"
+          :sales="product.sales"
+          variant="buy" />
+      </div>
+    </div>
   </div>
 </template>
-<script setup lang="ts"></script>
+
+<script setup lang="ts">
+import Banner from '@/components/commercial/Banner.vue';
+import FeatureCard from '@/components/commercial/FeatureCard.vue';
+import ProductCard from '@/components/commercial/ProductCard.vue';
+
+// Datos de prueba para el catálogo
+const products = [
+  {
+    name: 'Tableta Teclast T40Air 2024',
+    price: 13500,
+    sales: 43,
+    image: 'product-1.jpg',
+  },
+  {
+    name: 'Smartwatch Xiaomi Mi Band 6',
+    price: 3500,
+    sales: 12,
+    image: 'product-2.jpg',
+  },
+  {
+    name: 'Audífonos inalámbricos Sony WH-1000XM4',
+    price: 7500,
+    sales: 23,
+    image: 'product-3.jpg',
+  },
+  {
+    name: 'Cámara Canon EOS R5',
+    price: 25000,
+    sales: 5,
+    image: 'product-4.jpg',
+  },
+  {
+    name: 'Tableta Teclast T40Air 2024',
+    price: 13500,
+    sales: 43,
+    image: 'product-1.jpg',
+  },
+  {
+    name: 'Smartwatch Xiaomi Mi Band 6',
+    price: 3500,
+    sales: 12,
+    image: 'product-2.jpg',
+  },
+  {
+    name: 'Audífonos inalámbricos Sony WH-1000XM4',
+    price: 7500,
+    sales: 23,
+    image: 'product-3.jpg',
+  },
+  {
+    name: 'Cámara Canon EOS R5',
+    price: 25000,
+    sales: 5,
+    image: 'product-4.jpg',
+  },
+  {
+    name: 'Tableta Teclast T40Air 2024',
+    price: 13500,
+    sales: 43,
+    image: 'product-1.jpg',
+  },
+  {
+    name: 'Smartwatch Xiaomi Mi Band 6',
+    price: 3500,
+    sales: 12,
+    image: 'product-2.jpg',
+  },
+  {
+    name: 'Audífonos inalámbricos Sony WH-1000XM4',
+    price: 7500,
+    sales: 23,
+    image: 'product-3.jpg',
+  },
+  {
+    name: 'Cámara Canon EOS R5',
+    price: 25000,
+    sales: 5,
+    image: 'product-4.jpg',
+  },
+  {
+    name: 'Tableta Teclast T40Air 2024',
+    price: 13500,
+    sales: 43,
+    image: 'product-1.jpg',
+  },
+  {
+    name: 'Smartwatch Xiaomi Mi Band 6',
+    price: 3500,
+    sales: 12,
+    image: 'product-2.jpg',
+  },
+  {
+    name: 'Audífonos inalámbricos Sony WH-1000XM4',
+    price: 7500,
+    sales: 23,
+    image: 'product-3.jpg',
+  },
+  {
+    name: 'Cámara Canon EOS R5',
+    price: 25000,
+    sales: 5,
+    image: 'product-4.jpg',
+  },
+  {
+    name: 'Tableta Teclast T40Air 2024',
+    price: 13500,
+    sales: 43,
+    image: 'product-1.jpg',
+  },
+  {
+    name: 'Smartwatch Xiaomi Mi Band 6',
+    price: 3500,
+    sales: 12,
+    image: 'product-2.jpg',
+  },
+  {
+    name: 'Audífonos inalámbricos Sony WH-1000XM4',
+    price: 7500,
+    sales: 23,
+    image: 'product-3.jpg',
+  },
+  {
+    name: 'Cámara Canon EOS R5',
+    price: 25000,
+    sales: 5,
+    image: 'product-4.jpg',
+  },
+  {
+    name: 'Tableta Teclast T40Air 2024',
+    price: 13500,
+    sales: 43,
+    image: 'product-1.jpg',
+  },
+  {
+    name: 'Smartwatch Xiaomi Mi Band 6',
+    price: 3500,
+    sales: 12,
+    image: 'product-2.jpg',
+  },
+  {
+    name: 'Audífonos inalámbricos Sony WH-1000XM4',
+    price: 7500,
+    sales: 23,
+    image: 'product-3.jpg',
+  },
+  {
+    name: 'Cámara Canon EOS R5',
+    price: 25000,
+    sales: 5,
+    image: 'product-4.jpg',
+  },
+  {
+    name: 'Tableta Teclast T40Air 2024',
+    price: 13500,
+    sales: 43,
+    image: 'product-1.jpg',
+  },
+  {
+    name: 'Smartwatch Xiaomi Mi Band 6',
+    price: 3500,
+    sales: 12,
+    image: 'product-2.jpg',
+  },
+  {
+    name: 'Audífonos inalámbricos Sony WH-1000XM4',
+    price: 7500,
+    sales: 23,
+    image: 'product-3.jpg',
+  },
+  {
+    name: 'Cámara Canon EOS R5',
+    price: 25000,
+    sales: 5,
+    image: 'product-4.jpg',
+  },
+  {
+    name: 'Tableta Teclast T40Air 2024',
+    price: 13500,
+    sales: 43,
+    image: 'product-1.jpg',
+  },
+  {
+    name: 'Smartwatch Xiaomi Mi Band 6',
+    price: 3500,
+    sales: 12,
+    image: 'product-2.jpg',
+  },
+  {
+    name: 'Audífonos inalámbricos Sony WH-1000XM4',
+    price: 7500,
+    sales: 23,
+    image: 'product-3.jpg',
+  },
+  {
+    name: 'Cámara Canon EOS R5',
+    price: 25000,
+    sales: 5,
+    image: 'product-4.jpg',
+  },
+];
+</script>
+
 <style scoped></style>

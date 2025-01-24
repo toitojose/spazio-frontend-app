@@ -8,13 +8,23 @@ export default {
         secondary: 'var(--secondary-color)',
         accent: 'var(--accent-color)',
         highlight: {
-          DEFAULT: '#b74e91', // Color principal para destacar
+          default: '#b74e91', // Color principal para destacar
           secondary: '#5e42a6', // Color alternativo para destacar
         },
         sidebar: '#1f1f1f', // Fondo del sidebar
       },
       fontFamily: {
         logo: ['"Poiret One"', 'serif'],
+        sans: [
+          'Montserrat',
+          'ui-sans-serif',
+          'system-ui',
+          'sans-serif',
+          'Apple Color Emoji',
+          'Segoe UI Emoji',
+          'Segoe UI Symbol',
+          'Noto Color Emoji',
+        ],
       },
     },
   },

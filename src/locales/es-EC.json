@@ -150,6 +150,7 @@
     "metaDescription": "Administra tus métodos de pago de forma segura y eficiente desde tu cuenta de SPAZIO."
   },
   "renter": {
+    "title": "Inquilino",
     "metaTitle": "Inquilino - SPAZIO",
     "metaDescription": "Convierte tu arriendo en beneficios.",
     "mainUser": {
@@ -212,9 +213,46 @@
           "desc": "Disfruta de experiencias y premios únicos con tus puntos."
         }
       ]
+    },
+    "wantToRent": {
+      "title": "Quiero arrendar",
+      "desc": "Encuentra la propiedad perfecta para ti y disfruta de los beneficios de ser inquilino. ¡Únete a SPAZIO y comienza a arrendar hoy!",
+      "metaTitle": "Busca tu SPAZIO",
+      "metaDescription": "Encuentra la propiedad perfecta para ti y disfruta de los beneficios de ser inquilino. ¡Únete a SPAZIO y comienza a arrendar hoy!"
+    },
+    "myRentals": {
+      "title": "Mis arriendos",
+      "subtitle": "Administra tus arriendos",
+      "noRentals": "No se han agregado arriendos.",
+      "callToAction": "Ver arriendos",
+      "metaTitle": "Mis arriendos - SPAZIO",
+      "metaDescription": "Administra tus arriendos de forma segura y eficiente desde tu cuenta de SPAZIO."
+    },
+    "opportunities": {
+      "title": "Oportunidades",
+      "subtitle": "Descubre las recompensas que puedes obtener",
+      "noOpportunities": "No hay recompensas disponibles en este momento.",
+      "callToAction": "Explora las recompensas",
+      "metaTitle": "Oportunidades - SPAZIO",
+      "metaDescription": "Descubre las recompensas disponibles para canjear con tus puntos acumulados en SPAZIO."
+    },
+    "payments": {
+      "title": "Pagos",
+      "subtitle": "Administra tus pagos",
+      "noPayments": "No se han agregado pagos.",
+      "callToAction": "Ver pagos",
+      "metaTitle": "Pagos - SPAZIO",
+      "metaDescription": "Administra tus pagos de arriendo de forma segura y eficiente desde tu cuenta de SPAZIO."
+    },
+    "profile": {
+      "title": "Perfil",
+      "subtitle": "Administra tu perfil",
+      "metaTitle": "Tu perfil - SPAZIO",
+      "metaDescription": "Administra tu perfil de inquilino de forma segura y eficiente desde tu cuenta de SPAZIO."
     }
   },
   "propertyOwner": {
+    "title": "Propietario",
     "metaTitle": "Propietario - SPAZIO",
     "metaDescription": "Administra tus propiedades de forma segura y eficiente.",
     "mainUser": {
@@ -276,6 +314,7 @@
     }
   },
   "agent": {
+    "title": "Agente inmobiliario",
     "metaTitle": "Agente - SPAZIO",
     "metaDescription": "Gestiona tus propiedades e incentivos de manera segura y eficiente.",
     "contactAgent": "Contactar un agente",
@@ -374,8 +413,31 @@
           "icon": "pi-gift"
         }
       ]
+    },
+    "properties": {
+      "title": "Propiedades",
+      "subtitle": "Administra tus propiedades",
+      "noProperties": "No se han agregado propiedades.",
+      "callToAction": "Registrar Propiedad",
+      "metaTitle": "Propiedades - SPAZIO",
+      "metaDescription": "Administra tus propiedades de forma segura y eficiente desde tu cuenta de SPAZIO."
+    },
+    "prospects": {
+      "title": "Prospectos",
+      "subtitle": "Administra tus prospectos",
+      "noProspects": "No se han agregado prospectos.",
+      "callToAction": "Ver prospectos",
+      "metaTitle": "Prospectos - SPAZIO",
+      "metaDescription": "Administra tus prospectos de forma segura y eficiente desde tu cuenta de SPAZIO."
+    },
+    "contracts": {
+      "title": "Contratos",
+      "subtitle": "Administra tus contratos",
+      "noContracts": "No se han agregado contratos.",
+      "callToAction": "Ver contratos",
+      "metaTitle": "Contratos - SPAZIO",
+      "metaDescription": "Administra tus contratos de forma segura y eficiente desde tu cuenta de SPAZIO."
     }
-
   },
   "catalog": {
     "title": "Catálogo de productos",
@@ -393,5 +455,10 @@
     "callToAction": "Registrar Propiedad",
     "metaTitle": "Propiedades - SPAZIO",
     "metaDescription": "Administra tus propiedades de forma segura y eficiente desde tu cuenta de SPAZIO."
+  },
+  "backoffice": {
+    "title": "Backoffice",
+    "subtitle": "Administra tu backoffice",
+    "addUser": "Agregar"
   }
 }

@@ -202,9 +202,7 @@ const handleSignup = async () => {
             lastname: user.lastname || '',
             email: user.email || '',
             roles: user.roles || [],
-            lastLoginAt: user.lastLoginAt || null,
-            created_at: user.created_at,
-            updated_at: user.updated_at,
+            lastLoginAt: user.lastLoginAt,
           },
           token,
         );

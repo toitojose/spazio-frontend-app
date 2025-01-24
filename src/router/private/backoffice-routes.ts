@@ -8,6 +8,8 @@ const BackofficeRoutes: RouteRecordRaw[] = [
     meta: {
       metaTitle: 'dashboard.metaTitle',
       metaDescription: 'dashboard.metaDescription',
+      title: 'dashboard.title',
+      icon: 'pi pi-home',
     },
   },
 ];

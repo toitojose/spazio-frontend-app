@@ -3,7 +3,7 @@ import AuthRoutes from '@/router/public/auth-routes';
 import BackofficeRoutes from '@/router/private/backoffice-routes.ts';
 import { i18n } from '@/locales/i18n';
 import PublicRoutes from '@/router/public/public-routes.ts';
-import renterRoutes from '@/router/private/renter-routes.ts';
+import RenterRoutes from '@/router/private/renter-routes.ts';
 import AgentRoutes from '@/router/private/agent-routes.ts';
 import PropertyOwnerRoutes from '@/router/private/property-owner-routes.ts';
 
@@ -12,7 +12,7 @@ const routes = [
   ...AuthRoutes,
   ...PublicRoutes,
   ...BackofficeRoutes,
-  ...renterRoutes,
+  ...RenterRoutes,
   ...AgentRoutes,
   ...PropertyOwnerRoutes,
 ];
@@ -21,23 +21,6 @@ const routes = [
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
   routes,
-  scrollBehavior(to, _from, savedPosition) {
-    // Si se guarda la posición (retroceder/avanzar), úsala
-    if (savedPosition) {
-      return savedPosition;
-    }
-    // Si hay un hash, desplázate al elemento correspondiente
-    else if (to.hash) {
-      return {
-        el: to.hash,
-        behavior: 'smooth',
-      };
-    }
-    // De lo contrario, desplázate al inicio de la página
-    else {
-      return { top: 0, behavior: 'smooth' };
-    }
-  },
 });
 
 // Actualizar dinámicamente el título y las meta tags

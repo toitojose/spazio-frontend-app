@@ -113,6 +113,12 @@ import { authBackendClient } from '@/services/auth-backend-client.ts';
 import { errorHandlerService } from '@/services/error-handler-service.ts';
 import { useUserStore } from '@/store/user.ts';
 import type { AxiosError } from 'axios';
+import type { User } from '@/interfaces/user.interface.ts';
+
+const emit = defineEmits<{
+  (e: 'authSuccess', data: { user: User; token: string }): void;
+  (e: 'toggleForm'): void;
+}>();
 
 const email = ref('');
 const password = ref('');
@@ -135,16 +141,23 @@ const handleLogin = async () => {
 
       // Guardar usuario en Pinia
       const userStore = useUserStore();
-      userStore.setUser({ id: user.id, firstname: user.firstname, lastname: user.lastname, roles: user.roles }, token);
-
-      const emit = defineEmits<{ (e: 'loginSuccess', data: { user: any; token: string }) }>();
-      emit('loginSuccess', { user, token });
+      userStore.setUser(
+        {
+          id: user.id,
+          firstname: user.firstname,
+          lastname: user.lastname,
+          roles: user.roles,
+        },
+        token,
+      );
+      emit('authSuccess', { user, token });
     } else if (response.error?.key) {
       errorMessage.value = t(`error.${response.error.key}`) || t('error.unhandled');
     } else {
       errorMessage.value = t('error.unhandled');
     }
   } catch (error) {
+    console.error('Error durante el login:', error);
     const handledError = errorHandlerService.handleError(error as AxiosError);
     errorMessage.value = t(`error.${handledError.key}`) || handledError.message || t('error.unhandled');
   } finally {
