@@ -1,5 +1,5 @@
 <template>
-  <header class="fixed z-10 flex h-12 w-full items-center justify-between bg-primary px-4 py-2 pl-24 text-white">
+  <header class="fixed top-0 z-10 flex h-12 w-full items-center justify-between bg-primary px-4 py-2 pl-24 text-white">
     <span class="hidden text-xs sm:block"> Acumula puntos pagando tu arriendo a tiempo </span>
     <div class="relative">
       <nav

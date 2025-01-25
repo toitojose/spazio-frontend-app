@@ -8,7 +8,7 @@ import { spazioThemePreset } from '@/assets/theme/spazio-theme-preset.ts';
 import 'tailwindcss/tailwind.css';
 import 'primeicons/primeicons.css';
 import 'public/spazio.css';
-const isDarkMode = true;
+const isDarkMode = false;
 
 const app = createApp(App);
 const pinia = createPinia();
