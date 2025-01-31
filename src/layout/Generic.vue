@@ -1,6 +1,9 @@
 <template>
   <div class="relative">
-    <Sidebar :menu-items="groupedMenuItems" />
+    <Sidebar
+      :menu-items="groupedMenuItems"
+      :is-visible="isSidebarVisible"
+      @update:isVisible="handleSidebarVisibility" />
     <Header>
       <nav class="flex items-center space-x-0">
         <div
@@ -25,7 +28,7 @@
     </Header>
     <main
       id="main"
-      class="wrapper ml-20 bg-gray-100">
+      class="wrapper min-h-screen bg-gray-100 lg:ml-20">
       <router-view />
     </main>
 
@@ -66,12 +69,28 @@ const updateClass = () => {
   }
 };
 
+const isSidebarVisible = ref(window.innerWidth >= 768);
+const showSidebar = () => {
+  isSidebarVisible.value = true;
+};
+provide('showSidebar', showSidebar);
+const updateSidebarVisibility = () => {
+  isSidebarVisible.value = window.innerWidth >= 768;
+};
+const handleSidebarVisibility = (value: boolean) => {
+  console.log('Evento update:isVisible recibido con valor:', value);
+  isSidebarVisible.value = value;
+};
+
 onMounted(() => {
   updateClass();
+  updateSidebarVisibility();
   window.addEventListener('resize', updateClass);
+  window.addEventListener('resize', updateSidebarVisibility);
 });
 onUnmounted(() => {
   window.removeEventListener('resize', updateClass);
+  window.removeEventListener('resize', updateSidebarVisibility);
 });
 
 const menuRefs = ref<{ [key: string]: any }>({});
@@ -125,13 +144,12 @@ const openAuthDialog = (formType: 'login' | 'signup') => {
   showAuthDialog.value = true;
 };
 
-// Proveer la función para abrir el diálogo
 provide('openAuthDialog', openAuthDialog);
-
-/************************
- * cambios de desacople *
- ************************/
-const menuItems = computed(() => getMenuItemsByRoles(userStore.userRoles, t));
+/****** temporal *********/
+const role = ['RENTER'];
+/****** temporal *********/
+/*const menuItems = computed(() => getMenuItemsByRoles(userStore.userRoles, t));*/
+const menuItems = computed(() => getMenuItemsByRoles(role, t));
 const groupedMenuItems = computed(() => {
   const roleRouteMap = createRoleRouteMap(t);
 

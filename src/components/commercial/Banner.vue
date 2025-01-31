@@ -20,12 +20,12 @@ import Button from 'primevue/button';
 
 <style scoped>
 .banner {
-  background-image: url('public/img/banners/carnaval/carnaval-2.jpg');
+  background-image: url('/img/banners/carnaval/carnaval-2.jpg');
   @apply flex flex-col items-center justify-between bg-cover bg-right-bottom bg-no-repeat px-8 pb-6 pt-20 text-center md:bg-auto lg:flex-row lg:text-left;
 }
 .banner .offer {
   @apply flex h-32 w-32 flex-col justify-center justify-items-center bg-cover bg-no-repeat px-4 py-6 text-white;
-  background-image: url('public/img/banners/carnaval/promo-bg.svg');
+  background-image: url('/img/banners/carnaval/promo-bg.svg');
 }
 .banner .offer span {
   text-align: center;

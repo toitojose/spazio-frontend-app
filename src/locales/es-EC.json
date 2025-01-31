@@ -249,6 +249,38 @@
       "subtitle": "Administra tu perfil",
       "metaTitle": "Tu perfil - SPAZIO",
       "metaDescription": "Administra tu perfil de inquilino de forma segura y eficiente desde tu cuenta de SPAZIO."
+    },
+    "identityVerification": {
+      "title": "Verificación de identidad",
+      "subtitle": "Verifica tu identidad para acceder a más beneficios",
+      "metaTitle": "Verificación de identidad - SPAZIO",
+      "metaDescription": "Verifica tu identidad para acceder a más beneficios y recompensas exclusivas en SPAZIO."
+    },
+    "generalInformation": {
+      "title": "Información general",
+      "subtitle": "Administra tu información general",
+      "metaTitle": "Información general - SPAZIO",
+      "metaDescription": "Administra tu información general de inquilino de forma segura y eficiente desde tu cuenta de SPAZIO."
+    },
+    "employmentInformation": {
+      "title": "Información laboral",
+      "subtitle": "Administra tu información laboral",
+      "metaTitle": "Información laboral - SPAZIO",
+      "metaDescription": "Administra tu información laboral de inquilino de forma segura y eficiente desde tu cuenta de SPAZIO."
+    },
+    "matching": {
+      "title": "Asocia la propiedad",
+      "subtitle": "Descubre las propiedades que se ajustan a tus necesidades",
+      "noProperties": "No hay propiedades recomendadas en este momento.",
+      "callToAction": "Ver propiedades",
+      "metaTitle": "Propiedades recomendadas - SPAZIO",
+      "metaDescription": "Descubre las propiedades recomendadas que se ajustan a tus necesidades y preferencias en SPAZIO."
+    },
+    "connectOwner": {
+        "title": "Conectar con el propietario",
+        "subtitle": "Envía un mensaje al propietario",
+        "metaTitle": "Conectar con el propietario - SPAZIO",
+        "metaDescription": "Envía un mensaje al propietario de la propiedad para obtener más información y coordinar una visita."
     }
   },
   "propertyOwner": {

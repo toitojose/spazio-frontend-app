@@ -1,10 +1,13 @@
 <template>
-  <div>
+  <div class="block-footer">
     <div class="my-2 mr-4">
-      <i class="pi text-secondary" :class="icon" style="font-size: 1.5rem"></i>
+      <i
+        class="pi text-secondary"
+        :class="icon"
+        style="font-size: 1.5rem"></i>
     </div>
     <div>
-      <h3 class="text-lg font-bold mb-2">{{ title }}</h3>
+      <h3 class="mb-2 text-lg font-bold">{{ title }}</h3>
       <p><slot></slot></p>
     </div>
   </div>
@@ -28,4 +31,20 @@ export default defineComponent({
   },
 });
 </script>
-<style scoped></style>
+<style scoped>
+.block-footer {
+  @apply flex flex-col items-center border-primary-400 px-4 pb-4 text-center;
+}
+.block-footer:not(:last-child) {
+  @apply border-b;
+}
+@media screen and (min-width: 768px) {
+  .block-footer {
+    border-bottom: none;
+  }
+
+  .block-footer:not(:last-child) {
+    @apply border-r border-primary-400;
+  }
+}
+</style>

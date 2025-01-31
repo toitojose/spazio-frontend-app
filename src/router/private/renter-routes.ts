@@ -6,12 +6,67 @@ export default [
       {
         path: 'want-to-rent',
         name: 'renter-want-to-rent',
-        component: () => import('@/ui/views/private/renter/WantToRent.vue'),
+        component: () => import('@/ui/views/private/renter/wanttorent/WantToRent.vue'),
         meta: {
           metaTitle: 'renter.wantToRent.metaTitle',
           metaDescription: 'renter.wantToRent.metaDescription',
           title: 'renter.wantToRent.title',
           icon: 'pi pi-send',
+        },
+      },
+      {
+        path: 'identity-verification',
+        name: 'renter-identity-verification',
+        component: () => import('@/ui/views/private/renter/wanttorent/IdentityVerification.vue'),
+        meta: {
+          metaTitle: 'renter.identityVerification.metaTitle',
+          metaDescription: 'renter.identityVerification.metaDescription',
+          title: 'renter.identityVerification.title',
+          icon: 'pi pi-id-card',
+        },
+      },
+      {
+        path: 'general-information',
+        name: 'renter-general-information',
+        component: () => import('@/ui/views/private/renter/wanttorent/GeneralInformation.vue'),
+        meta: {
+          metaTitle: 'renter.generalInformation.metaTitle',
+          metaDescription: 'renter.generalInformation.metaDescription',
+          title: 'renter.generalInformation.title',
+          icon: 'pi pi-info-circle',
+        },
+      },
+      {
+        path: 'employment-information',
+        name: 'renter-employment-information',
+        component: () => import('@/ui/views/private/renter/wanttorent/EmploymentInformation.vue'),
+        meta: {
+          metaTitle: 'renter.employmentInformation.metaTitle',
+          metaDescription: 'renter.employmentInformation.metaDescription',
+          title: 'renter.employmentInformation.title',
+          icon: 'pi pi-briefcase',
+        },
+      },
+      {
+        path: 'matching',
+        name: 'renter-matching',
+        component: () => import('@/ui/views/private/renter/wanttorent/Matching.vue'),
+        meta: {
+          metaTitle: 'renter.matching.metaTitle',
+          metaDescription: 'renter.matching.metaDescription',
+          title: 'renter.matching.title',
+          icon: 'pi pi-search',
+        },
+      },
+      {
+        path: 'connect-owner',
+        name: 'renter-connect-owner',
+        component: () => import('@/ui/views/private/renter/wanttorent/ConnectOwner.vue'),
+        meta: {
+          metaTitle: 'renter.connectOwner.metaTitle',
+          metaDescription: 'renter.connectOwner.metaDescription',
+          title: 'renter.connectOwner.title',
+          icon: 'pi pi-link',
         },
       },
       {

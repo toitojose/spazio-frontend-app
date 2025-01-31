@@ -1,6 +1,17 @@
 <template>
-  <header class="fixed top-0 z-10 flex h-12 w-full items-center justify-between bg-primary px-4 py-2 pl-24 text-white">
-    <span class="hidden text-xs sm:block"> Acumula puntos pagando tu arriendo a tiempo </span>
+  <header
+    class="fixed top-0 z-10 flex h-12 w-full items-center justify-between bg-primary px-4 py-2 text-white lg:pl-24">
+    <span
+      v-if="!showSidebarButton"
+      class="hidden text-xs sm:block">
+      Acumula puntos pagando tu arriendo a tiempo
+    </span>
+    <button
+      v-else
+      class="text-white"
+      @click="showSidebar">
+      <i class="sp-spazio-iso"></i>
+    </button>
     <div class="relative">
       <nav
         id="info-roles"
@@ -32,7 +43,26 @@
   </header>
 </template>
 
-<script setup lang="ts"></script>
+<script setup lang="ts">
+import { inject, onMounted, onUnmounted, ref } from 'vue';
+
+const showSidebar = inject('showSidebar') as () => void;
+
+const showSidebarButton = ref(window.innerWidth < 768);
+
+const updateButtonVisibility = () => {
+  showSidebarButton.value = window.innerWidth < 768;
+};
+
+onMounted(() => {
+  window.addEventListener('resize', updateButtonVisibility);
+  updateButtonVisibility();
+});
+
+onUnmounted(() => {
+  window.removeEventListener('resize', updateButtonVisibility);
+});
+</script>
 
 <style scoped>
 #info-roles a span {

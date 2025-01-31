@@ -1,90 +1,118 @@
 <template>
-  <div>
-    <Drawer
-      v-model:visible="isVisible"
-      position="left"
-      :modal="false"
-      :dismissable="false"
-      :showCloseIcon="false"
-      :class="isHovered ? 'hover' : 'normal'"
-      @mouseover="onHover"
-      @mouseleave="onLeave">
-      <template #header>
-        <i
-          class="sp-spazio-iso text-2xl text-white"
-          :class="{ 'opacity-full': !isHovered, '': isHovered }"></i>
-        <i
-          class="sp-spazio-logotipo text-2xl text-white"
-          :class="{ 'opacity-full block': isHovered, 'opacity-none hidden': !isHovered }"></i>
-      </template>
+  <Drawer
+    v-model:visible="drawerVisible"
+    position="left"
+    :modal="isMobile"
+    :dismissable="isMobile"
+    :showCloseIcon="isMobile"
+    :class="isMobile || isHovered ? 'hover' : 'normal'"
+    @hide="closeSidebar"
+    @mouseover="onHover"
+    @mouseleave="onLeave">
+    <template #header>
+      <i
+        class="sp-spazio-iso hidden text-2xl text-white lg:block"
+        :class="{
+          'opacity-full': !isHovered,
+          'const isMobile = computed(() => window.innerWidth < 768);': isHovered,
+        }"></i>
+      <i
+        class="sp-spazio-logotipo text-2xl text-white"
+        :class="{ 'opacity-full block': isHovered || isMobile, 'opacity-none hidden': !isHovered && !isMobile }"></i>
+    </template>
 
-      <nav class="sidebar-nav">
-        <ul class="mt-2 space-y-2">
-          <li>
-            <a
-              href="/"
-              class="flex items-center space-x-3 rounded px-3 py-2 hover:bg-gray-100"
-              :class="{ active: isActive('/') }">
-              <i class="pi pi-home"></i>
-              <span>Portada</span>
-            </a>
-          </li>
-        </ul>
-        <div v-if="Object.keys(menuItems).length > 0">
-          <div
-            v-for="(group, roleName) in menuItems"
-            :key="roleName"
-            class="group">
-            <h3 class="sidebar-nav-title">
-              {{ roleName }}
-            </h3>
-            <ul class="mt-2 space-y-2">
-              <li
-                v-for="item in group"
-                :key="item.path">
-                <a
-                  :href="item.path"
-                  class="flex items-center space-x-3 rounded px-3 py-2 hover:bg-gray-100"
-                  :class="{ active: isActive(item.path) }">
-                  <i :class="item.meta?.icon || 'pi pi-question'"></i>
-                  <span>{{ item.title }}</span>
-                </a>
-              </li>
-            </ul>
-          </div>
+    <nav class="sidebar-nav">
+      <ul class="mt-2 space-y-2">
+        <li>
+          <a
+            href="/"
+            class="flex items-center space-x-3 rounded px-3 py-2 hover:bg-gray-100"
+            :class="{ active: isActive('/') }">
+            <i class="pi pi-home"></i>
+            <span>Portada</span>
+          </a>
+        </li>
+      </ul>
+      <div v-if="Object.keys(menuItems).length > 0">
+        <div
+          v-for="(group, roleName) in menuItems"
+          :key="roleName"
+          class="group">
+          <h3 class="sidebar-nav-title">
+            {{ roleName }}
+          </h3>
+          <ul class="mt-2 space-y-2">
+            <li
+              v-for="item in group"
+              :key="item.path">
+              <a
+                :href="item.path"
+                class="flex items-center space-x-3 rounded px-3 py-2 hover:bg-gray-100"
+                :class="{ active: isActive(item.path) }">
+                <i :class="item.meta?.icon || 'pi pi-question'"></i>
+                <span>{{ item.title }}</span>
+              </a>
+            </li>
+          </ul>
         </div>
-      </nav>
-    </Drawer>
-  </div>
+      </div>
+    </nav>
+  </Drawer>
 </template>
 
 <script setup lang="ts">
-import { ref } from 'vue';
+import { computed, onMounted, onUnmounted, ref } from 'vue';
 import Drawer from 'primevue/drawer';
-
 import { useRoute } from 'vue-router';
 
-defineProps<{
+const props = defineProps<{
   menuItems: Record<string, any>;
+  isVisible: boolean;
 }>();
+const emit = defineEmits(['update:isVisible']);
 
 // Estado del Drawer
-const isVisible = ref(true);
-
-// Control de hover
+const isMobile = ref(false);
 const isHovered = ref(false);
 
-const onHover = () => {
-  isHovered.value = true;
+const updateIsMobile = () => {
+  isMobile.value = window.innerWidth < 768;
 };
 
+const onHover = () => {
+  if (!isMobile.value) {
+    isHovered.value = true;
+  }
+};
 const onLeave = () => {
-  isHovered.value = false;
+  if (!isMobile.value) {
+    isHovered.value = false;
+  }
+};
+
+const drawerVisible = computed({
+  get: () => {
+    return props.isVisible;
+  },
+  set: (value) => {
+    emit('update:isVisible', value);
+  },
+});
+const closeSidebar = () => {
+  drawerVisible.value = false;
 };
 
 const route = useRoute();
 const isActive = (path: string) => route.path === path;
-console.log('=>(Sidebar.vue:86) isActive', isActive);
+
+onMounted(() => {
+  window.addEventListener('resize', updateIsMobile);
+  updateIsMobile();
+});
+
+onUnmounted(() => {
+  window.removeEventListener('resize', updateIsMobile);
+});
 </script>
 
 <style>
@@ -159,7 +187,7 @@ console.log('=>(Sidebar.vue:86) isActive', isActive);
   @apply bg-gradient-to-r from-accent to-secondary text-white;
 }
 .p-drawer-left .p-drawer .p-drawer-content .sidebar-nav li a span {
-  @apply text-nowrap;
+  @apply text-nowrap text-sm;
 }
 
 .p-drawer-left .p-drawer .p-drawer-content .sidebar-nav .sidebar-nav-title,

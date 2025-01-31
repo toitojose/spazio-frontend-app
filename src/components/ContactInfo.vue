@@ -1,11 +1,14 @@
 <template>
-  <footer
-    id="footer"
-    class="items-left relative flex w-full items-end border-t border-t-gray-300/20 text-white lg:pl-20">
-    <div class="relative z-10 w-full bg-gray-900/90 p-6 backdrop-blur-sm">
+  <section class="px-6 py-4 text-sm">
+    <h2 class="mb-4 text-center text-xl font-bold">¡Hablemos!</h2>
+    <p class="mb-8 text-center text-sm">
+      Estamos aquí para ayudarte en todo momento. Contáctanos por el medio que prefieras.
+    </p>
+    <div class="items-left relative flex w-full items-end border-t border-t-gray-300/20 lg:pl-20">
       <div class="grid grid-cols-1 gap-8 md:grid-cols-3">
         <!-- Ubicación -->
         <BlockFooter
+          class="!border-r-gray-300"
           title="Nuestra Ubicación"
           icon="pi-map-marker">
           Edificio Suyana,<br />
@@ -15,6 +18,7 @@
 
         <!-- Teléfono -->
         <BlockFooter
+          class="!border-r-gray-300"
           title="Contáctanos"
           icon="pi-phone">
           WhatsApp:
@@ -38,25 +42,10 @@
           </a>
         </BlockFooter>
       </div>
-
-      <!-- Separador -->
-      <hr class="my-4 border-gray-300/20" />
-
-      <!-- Créditos -->
-      <div class="text-center">
-        &copy; {{ new Date().getFullYear() }} <span class="sp-spazio-text-logo"></span> | Todos los derechos reservados.
-      </div>
     </div>
-  </footer>
+  </section>
 </template>
-<script lang="ts">
-import { defineComponent } from 'vue';
+<script setup lang="ts">
 import BlockFooter from '@/components/public/footer/BlockFooter.vue';
-
-export default defineComponent({
-  name: 'FooterSpazio',
-  components: { BlockFooter },
-});
 </script>
-
 <style scoped></style>
