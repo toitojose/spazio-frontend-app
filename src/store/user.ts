@@ -5,6 +5,8 @@ export const useUserStore = defineStore('user', {
   state: () => ({
     user: null as User | null,
     token: '',
+    entryMethod: null as 'internal' | 'external' | null,
+    entryCode: null as string | null,
   }),
   actions: {
     setUser(user: Partial<User>, token?: string) {
@@ -16,6 +18,12 @@ export const useUserStore = defineStore('user', {
     clearUser() {
       this.user = null;
       this.token = '';
+      this.entryMethod = null;
+      this.entryCode = null;
+    },
+    setEntry(method: 'internal' | 'external', code: string | null = null) {
+      this.entryMethod = method;
+      this.entryCode = code;
     },
   },
   getters: {
@@ -36,5 +44,11 @@ export const useUserStore = defineStore('user', {
 
     // Devuelve el objeto completo de los roles del usuario
     fullRoles: (state) => state.user?.roles || [],
+
+    isExternalEntry: (state) => state.entryMethod === 'external',
+
+    isInternalEntry: (state) => state.entryMethod === 'internal',
+
+    codeEntry: (state) => state.entryCode,
   },
 });

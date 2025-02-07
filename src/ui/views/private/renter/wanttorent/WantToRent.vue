@@ -1,6 +1,6 @@
 <template>
-  <RenterProcessLayout :current-step="0">
-    <div class="space-y-8">
+  <ProcessLayout :current-step="0">
+    <div class="flex min-h-full flex-col justify-evenly space-y-8">
       <div>
         <!-- Título -->
         <h2 class="mb-2 text-center text-2xl font-semibold"> Comienza tu proceso de arriendo fácil y seguro. </h2>
@@ -11,7 +11,6 @@
           Llena los campos solicitados en este proceso para arrendar. Es muy rápido y seguro.
         </p>
       </div>
-
       <!-- Beneficios -->
       <div class="grid grid-cols-1 gap-6 md:grid-cols-2">
         <div
@@ -44,12 +43,13 @@
         </div>
       </div>
     </div>
-  </RenterProcessLayout>
+  </ProcessLayout>
 </template>
 
 <script setup lang="ts">
-import RenterProcessLayout from '@/layout/renter/RenterProcessLayout.vue';
+import ProcessLayout from '@/layout/renter/ProcessLayout.vue';
 import { useRouter } from 'vue-router';
+import { useRenterProgressStore } from '@/store/renterProgressStore.ts';
 
 const benefits = [
   {
@@ -78,8 +78,11 @@ const benefits = [
     description: 'Tu información estará lista para futuros arrendamientos, simplificando el proceso.',
   },
 ];
+
+const renterProgressStore = useRenterProgressStore();
 const router = useRouter();
 function redirectToVerification() {
+  renterProgressStore.markStepCompleted(0, 'Introducción completada');
   router.push('/renter/matching');
 }
 </script>

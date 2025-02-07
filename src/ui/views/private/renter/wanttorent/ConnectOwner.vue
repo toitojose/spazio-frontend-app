@@ -1,5 +1,5 @@
 <template>
-  <RenterProcessLayout :current-step="5">
+  <ProcessLayout :current-step="5">
     <component :is="currentScenarioComponent" />
     <!-- Acciones posteriores -->
     <div class="flex flex-col space-y-3">
@@ -14,13 +14,13 @@
         icon="pi pi-gift"
         class="p-button-secondary" />
     </div>
-  </RenterProcessLayout>
+  </ProcessLayout>
 </template>
 
 <script setup lang="ts">
 import { computed, defineAsyncComponent, ref } from 'vue';
 import { Button } from 'primevue';
-import RenterProcessLayout from '@/layout/renter/RenterProcessLayout.vue';
+import ProcessLayout from '@/layout/renter/ProcessLayout.vue';
 
 // Importación dinámica de los componentes de escenarios
 const searching = defineAsyncComponent(() => import('@/components/connectOwner/Searching.vue'));

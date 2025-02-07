@@ -1,23 +1,37 @@
 <template>
-  <RenterProcessLayout :current-step="1">
-    <Message class="mb-4">
-      Selecciona el escenario que mejor describe tu situación para poder guiarte en el proceso
-    </Message>
-    <div id="scenarios">
-      <SelectButton
-        v-model="selectedScenario"
-        :options="scenarios"
-        optionLabel="title"
-        dataKey="title"
-        aria-labelledby="scenario-selection">
-        <template #option="slotProps">
-          <i
-            :class="slotProps.option.icon"
-            style="font-size: 1.5rem"></i>
-          <h4 class="text-sm font-semibold">{{ slotProps.option.title }}</h4>
-          <p class="text-xs">{{ slotProps.option.detail }}</p>
-        </template>
-      </SelectButton>
+  <ProcessLayout :current-step="1">
+    <div class="space-y-6">
+      <div class="space-y-4">
+        <!-- Título -->
+        <h2 class="mb-2 text-center text-2xl font-semibold"> Encuentra tu espacio ideal en pocos pasos </h2>
+
+        <!-- Bienvenida -->
+        <p class="text-center text-gray-600">
+          Elige la opción que mejor se adapte a tu situación y completa el proceso en minutos.
+          <br />
+          Spazio te acompaña en cada paso para hacer tu experiencia de arriendo más fácil, segura y confiable.
+        </p>
+        <Message class="mb-4">
+          Selecciona el escenario que mejor describe tu situación para poder guiarte en el proceso
+        </Message>
+      </div>
+      <div id="scenarios">
+        <SelectButton
+          v-model="selectedScenario"
+          :options="scenarios"
+          optionLabel="title"
+          dataKey="title"
+          aria-labelledby="scenario-selection"
+          @update:modelValue="handleScenarioSelection">
+          <template #option="slotProps">
+            <i
+              :class="slotProps.option.icon"
+              style="font-size: 1.5rem"></i>
+            <h4 class="text-sm font-semibold">{{ slotProps.option.title }}</h4>
+            <p class="text-xs">{{ slotProps.option.detail }}</p>
+          </template>
+        </SelectButton>
+      </div>
     </div>
     <div
       id="scenario-content"
@@ -41,8 +55,8 @@
 
       <div
         v-else-if="selectedScenario?.name === 'searching'"
-        class="rounded-lg bg-gray-50 p-6 shadow-md">
-        <h2 class="text-2xl font-semibold text-primary">🏡 Tu nuevo hogar está más cerca de lo que crees.</h2>
+        class="r">
+        <h2 class="text-2xl font-semibold text-primary">Tu nuevo hogar está más cerca de lo que crees.</h2>
         <p class="mt-2 text-gray-700">
           Antes de comenzar a explorar opciones, necesitamos algunos datos sobre ti para encontrar la mejor oferta.
         </p>
@@ -50,12 +64,7 @@
           Completa tu información y accede a inmobiliarias, contactos y sitios donde podrías encontrar tu próximo
           espacio.
         </p>
-        <p class="mt-4 font-medium text-gray-500">✨ ¡Es rápido y fácil! Solo toma unos minutos. ✨</p>
-        <Button
-          as="router-link"
-          to="/renter/identity-verification"
-          label="Verificar mi identidad"
-          class="mt-4" />
+        <p class="mt-4 font-medium text-gray-500">¡Es rápido y fácil! Solo toma unos minutos.</p>
       </div>
 
       <div v-else-if="selectedScenario?.name === 'agreement'">
@@ -77,22 +86,18 @@
               class="w-full rounded border p-2"
               placeholder="Ingrese el teléfono" />
           </div>
-          <button
-            type="submit"
-            class="rounded bg-primary px-4 py-2 text-white">
-            Guardar
-          </button>
         </form>
       </div>
     </div>
-  </RenterProcessLayout>
+  </ProcessLayout>
 </template>
 <script setup lang="ts">
 import { ref } from 'vue';
-import { Message, SelectButton, Button } from 'primevue';
-import RenterProcessLayout from '@/layout/renter/RenterProcessLayout.vue';
+import { Message, SelectButton } from 'primevue';
+import ProcessLayout from '@/layout/renter/ProcessLayout.vue';
 import SimplifiedPropertyForm from '@/components/property/SimplifiedPropertyForm.vue';
 import router from '@/router';
+import { useRenterProgressStore } from '@/store/renterProgressStore.ts';
 
 const selectedScenario = ref<string | null>(null);
 const scenarios = [
@@ -101,18 +106,21 @@ const scenarios = [
     title: 'Estoy arrendando',
     detail: 'Registra tu propiedad actual e invita a tu arrendador',
     name: 'renting',
+    onCompleted: 'ya estoy arrendando',
   },
   {
     icon: 'pi pi-home',
     title: 'Tengo un acuerdo con el propietario',
     detail: 'Registra los datos del bien inmueble para formalizar el proceso de arrendamiento',
     name: 'agreement',
+    onCompleted: 'ya tengo un acuerdo',
   },
   {
     icon: 'pi pi-search',
     title: 'Estoy buscando un inmueble',
     detail: 'Explora opciones para encontrar tu próximo espacio',
     name: 'searching',
+    onCompleted: 'Estoy buscando',
   },
 ];
 
@@ -130,10 +138,17 @@ const property = ref({
 function handleNextStep() {
   router.push('/renter/connect-owner');
 }
+
+const renterProgressStore = useRenterProgressStore();
+const handleScenarioSelection = (scenario: any) => {
+  if (scenario) {
+    renterProgressStore.markStepCompleted(1, scenario.onCompleted);
+  }
+};
 </script>
 <style>
 #scenarios .p-selectbutton {
-  @apply grid grid-cols-2 gap-6 lg:grid-cols-3;
+  @apply grid grid-cols-1 gap-4 lg:grid-cols-3 lg:gap-6;
 }
 
 #scenarios .p-togglebutton {

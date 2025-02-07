@@ -1,0 +1,55 @@
+#process{
+    @apply min-h-screen pt-12 lg:flex;
+}
+#process .process-content{
+    @apply flex min-h-full justify-between flex-col p-8 lg:w-3/4;
+}
+#process aside{
+    @apply border-b bg-gray-50 p-4 lg:w-1/4 lg:border-r lg:p-8 lg:pt-32 max-h-screen;
+}
+#process ul{
+    @apply flex justify-center lg:flex-col;
+}
+#process ul li{
+    @apply lg:pb-[1px] lg:border-l-4 border-transparent border-gray-200;
+}
+#process ul li a{
+    @apply  lg:border-l-4  border-transparent block px-1 lg:pl-2 relative lg:-left-1 lg:bottom-0 -bottom-1 lg:py-2 leading-none;
+}
+#process ul li a span{
+    @apply lg:block;
+}
+#process ul li:not(.active) a span.step,
+#process ul li:not(.active) a span.summary,
+#process ul li.completed a span.summary{
+    @apply hidden lg:block;
+}
+#process ul li:not(.active) a span.index{
+    @apply bg-gray-200 text-gray-800 p-1 px-2 rounded-full;
+}
+#process ul li a span.step,
+#process ul li a span.index{
+    @apply font-semibold lg:text-sm text-xs text-gray-800;
+}
+#process ul li a span.index{
+    @apply lg:hidden;
+}
+#process ul li.active a span.index::after{
+    content: ": ";
+}
+#process ul li a span.summary{
+    @apply font-light text-xs text-secondary;
+}
+#process ul li a:hover span{
+    @apply text-accent;
+}
+#process ul li.active a span.step{
+    @apply border-accent  text-accent;
+}
+#process ul li.completed a{
+    @apply border-accent;
+}
+
+#process ul li.completed:not(.active) a span.index{
+    @apply bg-accent text-white;
+}

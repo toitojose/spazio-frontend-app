@@ -136,21 +136,12 @@
         </div>
       </div>
     </div>
-
-    <!-- Botones -->
-    <div class="flex justify-between">
-      <div>&nbsp;</div>
-      <Button
-        size="small"
-        label="Conecta con el propietario"
-        @click="$emit('nextStep')" />
-    </div>
   </Form>
 </template>
 
 <script setup lang="ts">
 import { ref } from 'vue';
-import { InputText, Select, Button } from 'primevue';
+import { InputText, Select } from 'primevue';
 import { Form } from '@primevue/forms';
 
 // Modelo de datos simplificados del inmueble
