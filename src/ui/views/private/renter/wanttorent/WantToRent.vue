@@ -1,5 +1,5 @@
 <template>
-  <ProcessLayout :current-step="0">
+  <ProcessLayout :current-step="currentStep">
     <div class="flex min-h-full flex-col justify-evenly space-y-8">
       <div>
         <!-- Título -->
@@ -78,11 +78,13 @@ const benefits = [
     description: 'Tu información estará lista para futuros arrendamientos, simplificando el proceso.',
   },
 ];
+const currentStep = 0;
 
 const renterProgressStore = useRenterProgressStore();
 const router = useRouter();
 function redirectToVerification() {
-  renterProgressStore.markStepCompleted(0, 'Introducción completada');
+  renterProgressStore.markStepCompleted(currentStep, true);
+  renterProgressStore.updateStepSummary(currentStep, 'Introducción completada');
   router.push('/renter/matching');
 }
 </script>

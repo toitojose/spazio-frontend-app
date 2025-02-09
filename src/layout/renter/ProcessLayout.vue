@@ -16,9 +16,9 @@
               {{ step.label }}
             </span>
             <span
-              v-show="stepSummaries[index]"
+              v-if="getStepSummary(index)"
               class="summary">
-              {{ stepSummaries[index] }}
+              {{ getStepSummary(index) }}
             </span>
           </router-link>
         </li>
@@ -36,7 +36,7 @@
           icon="pi pi-arrow-left"
           icon-pos="left"
           variant="outlined"
-          @click="$emit('nextStep')" />
+          @click="$emit('prevStep')" />
         <Button
           size="small"
           icon="pi pi-arrow-right"
@@ -69,10 +69,11 @@ const steps = [
   { label: 'Conexión con el Propietario', route: '/renter/connect-owner' },
 ];
 
-const stepSummaries = computed(() => renterProgressStore.stepSummaries);
-const isStepCompleted = (index: number): boolean => {
-  return renterProgressStore.completedSteps.includes(index);
-};
+// Obtener el resumen dinámico de cada paso
+const getStepSummary = (index: number) => computed(() => renterProgressStore.getStepSummary(index)).value;
+
+// Verificar si un paso está completado (tiene un resumen)
+const isStepCompleted = (index: number): boolean => !!getStepSummary(index);
 </script>
 
 <style scoped>

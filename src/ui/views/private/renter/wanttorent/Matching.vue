@@ -1,5 +1,8 @@
 <template>
-  <ProcessLayout :current-step="1">
+  <ProcessLayout
+    :current-step="currentStep"
+    @prevStep="handlePreviousStep"
+    @nextStep="handleNextStep">
     <div class="space-y-6">
       <div class="space-y-4">
         <!-- Título -->
@@ -98,7 +101,7 @@ import ProcessLayout from '@/layout/renter/ProcessLayout.vue';
 import SimplifiedPropertyForm from '@/components/property/SimplifiedPropertyForm.vue';
 import router from '@/router';
 import { useRenterProgressStore } from '@/store/renterProgressStore.ts';
-
+const currentStep = 1;
 const selectedScenario = ref<string | null>(null);
 const scenarios = [
   {
@@ -106,43 +109,40 @@ const scenarios = [
     title: 'Estoy arrendando',
     detail: 'Registra tu propiedad actual e invita a tu arrendador',
     name: 'renting',
-    onCompleted: 'ya estoy arrendando',
+    onSelected: 'ya estoy arrendando',
   },
   {
     icon: 'pi pi-home',
     title: 'Tengo un acuerdo con el propietario',
     detail: 'Registra los datos del bien inmueble para formalizar el proceso de arrendamiento',
     name: 'agreement',
-    onCompleted: 'ya tengo un acuerdo',
+    onSelected: 'ya tengo un acuerdo',
   },
   {
     icon: 'pi pi-search',
     title: 'Estoy buscando un inmueble',
     detail: 'Explora opciones para encontrar tu próximo espacio',
     name: 'searching',
-    onCompleted: 'Estoy buscando',
+    onSelected: 'Estoy buscando',
   },
 ];
-
-// Modelo de datos del inmueble
-const property = ref({
-  city: '',
-  address: '',
-  type: null,
-  rooms: null,
-  bathrooms: null,
-  socialBathrooms: null,
-  additionalSpaces: [],
-});
-
-function handleNextStep() {
-  router.push('/renter/connect-owner');
-}
-
 const renterProgressStore = useRenterProgressStore();
+
+const handleNextStep = () => {
+  if (renterProgressStore.isStepCompleted(currentStep)) {
+    router.push('/renter/identity-verification');
+  } else {
+    alert('Por favor selecciona una opción');
+  }
+};
+
+const handlePreviousStep = () => {
+  router.push('/renter/want-to-rent');
+};
+
 const handleScenarioSelection = (scenario: any) => {
   if (scenario) {
-    renterProgressStore.markStepCompleted(1, scenario.onCompleted);
+    renterProgressStore.setScenario(scenario.name, scenario.onSelected);
   }
 };
 </script>
