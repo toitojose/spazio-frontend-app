@@ -95,16 +95,16 @@ onUnmounted(() => {
 
 const menuRefs = ref<{ [key: string]: any }>({});
 const setMenuRef = (key: string) => {
-  if (!menuRefs.value[key]) {
-    menuRefs.value[key] = ref();
+  if (!Object.prototype.hasOwnProperty.call(menuRefs.value, key)) {
+    menuRefs.value[key] = ref(null);
   }
   return menuRefs.value[key];
 };
 
 const toggleMenu = (key: string, event: Event) => {
-  const menu = menuRefs.value[key];
-  if (menu && menu.value) {
-    menu.value.toggle(event);
+  const menu = menuRefs.value[key]?.value; // Asegura que existe antes de acceder
+  if (menu) {
+    menu.toggle(event);
   }
 };
 const userStore = useUserStore();
@@ -143,8 +143,8 @@ const openAuthDialog = (formType: 'login' | 'signup') => {
   authDialogTitle.value = formType === 'login' ? 'login.title' : 'register.title';
   showAuthDialog.value = true;
 };
-
 provide('openAuthDialog', openAuthDialog);
+
 /****** temporal *********/
 const role = ['RENTER'];
 /****** temporal *********/

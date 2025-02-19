@@ -658,3 +658,5 @@ export const spazioThemePreset = definePreset(Aura, {
     },
   },
 });
+
+export default spazioThemePreset;

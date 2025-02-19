@@ -48,9 +48,9 @@ export default [
         },
       },
       {
-        path: 'matching',
-        name: 'renter-matching',
-        component: () => import('@/ui/views/private/renter/wanttorent/Matching.vue'),
+        path: 'select-scenario',
+        name: 'renter-scenario',
+        component: () => import('@/ui/views/private/renter/wanttorent/SelectScenario.vue'),
         meta: {
           metaTitle: 'renter.matching.metaTitle',
           metaDescription: 'renter.matching.metaDescription',

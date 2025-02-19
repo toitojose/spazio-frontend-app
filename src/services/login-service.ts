@@ -6,12 +6,17 @@ interface LoginResult {
   data?: {
     user: {
       id: number;
-      firstname: string;
-      lastname: string;
+      firstName: string;
+      middleName?: string;
+      lastName: string;
+      secondLastName?: string;
       email: string;
+      idNumber?: string;
+      landline?: string;
+      mobile?: string;
       lastLoginAt: string;
-      created_at: string;
-      updated_at: string;
+      createdAt: string;
+      updatedAt: string;
       roles: { id: number; name: string }[];
     };
     token: string;

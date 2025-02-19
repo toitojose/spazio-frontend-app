@@ -49,4 +49,5 @@ export const useRenterProgressStore = defineStore('renterProgress', {
     selectedScenario: (state) => state.steps[1].selectedScenario,
     getStepSummary: (state) => (stepIndex: number) => state.steps[stepIndex].summary,
   },
+  persist: true,
 });

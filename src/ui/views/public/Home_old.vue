@@ -193,9 +193,7 @@
       <section
         id="benefits"
         class="items-left relative flex items-center bg-surface-500 lg:h-screen">
-        <div
-          ref="vantaRef"
-          class="absolute inset-0 h-screen w-full"></div>
+        <div class="absolute inset-0 h-screen w-full"></div>
         <div class="px-18 relative z-10 mx-auto max-w-6xl py-10 text-center text-white">
           <h2 class="mb-8 font-logo text-5xl font-bold">Beneficios, más que solo resultados</h2>
           <div class="grid gap-12 md:m-6 lg:grid-cols-3">
@@ -239,7 +237,6 @@
 import { defineComponent, onBeforeUnmount, onMounted, ref } from 'vue';
 import { Card, Button as PButton } from 'primevue';
 import Typed from 'typed.js';
-import { destroyVanta, initializeVanta } from '@/assets/anime/vantaHelper.ts';
 import router from '@/router';
 import FooterSpazio from '@/components/public/footer/FooterSpazio.vue';
 import { useRoute } from 'vue-router';
@@ -254,7 +251,6 @@ export default defineComponent({
   setup() {
     const route = useRoute();
     const typedText = ref<HTMLElement | null>(null);
-    const vantaRef = ref<HTMLElement | null>(null);
     const currentHash = ref<string>(window.location.hash || '#welcome');
     const sidebarItems = [
       { id: 'welcome', href: '#welcome', label: 'Bienvenidos' },
@@ -326,14 +322,11 @@ export default defineComponent({
       window.history.replaceState(null, '', initialHash);
       window.addEventListener('scroll', handleScrollAndResize);
       window.addEventListener('resize', handleScrollAndResize);
-
-      initializeVanta(vantaRef.value);
     });
 
     onBeforeUnmount(() => {
       window.removeEventListener('scroll', handleScrollAndResize);
       window.removeEventListener('resize', handleScrollAndResize);
-      destroyVanta();
     });
 
     const navigateTo = (path: string) => {
@@ -348,7 +341,6 @@ export default defineComponent({
       sidebarItems,
       scrollToSection,
       currentHash,
-      vantaRef,
       navigateTo,
     };
   },

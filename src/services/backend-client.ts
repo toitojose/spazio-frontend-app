@@ -8,4 +8,4 @@ const CONFIG: AxiosRequestConfig = {
   },
 };
 
-export const authBackendClient: AxiosInstance = axios.create(CONFIG);
+export const backendClient: AxiosInstance = axios.create(CONFIG);

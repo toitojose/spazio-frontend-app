@@ -6,15 +6,10 @@
         <h2 class="mb-2 text-center text-2xl font-semibold"> Completa tu información laboral </h2>
 
         <!-- Bienvenida -->
-        <p class="text-center text-gray-600">
-          <p class="text-center text-gray-600">
-            Cuéntanos un poco sobre tu actividad laboral.
-          </p>
-        </p>
+        <p class="text-center text-gray-600"> Cuéntanos un poco sobre tu actividad laboral. </p>
       </div>
       <div class="flex flex-col-reverse lg:flex-row lg:space-x-6">
         <Form
-          v-slot="$form"
           class="flex flex-col space-y-6"
           @submit="onFormSubmit">
           <!-- Nombre de la Empresa -->
@@ -220,7 +215,7 @@ const renterProgressStore = useRenterProgressStore();
 const updateCompletedStep = () => {
   if (user.value.companyName && user.value.jobTitle) {
     const summary = `${user.value.companyName} - ${user.value.jobTitle}`;
-    renterProgressStore.markStepCompleted(currentStep, summary);
+    renterProgressStore.markStepCompleted(currentStep, true, summary);
   }
 };
 

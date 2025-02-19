@@ -1,23 +1,5 @@
 import type { AxiosInstance } from 'axios';
-
-interface SignupResult {
-  result: boolean;
-  message: string | string[];
-  error: { statusCode: number; key: string } | null;
-  data?: {
-    user: {
-      id: number;
-      firstname: string;
-      lastname: string;
-      email: string;
-      lastLoginAt: string | null;
-      created_at: string;
-      updated_at: string;
-      roles: { id: number; name: string }[];
-    };
-    token: string;
-  };
-}
+import type { SignupInterface, SignupResult } from '@/interfaces/auth/sign-up.interface.ts';
 
 export class SignupService {
   private authBackendClient: AxiosInstance;
@@ -26,17 +8,11 @@ export class SignupService {
     this.authBackendClient = authBackendClient;
   }
 
-  async signup(firstname: string, lastname: string, email: string, password: string): Promise<SignupResult> {
+  async signup(signupData: SignupInterface): Promise<SignupResult> {
     try {
-      const response = await this.authBackendClient.post<SignupResult>('/v1.0/auth/signup', {
-        firstname,
-        lastname,
-        email,
-        password,
-      });
+      const response = await this.authBackendClient.post<SignupResult>('/v1.0/auth/signup', signupData);
       return response.data;
     } catch (error: any) {
-      console.log('=>(signup-service.ts:39) error', error);
       if (error.response && error.response.data) {
         return {
           result: false,

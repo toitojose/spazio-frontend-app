@@ -50,6 +50,8 @@
 import ProcessLayout from '@/layout/renter/ProcessLayout.vue';
 import { useRouter } from 'vue-router';
 import { useRenterProgressStore } from '@/store/renterProgressStore.ts';
+import { useUserStore } from '@/store/user.ts';
+import { computed, inject, ref } from 'vue';
 
 const benefits = [
   {
@@ -79,14 +81,27 @@ const benefits = [
   },
 ];
 const currentStep = 0;
+const isWaitingForAuth = ref(false);
+const openAuthDialog = inject<(formType: 'login') => void>('openAuthDialog') || null;
 
 const renterProgressStore = useRenterProgressStore();
+const userStore = useUserStore();
+const userId = computed(() => userStore.userId || null);
 const router = useRouter();
-function redirectToVerification() {
+
+const checkedProcess = () => {
   renterProgressStore.markStepCompleted(currentStep, true);
   renterProgressStore.updateStepSummary(currentStep, 'Introducción completada');
-  router.push('/renter/matching');
-}
+  router.push('/renter/select-scenario');
+};
+const redirectToVerification = () => {
+  if (userId.value) {
+    checkedProcess();
+  } else {
+    isWaitingForAuth.value = true;
+    openAuthDialog?.('login');
+  }
+};
 </script>
 
 <style></style>

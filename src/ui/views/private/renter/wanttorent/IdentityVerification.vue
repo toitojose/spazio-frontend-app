@@ -1,5 +1,8 @@
 <template>
-  <ProcessLayout :current-step="2">
+  <ProcessLayout
+    :current-step="currentStep"
+    @prevStep="handlePreviousStep"
+    @nextStep="handleNextStep">
     <div class="space-y-6">
       <div class="space-y-4">
         <!-- Título -->
@@ -15,27 +18,35 @@
       </div>
 
       <div class="flex flex-col-reverse lg:flex-row lg:space-x-6">
-        <div class="mx-auto flex flex-col space-y-8 lg:w-2/3">
+        <Form
+          class="mx-auto flex flex-col space-y-8 lg:w-2/3"
+          @submit="handleNextStep">
           <!-- Subir Foto Personal -->
           <div>
             <label class="mb-2 block text-sm font-medium">Foto Personal</label>
             <div
               class="flex flex-col items-center justify-center rounded-lg border border-dashed border-gray-300 p-4 transition hover:border-gray-400">
               <FileUpload
-                choose-label="Seleccionar tu foto"
                 mode="basic"
-                customUpload
-                auto
-                severity="secondary"
-                class="p-button-outlined mb-4"
-                @select="onFileSelect" />
-              <p class="text-center text-xs">Sube tu foto personal en formato PNG, JPG. Tamaño máximo: 5 MB.</p>
+                name="file"
+                :url="urlUploadIdentity('personalPhoto')"
+                accept="image/*"
+                :auto="true"
+                chooseLabel="Subir imagen"
+                @before-send="onUploadPhoto"
+                @upload="onSuccess" />
+              <p class="mt-3 text-center text-xs">Sube tu foto personal en formato PNG, JPG. Tamaño máximo: 5 MB.</p>
               <img
-                v-if="user.photoSrc"
-                :src="user.photoSrc"
+                v-if="user.personalPhotoSrc"
+                :src="user.personalPhotoSrc"
                 alt="Foto personal"
                 class="mt-4 w-48 rounded-xl shadow-md" />
             </div>
+            <p
+              v-if="errors.photo"
+              class="text-xs text-red-400">
+              {{ errors.photo }}
+            </p>
           </div>
 
           <!-- Subir Foto de Cédula -->
@@ -44,17 +55,28 @@
             <div
               class="flex flex-col items-center justify-center rounded-lg border border-dashed border-gray-300 p-4 transition hover:border-gray-400">
               <FileUpload
-                choose-label="Selecciona tu cedula"
                 mode="basic"
-                customUpload
-                auto
-                severity="secondary"
-                class="p-button-outlined mb-4"
-                @select="onIdFileSelect" />
-              <p class="text-center text-xs"
-                >Sube la foto del frente de tu cédula en formato PNG, JPG o PDF. Tamaño máximo: 5 MB.</p
-              >
+                name="file"
+                :url="urlUploadIdentity('idCardPhoto')"
+                accept="image/*"
+                :auto="true"
+                chooseLabel="Subir imagen"
+                @before-send="onUploadPhoto"
+                @upload="onSuccess" />
+              <p class="mt-3 text-center text-xs">
+                Sube tu foto de tu cedula en formato PNG, JPG. Tamaño máximo: 5 MB.
+              </p>
+              <img
+                v-if="user.idCardPhotoSrc"
+                :src="user.idCardPhotoSrc"
+                alt="Cédula"
+                class="mt-4 w-48 rounded-xl shadow-md" />
             </div>
+            <p
+              v-if="errors.idPhoto"
+              class="text-xs text-red-400">
+              {{ errors.idPhoto }}
+            </p>
           </div>
 
           <!-- Cédula de Identidad -->
@@ -62,14 +84,19 @@
             <FloatLabel>
               <InputText
                 id="dni"
-                v-model="user.dni"
+                v-model="user.idNumber"
                 size="small"
                 class="w-full"
-                @update:modelValue="handleOnCompleted" />
+                @input="handleDniUpdate" />
               <label for="dni">Cédula de Identidad</label>
             </FloatLabel>
+            <p
+              v-if="errors.dni"
+              class="text-xs text-red-500">
+              {{ errors.dni }}
+            </p>
           </div>
-        </div>
+        </Form>
         <!-- Razones para validar identidad -->
         <Message
           severity="info"
@@ -88,40 +115,87 @@
 </template>
 <script setup lang="ts">
 import ProcessLayout from '@/layout/renter/ProcessLayout.vue';
-import { FileUpload, FloatLabel, InputText, Message } from 'primevue';
-import { ref } from 'vue';
+import { FloatLabel, InputText, Message, FileUpload } from 'primevue';
+import { Form } from '@primevue/forms';
+import { computed, ref } from 'vue';
 import { useRenterProgressStore } from '@/store/renterProgressStore.ts';
+import router from '@/router';
+import { debounce } from 'lodash';
+import { backendClient } from '@/services/backend-client.ts';
+import { useUserStore } from '@/store/user.ts';
+import { IdentityVerificationService } from '@/services/identity-verification-service.ts';
+
+const currentStep = 2;
+const userStore = useUserStore();
+const userId = computed(() => userStore.userId || null);
+
+const renterProgressStore = useRenterProgressStore();
+const identityService = new IdentityVerificationService(backendClient);
+
+const errors = ref<{ photo?: string; idPhoto?: string; dni?: string }>({});
 
 const user = ref({
-  photoSrc: null,
-  dni: '',
-  firstName: '',
-  secondName: '',
-  firstLastName: '',
-  secondLastName: '',
-  phone: '',
-  landline: '',
-  email: '',
+  idNumber: '',
+  personalPhotoSrc: '',
+  idCardPhotoSrc: '',
 });
-const onFileSelect = (event: any): void => {
-  const file = event.files[0];
-  if (file) {
-    const reader = new FileReader();
-    reader.onload = (e: ProgressEvent<FileReader>) => {
-      user.value.photoSrc = e.target?.result as string;
-    };
-    reader.readAsDataURL(file);
+
+const validateFields = () => {
+  errors.value = {}; // Reiniciar errores
+
+  if (!user.value.personalPhotoSrc) {
+    errors.value.photo = 'La foto personal es obligatoria.';
+  }
+
+  if (!user.value.idCardPhotoSrc) {
+    errors.value.idPhoto = 'La foto de la cédula es obligatoria.';
+  }
+
+  if (!user.value.idNumber) {
+    errors.value.dni = 'El número de cédula es obligatorio.';
+  }
+};
+const handleDniUpdate = debounce(async () => {
+  if (user.value.idNumber) {
+    await identityService.updateIdentity(userId.value, user.value.idNumber);
+    renterProgressStore.updateStepSummary(currentStep, `${user.value.idNumber}`);
+  }
+}, 500);
+
+const handlePreviousStep = () => {
+  router.push('/renter/matching');
+};
+const handleNextStep = async () => {
+  validateFields(); // Validar campos antes de proceder
+  if (Object.keys(errors.value).length > 0) return;
+
+  if (!userId.value) return;
+  try {
+    await identityService.updateIdentity(userId.value, user.value.idNumber);
+    await router.push('/renter/general-information');
+  } catch (error) {
+    console.error('Error en handleNextStep:', error);
   }
 };
 
-const onIdFileSelect = (event: any): void => {
-  // Manejo de los archivos de la cédula
-  console.log('Archivos de cédula seleccionados:', event.files);
+const urlUploadIdentity = (type: 'personalPhoto' | 'idCardPhoto') => {
+  if (!userId.value) return '';
+  return identityService.getUploadUrl(userId.value, type);
 };
+const onUploadPhoto = (event: any) => {
+  event.xhr.setRequestHeader('Authorization', `Bearer ${userStore.authToken}`);
+};
+const onSuccess = (event: any) => {
+  const response = JSON.parse(event.xhr.response);
+  console.log('📸 Respuesta del backend:', response); // Verificar que llega correctamente
 
-const renterProgressStore = useRenterProgressStore();
-const handleOnCompleted = (value: string) => {
-  renterProgressStore.markStepCompleted(2, value);
+  if (response && response.data && response.data.fileUrl && response.data.fieldName) {
+    if (response.data.fieldName === 'personalPhoto') {
+      user.value.personalPhotoSrc = response.data.fileUrl; // Asignar a la propiedad correcta
+    } else if (response.data.fieldName === 'idCardPhoto') {
+      user.value.idCardPhotoSrc = response.data.fileUrl;
+    }
+  }
 };
 </script>
 <style scoped></style>

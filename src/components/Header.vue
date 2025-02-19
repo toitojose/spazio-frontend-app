@@ -1,6 +1,6 @@
 <template>
   <header
-    class="fixed top-0 z-10 flex h-12 w-full items-center justify-between bg-primary px-4 py-2 text-white lg:pl-24">
+    class="fixed top-0 z-50 flex h-12 w-full items-center justify-between bg-primary px-4 py-2 text-white lg:pl-24">
     <span
       v-if="!showSidebarButton"
       class="hidden text-xs sm:block">

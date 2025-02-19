@@ -109,7 +109,7 @@ import { ref } from 'vue';
 import { useI18n } from 'vue-i18n';
 import { InputText, Password, Button as PButton, Message, Button, Checkbox } from 'primevue';
 import { LoginService } from '@/services/login-service.ts';
-import { authBackendClient } from '@/services/auth-backend-client.ts';
+import { backendClient } from '@/services/backend-client.ts';
 import { errorHandlerService } from '@/services/error-handler-service.ts';
 import { useUserStore } from '@/store/user.ts';
 import type { AxiosError } from 'axios';
@@ -127,7 +127,7 @@ const isLoading = ref(false);
 const { t } = useI18n();
 const rememberMe = ref(false);
 
-const loginService = new LoginService(authBackendClient);
+const loginService = new LoginService(backendClient);
 
 const sanitizeMail = (mail: string): string => mail.toLowerCase().trim();
 
@@ -144,8 +144,14 @@ const handleLogin = async () => {
       userStore.setUser(
         {
           id: user.id,
-          firstname: user.firstname,
-          lastname: user.lastname,
+          firstName: user.firstName,
+          middleName: user.middleName,
+          lastName: user.lastName,
+          secondLastName: user.secondLastName,
+          email: user.email,
+          idNumber: user.idNumber,
+          landline: user.landline,
+          mobile: user.mobile,
           roles: user.roles,
         },
         token,

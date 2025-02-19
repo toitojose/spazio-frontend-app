@@ -13,11 +13,16 @@
   "register": {
     "title": "¡Únete a SPAZIO!",
     "subtitle": "Crea tu cuenta y comienza a disfrutar de nuestros servicios.",
-    "firstname": "Nombre",
-    "lastname": "Apellido",
+    "firstName": "Primer nombre",
+    "middleName": "Segundo nombre",
+    "lastName": "Primer apellido",
+    "secondLastName": "Segundo apellido",
     "email": "Correo electrónico",
     "password": "Contraseña",
     "confirmPassword": "Confirmar contraseña",
+    "roleType": "Define tu rol en SPAZIO",
+    "renter": "Soy inquilino",
+    "propertyOwner": "Soy propietario",
     "signUpButton": "Registrarse",
     "emptyName": "El nombre no puede estar vacío.",
     "emptyEmail": "El correo electrónico no puede estar vacío.",
@@ -250,6 +255,12 @@
       "metaTitle": "Tu perfil - SPAZIO",
       "metaDescription": "Administra tu perfil de inquilino de forma segura y eficiente desde tu cuenta de SPAZIO."
     },
+    "scenarios": {
+      "renting_with_contract": "Ya estoy arrendando",
+      "renting_no_contract": "Arrendando sin contrato",
+      "exploring_options": "Explorando opciones",
+      "agreement_pending_contract": "Tengo acuerdo pendiente de contrato"
+    },
     "identityVerification": {
       "title": "Verificación de identidad",
       "subtitle": "Verifica tu identidad para acceder a más beneficios",
@@ -277,10 +288,10 @@
       "metaDescription": "Descubre las propiedades recomendadas que se ajustan a tus necesidades y preferencias en SPAZIO."
     },
     "connectOwner": {
-        "title": "Conectar con el propietario",
-        "subtitle": "Envía un mensaje al propietario",
-        "metaTitle": "Conectar con el propietario - SPAZIO",
-        "metaDescription": "Envía un mensaje al propietario de la propiedad para obtener más información y coordinar una visita."
+      "title": "Conectar con el propietario",
+      "subtitle": "Envía un mensaje al propietario",
+      "metaTitle": "Conectar con el propietario - SPAZIO",
+      "metaDescription": "Envía un mensaje al propietario de la propiedad para obtener más información y coordinar una visita."
     }
   },
   "propertyOwner": {

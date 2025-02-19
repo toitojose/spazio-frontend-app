@@ -76,7 +76,8 @@ const isMobile = ref(false);
 const isHovered = ref(false);
 
 const updateIsMobile = () => {
-  isMobile.value = window.innerWidth < 768;
+  const width = window.visualViewport?.width || window.innerWidth;
+  isMobile.value = width < 768;
 };
 
 const onHover = () => {
@@ -106,8 +107,8 @@ const route = useRoute();
 const isActive = (path: string) => route.path === path;
 
 onMounted(() => {
-  window.addEventListener('resize', updateIsMobile);
   updateIsMobile();
+  window.addEventListener('resize', updateIsMobile);
 });
 
 onUnmounted(() => {

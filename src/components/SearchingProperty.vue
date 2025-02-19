@@ -131,5 +131,8 @@ function openDialog(type: string) {
   dialogType.value = type;
   visible.value = true;
 }
+const copyToClipboard = (text: string) => {
+  navigator.clipboard.writeText(text);
+};
 </script>
 <style scoped></style>

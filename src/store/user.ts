@@ -1,5 +1,5 @@
 import { defineStore } from 'pinia';
-import type { User } from '@/interfaces/user.interface.ts';
+import type { User } from '@/interfaces/user.interface';
 
 export const useUserStore = defineStore('user', {
   state: () => ({
@@ -27,28 +27,17 @@ export const useUserStore = defineStore('user', {
     },
   },
   getters: {
-    // Verifica si el usuario está autenticado
     isAuthenticated: (state) => !!state.user,
-
-    // Obtén el nombre del usuario
-    userName: (state) => (state.user ? `${state.user.firstname} ${state.user.lastname}` : ''),
-
-    // Obtener el primer nombre del usuario
-    userFirstName: (state) => state.user?.firstname || '',
-
-    // Roles del usuario como lista de nombres
+    authToken: (state) => (state.token ? state.token : ''),
+    userId: (state) => state.user?.id || null,
+    userName: (state) => (state.user ? `${state.user.firstName} ${state.user.lastName}` : ''),
+    userFirstName: (state) => state.user?.firstName || '',
     userRoles: (state) => state.user?.roles?.map((role) => role.name) || [],
-
-    // Verifica si el usuario tiene un rol específico
     hasRole: (state) => (roleName: string) => state.user?.roles?.some((role) => role.name === roleName),
-
-    // Devuelve el objeto completo de los roles del usuario
     fullRoles: (state) => state.user?.roles || [],
-
     isExternalEntry: (state) => state.entryMethod === 'external',
-
     isInternalEntry: (state) => state.entryMethod === 'internal',
-
     codeEntry: (state) => state.entryCode,
   },
+  persist: true,
 });

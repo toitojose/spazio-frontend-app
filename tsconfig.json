@@ -12,10 +12,14 @@
     }
   ],
   "compilerOptions": {
+    "types": ["pinia-plugin-persistedstate"],
     "module": "NodeNext",
     "baseUrl": ".",
     "paths": {
       "@/*": ["src/*"]
     }
   },
+  "skipLibCheck": true,
+  "strict": true
+
 }
