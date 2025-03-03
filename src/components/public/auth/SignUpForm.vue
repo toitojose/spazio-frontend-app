@@ -188,7 +188,7 @@ import { InputText, Password, Button, Message, RadioButton, FloatLabel } from 'p
 import { Form } from '@primevue/forms';
 import { useI18n } from 'vue-i18n';
 import { SignupService } from '@/services/signup-service.ts';
-import { backendClient } from '@/services/backend-client.ts';
+import { backendClient } from '@/api/backend-client.ts';
 import { useUserStore } from '@/store/user.ts';
 import { errorHandlerService } from '@/services/error-handler-service.ts';
 import type { AxiosError } from 'axios';

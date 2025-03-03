@@ -121,7 +121,7 @@ import { computed, ref } from 'vue';
 import { useRenterProgressStore } from '@/store/renterProgressStore.ts';
 import router from '@/router';
 import { debounce } from 'lodash';
-import { backendClient } from '@/services/backend-client.ts';
+import { backendClient } from '@/api/backend-client.ts';
 import { useUserStore } from '@/store/user.ts';
 import { IdentityVerificationService } from '@/services/identity-verification-service.ts';
 

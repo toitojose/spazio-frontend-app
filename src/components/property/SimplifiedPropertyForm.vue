@@ -1,10 +1,7 @@
 <template>
   <div>
-    <h4 class="mb-2 text-lg font-bold">Registra los detalles de la propiedad</h4>
-    <p class="mb-4 text-sm">
-      Comparte la información clave de la propiedad para gestionar su arrendamiento de manera sencilla y eficiente en
-      SPAZIO.
-    </p>
+    <h4 class="mb-2 text-lg font-bold"> Registra los detalles de la propiedad </h4>
+    <p class="mb-4 text-sm">{{ formDescription }}</p>
 
     <Form
       class="flex w-full flex-col space-y-6"
@@ -157,9 +154,17 @@
 </template>
 
 <script setup lang="ts">
-import { ref } from 'vue';
+import { computed, ref } from 'vue';
 import { InputText, Select, Button } from 'primevue';
 import { Form } from '@primevue/forms';
+
+const props = defineProps<{ contextType: 'NEW_OWNER' | 'NEW_PROPERTY' }>();
+
+const formDescription = computed(() => {
+  return props.contextType === 'NEW_OWNER'
+    ? 'Comparte la información clave de la propiedad para gestionar tu arrendamiento de manera sencilla y eficiente en SPAZIO.'
+    : 'El propietario ya está registrado en SPAZIO, pero aún no ha añadido propiedades. Por favor, ingresa los detalles del inmueble para continuar con la gestión del arrendamiento.';
+});
 
 // Modelo de datos simplificados del inmueble
 const property = ref({

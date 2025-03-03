@@ -10,11 +10,11 @@
           action-type="search"
           @submit="handleOwnerSearch" />
         <div
-          v-show="hasSearched"
+          v-if="hasSearched && !showPropertyForm"
           id="property-selection"
           class="flex h-[calc(100vh-3rem)] w-full items-center pt-16">
           <div
-            v-if="multipleProperties.length > 0"
+            v-if="properties.length > 0"
             class="w-full space-y-6">
             <h4 class="mb-2 text-lg font-bold">¡Genial! Tu arrendador ya está en SPAZIO</h4>
             <p class="mb-4 text-sm">
@@ -29,7 +29,7 @@
               :class="gridColumns"
               class="!grid gap-4">
               <div
-                v-for="property in multipleProperties"
+                v-for="property in properties"
                 :key="property.id"
                 class="flex cursor-pointer items-center rounded-lg border p-4 shadow-sm transition hover:shadow-md">
                 <RadioButton
@@ -52,7 +52,7 @@
                 label="No encuentro mi propiedad"
                 variant="outlined"
                 icon="pi pi-times"
-                @click="HandleNotFoundOwner" />
+                @click="showNoPropertyDialog = true" />
               <Button
                 :disabled="!selectedProperty"
                 label="Confirmar propiedad"
@@ -60,6 +60,31 @@
                 icon-pos="right"
                 @click="confirmPropertySelection" />
             </div>
+            <Dialog
+              v-model:visible="showNoPropertyDialog"
+              :style="{ width: '50rem' }"
+              :breakpoints="{ '768px': '50rem', '0px': '75%' }"
+              modal
+              header="No encuentro mi propiedad en la lista"
+              class="w-96">
+              <p class="mb-4">
+                El propietario ha sido encontrado en el sistema y ya tiene propiedades registradas. Sin embargo, si la
+                propiedad que deseas arrendar no está en la lista, puedes agregar una nueva propiedad a su nombre.
+              </p>
+
+              <template #footer>
+                <Button
+                  label="Buscar nuevamente al propietario"
+                  icon="pi pi-arrow-up"
+                  variant="outlined"
+                  @click="returnToOwnerForm" />
+                <Button
+                  label="Crear nueva propiedad"
+                  icon="pi pi-plus"
+                  icon-pos="right"
+                  @click="createNewPropertyForOwner" />
+              </template>
+            </Dialog>
           </div>
         </div>
 
@@ -67,7 +92,7 @@
           v-if="showPropertyForm"
           id="property-form"
           class="flex h-[calc(100vh-3rem)] w-full items-center space-x-6 pt-16">
-          <SimplifiedPropertyForm />
+          <SimplifiedPropertyForm :context-type="propertyContextType" />
           <Message severity="info">
             <h3 class="mb-4 text-sm font-semibold">¿Por qué solicitamos esta información?</h3>
 
@@ -78,6 +103,7 @@
             </ul>
           </Message>
         </div>
+
         <Dialog
           v-model:visible="showDialog"
           :style="{ width: '50rem' }"
@@ -113,25 +139,29 @@
 import GeneralForm from '@/components/GeneralForm.vue';
 import { RadioButtonGroup, RadioButton, Button, Dialog, Message } from 'primevue';
 import SimplifiedPropertyForm from '@/components/property/SimplifiedPropertyForm.vue';
-import { PropertyOwnersValidationStatus } from '@/enums/property-owners-validation-status.enum.ts';
-import { PropertyOwnerService } from '@/services/PropertyOwnerService.ts';
-import { computed, nextTick, ref, watch } from 'vue';
+import { computed, nextTick, ref } from 'vue';
 import type { PropertyData } from '@/interfaces/real-estate/property-data.interface.ts';
-import { backendClient } from '@/services/backend-client.ts';
-import type { GeneralFormData } from '@/interfaces/user.interface.ts';
 import { RolesEnum } from '@/enums/roles.enum.ts';
+import type { GeneralFormData } from '@/interfaces/User.interface.ts';
+import { PropertyOwnerClient } from '@/api/PropertyOwnerClient.ts';
+import { PropertyOwnerService } from '@/services/property-owner-service.ts';
+import { UserValidationStatus } from '@/enums/user-validation-status.enum.ts';
+import { useToast } from 'primevue/usetoast';
 
-const propertyOwnerService = new PropertyOwnerService(backendClient);
+const propertyOwnerClient = new PropertyOwnerClient();
+const propertyOwnerService = new PropertyOwnerService(propertyOwnerClient);
 const propertyOwnerIsRegistered = ref(false);
 const propertyOwnerData = ref<any>(null);
 const properties = ref<PropertyData[]>([]);
+const propertyContextType = ref<'NEW_OWNER' | 'NEW_PROPERTY'>('NEW_PROPERTY');
 const selectedProperty = ref<PropertyData | null>(null);
 const hasSearched = ref(false);
 const showDialog = ref(false);
+const showNoPropertyDialog = ref(false);
 const ownerDialogHeader = ref('No encuentro al propietario');
+const toast = useToast();
 
 const showPropertyForm = ref(false);
-const multipleProperties = computed(() => (properties.value.length > 0 ? properties.value : []));
 
 const prepareValidateData = (formData: { values: GeneralFormData }): GeneralFormData => ({
   firstName: formData.values.firstName.trim(),
@@ -154,19 +184,19 @@ const handleOwnerSearch = async (formData: any) => {
     const propertyOwnerDataReady = prepareValidateData(formData);
     const response = await propertyOwnerService.validatePropertyOwner(propertyOwnerDataReady);
 
-    if (response.result && response.data) {
+    if (response.success && response.data) {
       const data = response.data;
       // Caso verde: propietario encontrado y confirmado
-      if (data.status === PropertyOwnersValidationStatus.OWNER_CONFIRMED) {
+      if (data.status === UserValidationStatus.CONFIRMED) {
         proceedToPropertySelection(data.properties);
       }
-      if (data.status === PropertyOwnersValidationStatus.OWNER_NOT_FOUND) {
+      if (data.status === UserValidationStatus.NOT_FOUND) {
         showDialog.value = true;
         ownerDialogHeader.value = 'No encontramos un propietario con estos datos';
       }
     }
   } catch (error) {
-    console.error('Error en la simulación del backend:', error);
+    toast.add({ severity: 'error', summary: 'Error', detail: error, life: 3000 });
   }
   propertyOwnerIsRegistered.value = false;
 };
@@ -175,12 +205,33 @@ const handleOwnerSearch = async (formData: any) => {
 const proceedToPropertySelection = (receivedProperties: PropertyData[]) => {
   properties.value = receivedProperties;
   hasSearched.value = true;
-  nextTick(() => {
-    const section = document.getElementById('property-selection');
-    if (section) {
-      section.scrollIntoView({ behavior: 'smooth' });
-    }
-  });
+
+  if (receivedProperties.length === 0) {
+    // Caso: Propietario sin propiedades, mostrar el formulario de nueva propiedad
+    propertyContextType.value = 'NEW_PROPERTY';
+    showPropertyForm.value = true;
+    nextTick(() => {
+      const section = document.getElementById('property-form');
+      if (section) {
+        section.scrollIntoView({ behavior: 'smooth' });
+      }
+    });
+  } else {
+    // Caso: Propietario con propiedades, mostrar la selección de propiedades
+    selectedProperty.value = receivedProperties[0];
+    showPropertyForm.value = false;
+    console.log('=>(RentingWithContract.vue:195) data', [hasSearched.value, !showPropertyForm.value]);
+    console.log(
+      '=>(RentingWithContract.vue:195) hasSearched && !showPropertyForm',
+      hasSearched.value && !showPropertyForm.value,
+    );
+    nextTick(() => {
+      const section = document.getElementById('property-selection');
+      if (section) {
+        section.scrollIntoView({ behavior: 'smooth' });
+      }
+    });
+  }
 };
 const formatPropertyDetails = (property: PropertyData) => {
   return `${property.bedrooms ?? 0} hab. | ${property.bathrooms ?? 0} baños | ${property.propertyArea ?? 0} m²`;
@@ -192,18 +243,15 @@ const confirmPropertySelection = () => {
 };
 
 const gridColumns = computed(() => {
-  const count = multipleProperties.value.length;
+  const count = properties.value.length;
+  if (count === 0) return ''; // No aplica si no hay propiedades
   if (count % 3 === 0) return 'grid-cols-3';
   if (count % 2 === 0) return 'grid-cols-2';
   return 'grid-cols-1';
 });
-watch(multipleProperties, (newProperties) => {
-  if (newProperties.length > 0 && !selectedProperty.value) {
-    selectedProperty.value = newProperties[0];
-  }
-});
 
 const returnToOwnerForm = () => {
+  showNoPropertyDialog.value = false;
   showDialog.value = false;
   hasSearched.value = false;
   nextTick(() => {
@@ -245,9 +293,9 @@ const continueWithPreRegistration = async () => {
   }
 };
 
-const HandleNotFoundOwner = () => {
-  showDialog.value = true;
-  ownerDialogHeader.value = 'No encuentro mi propiedad en la lista';
+const createNewPropertyForOwner = () => {
+  showNoPropertyDialog.value = false;
+  showPropertyForm.value = true;
 };
 </script>
 <style scoped></style>

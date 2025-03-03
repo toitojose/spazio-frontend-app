@@ -88,7 +88,7 @@ import ProcessLayout from '@/layout/renter/ProcessLayout.vue';
 import router from '@/router';
 import { useRenterProgressStore } from '@/store/renterProgressStore.ts';
 import { RenterStatusService } from '@/services/renter-status-service.ts';
-import { backendClient } from '@/services/backend-client.ts';
+import { backendClient } from '@/api/backend-client.ts';
 import { RenterStatusEnum } from '@/enums/renter-status.enum';
 import RentingWithContract from '@/components/renterScenarios/RentingWithContract.vue';
 

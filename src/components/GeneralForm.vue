@@ -192,8 +192,8 @@ import { defineProps, defineEmits, ref } from 'vue';
 import { zodResolver } from '@primevue/forms/resolvers/zod';
 import { useToast } from 'primevue/usetoast';
 import { z } from 'zod';
-import type { GeneralFormData } from '@/interfaces/user.interface.ts';
 import type { RolesEnum } from '@/enums/roles.enum.ts';
+import type { GeneralFormData } from '@/interfaces/User.interface.ts';
 
 // Emitir datos al componente padre
 const emit = defineEmits(['formUpdated']);

@@ -1,103 +1,63 @@
-import type { GeneralFormData, UserCreationResult } from '@/interfaces/user.interface.ts';
-import { UserValidationStatus } from '@/enums/src/enums/user-validation-status.enum.ts';
-import type { UserValidationResult } from '@/interfaces/user-validation-result.interface.ts';
-import type { AxiosInstance } from 'axios';
-import type { PropertyOwnerValidationResult } from '@/interfaces/property-owner/property-owner-validation.result.ts';
 import { useUserStore } from '@/store/user.ts';
-
-export interface PropertyOwnerPayload {
-  idNumber?: string;
-  landline?: string;
-  mobile?: string;
-  email?: string;
-  secondLastName?: string;
-  middleName?: string;
-  firstName: string;
-  lastName: string;
-  roleType: string;
-}
+import type { PropertyOwnerClient } from '@/api/PropertyOwnerClient.ts';
+import type { PropertyOwnerValidationResult } from '@/interfaces/property-owner/PropertyOwnerValidationResult.interface.ts';
+import type { GeneralFormData, UserCreationResult } from '@/interfaces/User.interface.ts';
 
 export class PropertyOwnerService {
-  private authBackendClient: AxiosInstance;
+  private propertyOwnerClient: PropertyOwnerClient;
 
-  constructor(authBackendClient: AxiosInstance) {
-    this.authBackendClient = authBackendClient;
+  constructor(propertyOwnerClient: PropertyOwnerClient) {
+    this.propertyOwnerClient = propertyOwnerClient;
   }
-  /**
-   * Busca un propietario basado en los criterios proporcionados.
-   * Simula una respuesta del backend para manejar la lógica del semáforo.
-   */
 
-  async validatePropertyOwner(data: GeneralFormData): Promise<UserValidationResult> {
+  async validatePropertyOwner(data: GeneralFormData): Promise<PropertyOwnerValidationResult> {
     const userStore = useUserStore();
     const token = userStore.token;
     if (!token) throw new Error('Token de autenticación no disponible.');
+
     try {
-      // Llamamos al UserClient para validar la existencia del usuario
-      const response = await this.authBackendClient.post<PropertyOwnerValidationResult>(
-        '/v1.0/property-owner/validate',
-        data,
-        {
-          headers: {
-            Authorization: `Bearer ${token}`,
-            'Content-Type': 'application/json',
-          },
-        },
-      );
+      const response = await this.propertyOwnerClient.validatePropertyOwner(data, token);
+
       return {
-        result: response.result,
+        success: response.success,
         message: response.message,
-        error: response.error,
-        data: {
-          status: response.data?.status || UserValidationStatus.NOT_FOUND,
-          user: response.data?.user,
-        },
+        error: response.error ?? null,
+        data:
+          response.success && response.data
+            ? {
+                status: response.data.status,
+                properties: response.data.properties ?? [],
+              }
+            : null,
+        statusCode: response.statusCode ?? 500,
       };
     } catch (error: any) {
-      if (error.response && error.response.data) {
-        return {
-          result: false,
-          message: error.response.data.message,
-          error: {
-            statusCode: error.response.status,
-            key: error.response.data.error,
-          },
-        };
-      }
-      throw error;
+      console.error('Error al validar el propietario:', error);
+      return {
+        success: false,
+        message: 'Error al validar el propietario',
+        error: {
+          key: error.response?.data?.error?.key || 'UNKNOWN_ERROR',
+        },
+        data: null,
+        statusCode: error.response?.status || 500,
+      };
     }
   }
 
-  /**
-   * Servicio para crear un nuevo propietario
-   * El registro lo crea el inquilino por lo que no se registra el password y otros campos adicionales.
-   */
   async createPropertyOwner(propertyOwner: GeneralFormData): Promise<UserCreationResult> {
     try {
-      const payload = {
-        firstName: propertyOwner.firstName,
-        lastName: propertyOwner.lastName,
-        email: propertyOwner.email,
-        roleType: propertyOwner.roleType,
-        ...(propertyOwner.middleName ? { middleName: propertyOwner.middleName } : {}),
-        ...(propertyOwner.secondLastName ? { secondLastName: propertyOwner.secondLastName } : {}),
-        ...(propertyOwner.idNumber ? { idNumber: propertyOwner.idNumber } : {}),
-        ...(propertyOwner.mobile ? { mobile: propertyOwner.mobile } : {}),
-        ...(propertyOwner.landline ? { landline: propertyOwner.landline } : {}),
-      };
-      return this.userClient.createUserWithRole(payload);
+      return await this.propertyOwnerClient.createPropertyOwner(propertyOwner);
     } catch (error: any) {
-      if (error.response && error.response.data) {
-        return {
-          result: false,
-          message: error.response.data.message,
-          error: {
-            statusCode: error.response.status,
-            key: error.response.data.error,
-          },
-        };
-      }
-      throw error;
+      console.error('Error al registrar propietario:', error);
+      return {
+        result: false,
+        message: 'Error al registrar propietario',
+        error: {
+          statusCode: error.response?.status || 500,
+          key: error.response?.data?.error || 'UNKNOWN_ERROR',
+        },
+      };
     }
   }
 }

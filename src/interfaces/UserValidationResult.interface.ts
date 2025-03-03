@@ -1,12 +1,12 @@
-import type { UserValidationStatus } from '@/enums/src/enums/user-validation-status.enum.ts';
-import type { User } from '@/interfaces/user.interface.ts';
+import type { UserValidationStatus } from '@/enums/user-validation-status.enum.ts';
+import type { User } from '@/interfaces/User.interface.ts';
 
 export interface UserValidationResult {
-  result: boolean;
+  success: boolean;
   message: string;
   error: { statusCode: number; key: string } | null;
   data?: {
     status: UserValidationStatus;
     user?: User;
-  };
+  } | null;
 }

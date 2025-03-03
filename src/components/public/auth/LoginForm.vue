@@ -109,7 +109,7 @@ import { ref } from 'vue';
 import { useI18n } from 'vue-i18n';
 import { InputText, Password, Button as PButton, Message, Button, Checkbox } from 'primevue';
 import { LoginService } from '@/services/login-service.ts';
-import { backendClient } from '@/services/backend-client.ts';
+import { backendClient } from '@/api/backend-client.ts';
 import { errorHandlerService } from '@/services/error-handler-service.ts';
 import { useUserStore } from '@/store/user.ts';
 import type { AxiosError } from 'axios';
