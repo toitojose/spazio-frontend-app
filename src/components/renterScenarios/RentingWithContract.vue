@@ -115,9 +115,11 @@ import { RadioButtonGroup, RadioButton, Button, Dialog, Message } from 'primevue
 import SimplifiedPropertyForm from '@/components/property/SimplifiedPropertyForm.vue';
 import { PropertyOwnersValidationStatus } from '@/enums/property-owners-validation-status.enum.ts';
 import { PropertyOwnerService } from '@/services/PropertyOwnerService.ts';
-import { backendClient } from '@/services/backend-client.ts';
 import { computed, nextTick, ref, watch } from 'vue';
 import type { PropertyData } from '@/interfaces/real-estate/property-data.interface.ts';
+import { backendClient } from '@/services/backend-client.ts';
+import type { GeneralFormData } from '@/interfaces/user.interface.ts';
+import { RolesEnum } from '@/enums/roles.enum.ts';
 
 const propertyOwnerService = new PropertyOwnerService(backendClient);
 const propertyOwnerIsRegistered = ref(false);
@@ -131,25 +133,26 @@ const ownerDialogHeader = ref('No encuentro al propietario');
 const showPropertyForm = ref(false);
 const multipleProperties = computed(() => (properties.value.length > 0 ? properties.value : []));
 
+const prepareValidateData = (formData: { values: GeneralFormData }): GeneralFormData => ({
+  firstName: formData.values.firstName.trim(),
+  middleName: formData.values.middleName?.trim() || undefined,
+  lastName: formData.values.lastName.trim(),
+  secondLastName: formData.values.secondLastName?.trim() || undefined,
+  email: formData.values.email ? formData.values.email.trim().toLowerCase() : undefined,
+  idNumber: formData.values.idNumber ? formData.values.idNumber.trim() : undefined,
+  landline: formData.values.landline ? formData.values.landline.trim() : undefined,
+  mobile: formData.values.mobile ? formData.values.mobile.trim() : undefined,
+  roleType: RolesEnum.PROPERTY_OWNER,
+});
 const handleOwnerSearch = async (formData: any) => {
   if (!formData.valid) {
     alert('El formulario del propietario no es válido, no se puede proceder con la búsqueda.');
     return;
   }
-  propertyOwnerData.value = {
-    firstName: formData.values.firstName.trim(),
-    middleName: formData.values.secondName?.trim() || undefined, // Opcional
-    lastName: formData.values.firstLastName.trim(),
-    secondLastName: formData.values.secondLastName?.trim() || undefined, // Opcional
-    email: formData.values.email ? formData.values.email.trim().toLowerCase() : undefined,
-    idNumber: formData.values.identification ? formData.values.identification.trim() : undefined,
-    landline: formData.values.landline ? formData.values.landline.trim() : undefined,
-    mobile: formData.values.phone ? formData.values.phone.trim() : undefined,
-  };
 
   try {
-    // Simulación del backend con un retraso artificial
-    const response = await propertyOwnerService.validatePropertyOwner(propertyOwnerData);
+    const propertyOwnerDataReady = prepareValidateData(formData);
+    const response = await propertyOwnerService.validatePropertyOwner(propertyOwnerDataReady);
 
     if (response.result && response.data) {
       const data = response.data;

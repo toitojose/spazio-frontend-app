@@ -30,17 +30,17 @@
         </div>
         <div class="flex flex-col gap-1">
           <InputText
-            id="secondName"
-            name="secondName"
+            id="middleName"
+            name="middleName"
             size="small"
             placeholder="Segundo Nombre" />
           <Message
-            v-if="$form && $form.secondName?.invalid"
+            v-if="$form && $form.middleName?.invalid"
             severity="error"
             size="small"
             class="text-xs"
             variant="simple">
-            {{ $form.secondName.error?.message }}
+            {{ $form.middleName.error?.message }}
           </Message>
         </div>
       </div>
@@ -49,24 +49,24 @@
     <!-- Apellidos -->
     <div class="flex items-center gap-4">
       <label
-        for="firstLastName"
+        for="lastName"
         class="w-1/4 text-right text-xs font-medium">
         Apellidos
       </label>
       <div class="grid w-full grid-cols-2 gap-4">
         <div class="flex flex-col gap-1">
           <InputText
-            id="firstLastName"
-            name="firstLastName"
+            id="lastName"
+            name="lastName"
             size="small"
             placeholder="Primer Apellido" />
           <Message
-            v-if="$form && $form.firstLastName?.invalid"
+            v-if="$form && $form.lastName?.invalid"
             severity="error"
             size="small"
             class="text-xs"
             variant="simple">
-            {{ $form.firstLastName.error?.message }}
+            {{ $form.lastName.error?.message }}
           </Message>
         </div>
         <div class="flex flex-col gap-1">
@@ -135,24 +135,43 @@
       <label
         for="email"
         class="w-1/4 text-right text-xs font-medium">
-        Correo Electrónico
+        Información general
       </label>
-      <div class="flex w-full flex-col gap-1">
-        <InputText
-          id="email"
-          name="email"
-          size="small"
-          type="email"
-          class="w-full"
-          placeholder="Correo Electrónico" />
-        <Message
-          v-if="$form && $form.email?.invalid"
-          severity="error"
-          size="small"
-          class="text-xs"
-          variant="simple">
-          {{ $form.email.error?.message }}
-        </Message>
+      <div class="grid w-full grid-cols-2 gap-4">
+        <div class="flex flex-col gap-1">
+          <InputText
+            id="email"
+            name="email"
+            size="small"
+            type="email"
+            class="w-full"
+            placeholder="Correo Electrónico" />
+          <Message
+            v-if="$form && $form.email?.invalid"
+            severity="error"
+            size="small"
+            class="text-xs"
+            variant="simple">
+            {{ $form.email.error?.message }}
+          </Message>
+        </div>
+        <div class="flex flex-col gap-1">
+          <InputText
+            id="idNumber"
+            name="idNumber"
+            size="small"
+            type="text"
+            class="w-full"
+            placeholder="Cedula identidad" />
+          <Message
+            v-if="$form && $form.idNumber?.invalid"
+            severity="error"
+            size="small"
+            class="text-xs"
+            variant="simple">
+            {{ $form.idNumber.error?.message }}
+          </Message>
+        </div>
       </div>
     </div>
 
@@ -174,6 +193,7 @@ import { zodResolver } from '@primevue/forms/resolvers/zod';
 import { useToast } from 'primevue/usetoast';
 import { z } from 'zod';
 import type { GeneralFormData } from '@/interfaces/user.interface.ts';
+import type { RolesEnum } from '@/enums/roles.enum.ts';
 
 // Emitir datos al componente padre
 const emit = defineEmits(['formUpdated']);
@@ -183,14 +203,14 @@ const toast = useToast();
 
 // Definir props
 const props = defineProps({
+  initialData: {
+    type: Object,
+    default: () => ({}),
+  },
   formType: {
     type: String,
     required: true,
     validator: (value: string) => ['renter', 'property-owner'].includes(value),
-  },
-  initialData: {
-    type: Object,
-    default: () => ({}),
   },
   userRole: {
     type: String,
@@ -223,19 +243,19 @@ switch (props.actionType) {
 }
 const requiredFields =
   props.userRole === 'agent'
-    ? ['firstName', 'secondName', 'firstLastName', 'secondLastName', 'mobile', 'email']
+    ? ['firstName', 'middleName', 'lastName', 'secondLastName', 'mobile', 'email', 'idNumber']
     : props.userRole !== props.formType
-      ? ['firstName', 'firstLastName', 'mobile', 'email']
-      : ['firstName', 'secondName', 'firstLastName', 'secondLastName', 'mobile', 'email'];
+      ? ['firstName', 'lastName', 'mobile', 'email']
+      : ['firstName', 'middleName', 'lastName', 'secondLastName', 'mobile', 'email', 'idNumber'];
 
 const schema = z.object({
   firstName: requiredFields.includes('firstName')
     ? z.string().min(1, { message: 'Es obligatorio' })
     : z.string().optional(),
-  secondName: requiredFields.includes('secondName')
+  middleName: requiredFields.includes('middleName')
     ? z.string().min(1, { message: 'Es obligatorio' })
     : z.string().optional(),
-  firstLastName: requiredFields.includes('firstLastName')
+  lastName: requiredFields.includes('lastName')
     ? z.string().min(1, { message: 'Es obligatorio' })
     : z.string().optional(),
   secondLastName: requiredFields.includes('secondLastName')
@@ -257,12 +277,14 @@ const resolver = zodResolver(schema);
 // Inicializar valores del formulario
 const initialValues = ref<GeneralFormData>({
   firstName: props.initialData.firstName || '',
-  secondName: props.initialData.secondName || '',
-  firstLastName: props.initialData.firstLastName || '',
+  middleName: props.initialData.middleName || '',
+  lastName: props.initialData.lastName || '',
   secondLastName: props.initialData.secondLastName || '',
+  idNumber: props.initialData.idNumber || '',
   mobile: props.initialData.mobile || '',
   landline: props.initialData.landline || '',
   email: props.initialData.email || '',
+  roleType: props.formType as RolesEnum,
 });
 
 const formData = ref<GeneralFormData>({ ...initialValues.value });

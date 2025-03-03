@@ -1,5 +1,7 @@
 <template>
-  <ProcessLayout :current-step="currentStep">
+  <ProcessLayout
+    :current-step="currentStep"
+    :show-navigation-buttons="false">
     <div class="flex min-h-full flex-col justify-evenly space-y-8">
       <div>
         <!-- Título -->

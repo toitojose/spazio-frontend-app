@@ -3,4 +3,5 @@ export enum RolesEnum {
   AGENT = 'AGENT',
   PROPERTY_AGENT = 'PROPERTY_AGENT',
   ADMIN = 'ADMIN',
+  PROPERTY_OWNER = 'PROPERTY_OWNER',
 }

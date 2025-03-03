@@ -1,3 +1,5 @@
+import type { RolesEnum } from '@/enums/roles.enum.ts';
+
 export interface Role {
   id: number;
   name: string;
@@ -22,10 +24,25 @@ export interface User {
 
 export interface GeneralFormData {
   firstName: string;
-  secondName?: string;
-  firstLastName: string;
+  middleName?: string;
+  lastName: string;
   secondLastName?: string;
-  mobile: string;
+  idNumber?: string;
+  mobile?: string;
   landline?: string;
-  email: string;
+  email?: string;
+  roleType: RolesEnum;
+}
+
+export interface UserCreationResult {
+  result: boolean;
+  message: string | string[];
+  error: { statusCode: number; key: string } | null;
+  data?: {
+    id: number;
+    firstName: string;
+    lastName: string;
+    email: string;
+    roles: Array<{ id: number; name: RolesEnum }>;
+  };
 }

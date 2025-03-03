@@ -1,5 +1,5 @@
-import { PropertyOwnersValidationStatus } from '@/enums/property-owners-validation-status.enum.ts';
 import type { PropertyData } from '@/interfaces/real-estate/property-data.interface.ts';
+import { PropertyOwnersValidationStatus } from '@/enums/property-owners-validation-status.enum.ts';
 
 export interface PropertyOwnerValidationResult {
   result: boolean;
