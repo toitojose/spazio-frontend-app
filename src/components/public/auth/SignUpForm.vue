@@ -218,7 +218,7 @@ const onSubmit = async () => {
     const signupData = prepareSignupData();
     const response = await signupService.signup(signupData);
 
-    if (response.result && response.data) {
+    if ( response.data) {
       storeUserData(response.data.user, response.data.token);
       handleSignupSuccess(response.data.user, response.data.token);
     } else {

@@ -135,10 +135,9 @@ const handleLogin = async () => {
   try {
     const sanitizedEmail = sanitizeMail(email.value);
     const response = await loginService.login(sanitizedEmail, password.value);
-
-    if (response.result && response.data) {
+    console.log(response)
+    if (response.data) {
       const { user, token } = response.data;
-
       // Guardar usuario en Pinia
       const userStore = useUserStore();
       userStore.setUser(

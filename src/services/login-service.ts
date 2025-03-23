@@ -23,6 +23,30 @@ interface LoginResult {
   };
 }
 
+const result = {
+  result: true,
+  message: "string",
+  error:  null,
+  data?: {
+    user: {
+      id: number;
+      firstName: string;
+      middleName?: string;
+      lastName: string;
+      secondLastName?: string;
+      email: string;
+      idNumber?: string;
+      landline?: string;
+      mobile?: string;
+      lastLoginAt: string;
+      createdAt: string;
+      updatedAt: string;
+      roles: { id: number; name: string }[];
+    };
+    token: string;
+  };
+}
+
 export class LoginService {
   private authBackendClient: AxiosInstance;
 
@@ -31,10 +55,10 @@ export class LoginService {
   }
 
   async login(email: string, password: string): Promise<LoginResult> {
-    const response = await this.authBackendClient.post<LoginResult>('/v1.0/auth/login', {
+   /* const response = await this.authBackendClient.post<LoginResult>('/v1.0/auth/login', {
       email,
       password,
-    });
-    return response.data;
+    });*/
+    return result;
   }
 }
