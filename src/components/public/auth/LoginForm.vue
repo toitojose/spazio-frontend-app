@@ -109,11 +109,13 @@ import { ref } from 'vue';
 import { useI18n } from 'vue-i18n';
 import { InputText, Password, Button as PButton, Message, Button, Checkbox } from 'primevue';
 import { LoginService } from '@/services/login-service.ts';
+import type { LoginResult } from '@/interfaces/auth/login.interface';
 import { backendClient } from '@/api/backend-client.ts';
 import { errorHandlerService } from '@/services/error-handler-service.ts';
 import { useUserStore } from '@/store/user.ts';
 import type { AxiosError } from 'axios';
 import type { User } from '@/interfaces/user.interface.ts';
+import { useRouter } from 'vue-router'
 
 const emit = defineEmits<{
   (e: 'authSuccess', data: { user: User; token: string }): void;
@@ -179,6 +181,21 @@ const onSubmit = async () => {
   isLoading.value = true;
   await handleLogin();
 };
+
+const isAdmin = (result: LoginResult) => {
+  const router = useRouter();
+  if (result.data){
+    const { user, token } = result.data
+    const roles = user.roles;
+
+    for (let role in roles){
+      if(role.name == "ADMIN"){
+        router.push('/admin');
+      }
+  }
+  }
+  
+}
 
 const cominSoon = () => {
   alert('Coming soon');
