@@ -6,6 +6,7 @@ import PublicRoutes from '@/router/public/public-routes.ts';
 import RenterRoutes from '@/router/private/renter-routes.ts';
 import AgentRoutes from '@/router/private/agent-routes.ts';
 import PropertyOwnerRoutes from '@/router/private/property-owner-routes.ts';
+import AdminRoutes from '@/router/private/admin-routes';
 
 // Consolidar rutas
 const routes = [
@@ -15,6 +16,7 @@ const routes = [
   ...RenterRoutes,
   ...AgentRoutes,
   ...PropertyOwnerRoutes,
+  ...AdminRoutes,
 ];
 
 // Crear instancia del router

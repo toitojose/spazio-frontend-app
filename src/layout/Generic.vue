@@ -30,6 +30,9 @@
       id="main"
       class="wrapper min-h-screen bg-gray-100 lg:ml-20">
       <router-view />
+      <div v-if="isAdmin">
+        <router-link to="/admin">Vista A</router-link>
+      </div>
     </main>
 
     <FooterSpazio />
@@ -57,9 +60,11 @@ import { useUserStore } from '@/store/user.ts';
 import { createRoleRouteMap, getMenuItemsByRoles } from '@/router/private/menu-items.ts';
 import { useI18n } from 'vue-i18n';
 import type { RolesEnum } from '@/enums/roles.enum.ts';
+import Admin from '@/ui/views/private/admin/Home.vue';
 
 const logo = ref('sp-spazio-iso');
 const { t } = useI18n();
+let isAdmin = true;
 
 const updateClass = () => {
   if (window.innerWidth >= 1024) {
