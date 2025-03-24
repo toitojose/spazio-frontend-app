@@ -128,6 +128,7 @@ const errorMessage = ref('');
 const isLoading = ref(false);
 const { t } = useI18n();
 const rememberMe = ref(false);
+const router = useRouter();
 
 const loginService = new LoginService(backendClient);
 
@@ -158,6 +159,7 @@ const handleLogin = async () => {
         token,
       );
       emit('authSuccess', { user, token });
+      isAdmin(response);
     } else if (response.error?.key) {
       errorMessage.value = t(`error.${response.error.key}`) || t('error.unhandled');
     } else {
@@ -183,19 +185,20 @@ const onSubmit = async () => {
 };
 
 const isAdmin = (result: LoginResult) => {
-  const router = useRouter();
-  if (result.data){
-    const { user, token } = result.data
+  if (result.data) {
+    const { user } = result.data;
     const roles = user.roles;
 
-    for (let role in roles){
-      if(role.name == "ADMIN"){
-        router.push('/admin');
+    if (roles) {
+      for (const role of roles) {
+        if (role.name === 'ADMIN') {
+          router.push('/admin');
+          return;
+        }
       }
+    }
   }
-  }
-  
-}
+};
 
 const cominSoon = () => {
   alert('Coming soon');
