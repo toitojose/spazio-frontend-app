@@ -60,7 +60,6 @@ import type { RolesEnum } from '@/enums/roles.enum.ts';
 
 const logo = ref('sp-spazio-iso');
 const { t } = useI18n();
-let isAdmin = true;
 
 const updateClass = () => {
   if (window.innerWidth >= 1024) {
