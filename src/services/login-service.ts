@@ -23,28 +23,28 @@ interface LoginResult {
   };
 }
 
-const result = {
+const result: LoginResult = {
   result: true,
   message: "string",
   error:  null,
-  data?: {
+  data: {
     user: {
-      id: number;
-      firstName: string;
-      middleName?: string;
-      lastName: string;
-      secondLastName?: string;
-      email: string;
-      idNumber?: string;
-      landline?: string;
-      mobile?: string;
-      lastLoginAt: string;
-      createdAt: string;
-      updatedAt: string;
-      roles: { id: number; name: string }[];
-    };
-    token: string;
-  };
+      id: 1,
+      firstName: "Juan",
+      middleName: "Carlos",
+      lastName: "Perez",
+      secondLastName: "Gomez",
+      email: "juan.perez@example.com",
+      idNumber: undefined,
+      landline: undefined,
+      mobile: undefined,
+      lastLoginAt: "2025-03-23 16:44:39.31",
+      createdAt: "2025-03-23 20:33:53.897746",
+      updatedAt: "2025-03-23 21:44:39.324473",
+      roles: [{ id: 3, name: "ADMIN" }],
+    },
+    token: "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6Imp1YW4ucGVyZXpAZXhhbXBsZS5jb20iLCJyZW50ZXJJZCI6MSwiaWF0IjoxNzQyNzY1NTA2LCJleHAiOjE3NDMzNzAzMDZ9.Gksda90RqPpWqD5_Ubz3kWnGXi0gDYbmHFHypZVTuLc",
+  },
 }
 
 export class LoginService {
