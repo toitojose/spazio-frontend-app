@@ -159,7 +159,7 @@ const handleLogin = async () => {
         token,
       );
       emit('authSuccess', { user, token });
-      isAdmin(response);
+      isAdmin(user.roles);
     } else if (response.error?.key) {
       errorMessage.value = t(`error.${response.error.key}`) || t('error.unhandled');
     } else {
@@ -184,18 +184,11 @@ const onSubmit = async () => {
   await handleLogin();
 };
 
-const isAdmin = (result: LoginResult) => {
-  if (result.data) {
-    const { user } = result.data;
-    const roles = user.roles;
-
-    if (roles) {
-      for (const role of roles) {
-        if (role.name === 'ADMIN') {
-          router.push('/admin');
-          return;
-        }
-      }
+const isAdmin = (result: any) => {
+  for (const role of result) {
+    if (role.name === 'ADMIN') {
+      router.push('/admin');
+      return;
     }
   }
 };

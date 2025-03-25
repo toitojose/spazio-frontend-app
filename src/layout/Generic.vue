@@ -51,6 +51,7 @@ import FooterSpazio from '@/components/public/footer/FooterSpazio.vue';
 import { Dialog as PDialog, Button, Menu } from 'primevue';
 import type { PublicMenuItemInterface } from '@/interfaces/public-menu-item.interface.ts';
 import AuthForms from '@/ui/views/public/auth/AuthForms.vue';
+import InternalRedirect from '@/components/InternalRedirect.vue';
 import Header from '@/components/Header.vue';
 import Sidebar from '@/components/Sidebar.vue';
 import { useUserStore } from '@/store/user.ts';
