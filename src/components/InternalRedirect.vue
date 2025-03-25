@@ -5,12 +5,11 @@
                 severity="success"
                 class="mb-4">
                 ¡Hola, <span class="font-semibold">{{ firstName }}!</span> <br />
-                Has iniciado sesión, ahora puedes seguir explorando ..........
+                Has iniciado sesión, puedes ir a administracion o quedarte aqui
             </Message>
             <Button
                 size="small"
-                :label="$t('login.loginGoogle')"
-                icon="pi pi-google"
+                :label="('Ir a administracion')"
                 class="w-full border-gray-300 bg-white text-gray-700 hover:bg-gray-100"
                 @click="redirect()" />
         </div>

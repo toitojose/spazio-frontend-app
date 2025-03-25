@@ -70,7 +70,6 @@ import type { RolesEnum } from '@/enums/roles.enum.ts';
 
 const logo = ref('sp-spazio-iso');
 const { t } = useI18n();
-const isAdmin = computed(() => userStore.isAdmin());
 
 const updateClass = () => {
   if (window.innerWidth >= 1024) {
@@ -144,6 +143,9 @@ const getSecondaryItems = (): PublicMenuItemInterface[] => {
 };
 const secondaryItems = ref<PublicMenuItemInterface[]>(getSecondaryItems());
 
+
+
+
 // Estados del diálogo de autenticación
 const authFormType = ref<'login' | 'signup'>('login');
 const showAuthDialog = ref(false);
@@ -184,6 +186,10 @@ const groupedMenuItems = computed(() => {
     {} as Record<string, typeof menuItems.value>,
   );
 });
+
+//Estados dialog redirigir
+const isAdmin = ref(userStore.isAdmin());
+
 </script>
 
 <style scoped>
