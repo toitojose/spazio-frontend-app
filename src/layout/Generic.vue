@@ -43,6 +43,15 @@
     class="w-11/12 sm:w-5/12">
     <AuthForms :formType="authFormType" />
   </PDialog>
+
+  <PDialog
+    v-model:visible="isAdmin"
+    :modal="true"
+    :closable="true"
+    :header="$t(authDialogTitle)"
+    class="w-11/12 sm:w-5/12">
+    <InternalRedirect />
+  </PDialog>
 </template>
 
 <script setup lang="ts">
@@ -61,6 +70,7 @@ import type { RolesEnum } from '@/enums/roles.enum.ts';
 
 const logo = ref('sp-spazio-iso');
 const { t } = useI18n();
+const isAdmin = computed(() => userStore.isAdmin());
 
 const updateClass = () => {
   if (window.innerWidth >= 1024) {

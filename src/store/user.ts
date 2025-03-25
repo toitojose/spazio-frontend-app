@@ -25,6 +25,16 @@ export const useUserStore = defineStore('user', {
       this.entryMethod = method;
       this.entryCode = code;
     },
+    isAdmin() {
+      if(this.user?.roles){
+        for(let role of this.user.roles){
+          if(role.name === 'ADMIN'){
+            return true;
+          }
+        }
+      }
+      return false;
+    }
   },
   getters: {
     isAuthenticated: (state) => !!state.user,

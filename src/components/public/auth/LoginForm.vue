@@ -109,7 +109,6 @@ import { ref } from 'vue';
 import { useI18n } from 'vue-i18n';
 import { InputText, Password, Button as PButton, Message, Button, Checkbox } from 'primevue';
 import { LoginService } from '@/services/login-service.ts';
-import type { LoginResult } from '@/interfaces/auth/login.interface';
 import { backendClient } from '@/api/backend-client.ts';
 import { errorHandlerService } from '@/services/error-handler-service.ts';
 import { useUserStore } from '@/store/user.ts';
@@ -184,6 +183,7 @@ const onSubmit = async () => {
   await handleLogin();
 };
 
+/*Verificar el cambio de logica para usar el metodo isAdmin definido */
 const isAdmin = (result: any) => {
   for (const role of result) {
     if (role.name === 'ADMIN') {
