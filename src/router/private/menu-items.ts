@@ -2,6 +2,7 @@ import AgentRoutes from './agent-routes';
 import BackofficeRoutes from './backoffice-routes';
 import RenterRoutes from './renter-routes';
 import PropertyOwnerRoutes from './property-owner-routes';
+import AdminRoutes from './admin-routes';
 import type { RouteRecordRaw } from 'vue-router';
 import { RolesEnum } from '@/enums/roles.enum.ts';
 
@@ -23,7 +24,7 @@ export const createRoleRouteMap = (
   },
   [RolesEnum.ADMIN]: {
     name: t('backoffice.title'),
-    routes: getChildrenFromRoutes(BackofficeRoutes),
+    routes: getChildrenFromRoutes(AdminRoutes),
   },
 });
 

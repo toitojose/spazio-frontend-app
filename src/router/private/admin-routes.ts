@@ -12,9 +12,10 @@ export default [
         meta: {
           metaTitle: 'login.metaTitle',
           metaDescription: 'login.metaDescription',
+          title: 'admin.title',
+          icon: 'pi pi-home',
         },
       },
-      
       {
         path: 'products',
         name: 'Admin-products',
@@ -22,6 +23,8 @@ export default [
         meta: {
           metaTitle: 'login.metaTitle',
           metaDescription: 'login.metaDescription',
+          title: 'admin.products.title',
+          icon: 'pi pi-box',
         },
       },
     ],

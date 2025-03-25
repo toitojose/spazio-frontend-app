@@ -25,11 +25,11 @@
       <ul class="mt-2 space-y-2">
         <li>
           <a
-            href="/admin"
+            href="/"
             class="flex items-center space-x-3 rounded px-3 py-2 hover:bg-gray-100"
             :class="{ active: isActive('/') }">
             <i class="pi pi-home"></i>
-            <span>Portada</span>
+            <span>Pagina principal</span>
           </a>
         </li>
       </ul>

@@ -499,6 +499,12 @@
     "metaTitle": "Propiedades - SPAZIO",
     "metaDescription": "Administra tus propiedades de forma segura y eficiente desde tu cuenta de SPAZIO."
   },
+  "admin": {
+    "title": "Home - Administración",
+    "products": {
+      "title": "Productos"
+    }
+  },
   "backoffice": {
     "title": "Backoffice",
     "subtitle": "Administra tu backoffice",
