@@ -5,13 +5,14 @@
                 severity="success"
                 class="mb-4">
                 ¡Hola, <span class="font-semibold">{{ firstName }}!</span> <br />
-                Has iniciado sesión, ahora puedes seguir explorando.
+                Has iniciado sesión, ahora puedes seguir explorando ..........
             </Message>
             <Button
-            size="small"
-            :label="('Ir a Administracion')"
-            class="w-full border-gray-300 bg-white text-gray-700 hover:bg-gray-100"
-            @click="redirect()" />
+                size="small"
+                :label="$t('login.loginGoogle')"
+                icon="pi pi-google"
+                class="w-full border-gray-300 bg-white text-gray-700 hover:bg-gray-100"
+                @click="redirect()" />
         </div>
     </div>
 </template>
@@ -19,8 +20,8 @@
 <script setup lang="ts">
   import { computed } from 'vue';
   import { useUserStore } from '@/store/user.ts';
-  import Message from 'primevue/message';
-  import { useRouter } from 'vue-router'
+  import { useRouter } from 'vue-router';
+  import { Button, Message } from 'primevue';
   
   const userStore = useUserStore();
   const router = useRouter();
