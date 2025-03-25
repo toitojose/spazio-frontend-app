@@ -7,8 +7,18 @@ export default [
     children: [
       {
         path: '',
-        name: 'Auth',
+        name: 'Admin-home',
         component: () => import('@/ui/views/private/admin/Home.vue'),
+        meta: {
+          metaTitle: 'login.metaTitle',
+          metaDescription: 'login.metaDescription',
+        },
+      },
+      
+      {
+        path: 'products',
+        name: 'Admin-products',
+        component: () => import('@/ui/views/private/admin/Products.vue'),
         meta: {
           metaTitle: 'login.metaTitle',
           metaDescription: 'login.metaDescription',

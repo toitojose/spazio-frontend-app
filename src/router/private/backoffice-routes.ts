@@ -2,7 +2,7 @@ import type { RouteRecordRaw } from 'vue-router';
 
 const BackofficeRoutes: RouteRecordRaw[] = [
   {
-    path: '/welcome',
+    path: '/admin/products',
     name: 'welcome',
     component: () => import('@/ui/views/private/Welcome.vue'),
     meta: {
@@ -13,5 +13,6 @@ const BackofficeRoutes: RouteRecordRaw[] = [
     },
   },
 ];
+/*para cambiar*/
 
 export default BackofficeRoutes;
