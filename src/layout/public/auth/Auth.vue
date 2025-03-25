@@ -12,7 +12,7 @@
           </p>
         </header>
         <main>
-          <router-view />
+          <AuthForms :formType="authFormType"/>
         </main>
         <footer class="mt-6 text-center text-sm text-gray-500">
           <small>&copy; {{ year }} SPAZIO. All rights reserved.</small>
@@ -23,8 +23,14 @@
 </template>
 
 <script setup lang="ts">
+import { ref } from 'vue';
 import { useI18n } from 'vue-i18n';
+import AuthForms from '@/ui/views/public/auth/AuthForms.vue';
+import { useUserStore } from '@/store/user.ts';
+import { useRouter } from 'vue-router'
 
+const userStore = useUserStore();
+const router = useRouter();
 const { t: $t } = useI18n();
 defineProps({
   title: {
@@ -36,6 +42,17 @@ defineProps({
     required: false,
   },
 });
+
+if(userStore.isAuthenticated){
+  if(userStore.isAdmin()){
+    router.push('/admin');
+  }else{
+    router.push('/');
+  }
+}
+
+const authFormType = ref<'login' | 'signup'>('login');
+
 const currYear = new Date();
 const year = currYear.getFullYear();
 </script>

@@ -35,7 +35,7 @@ router.beforeEach((to, from, next) => {
     to: to.path,
     isAdminRoute,
     isAuthenticated: userStore.isAuthenticated,
-    isAdmin: userStore.isAdmin
+    isAdmin: userStore.isAdmin()
   });
   
   // Si es una ruta de admin
@@ -43,12 +43,12 @@ router.beforeEach((to, from, next) => {
     // Verificar si el usuario está autenticado
     if (!userStore.isAuthenticated) {
       console.log('Usuario no autenticado, redirigiendo a login');
-      next({ path: '/login' });
+      next({ path: '/auth' });
       return;
     }
 
     // Verificar si el usuario tiene rol de admin
-    if (!userStore.isAdmin) {
+    if (!userStore.isAdmin()) {
       console.log('Usuario no es admin, redirigiendo a home');
       next({ path: '/' });
       return;

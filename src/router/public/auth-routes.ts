@@ -19,7 +19,7 @@ export default [
         },
       },
       {
-        path: '/login/not-available',
+        path: 'login/not-available',
         name: 'not-available',
         component: () => import('@/ui/views/public/auth/NotAvailable.vue'),
         meta: {
@@ -28,7 +28,7 @@ export default [
         },
       },
       {
-        path: '/login/email-change',
+        path: 'login/email-change',
         name: 'email-change',
         component: () => import('@/ui/views/public/auth/EmailChange.vue'),
         meta: {
@@ -37,7 +37,7 @@ export default [
         },
       },
       {
-        path: '/login/reset-password',
+        path: 'login/reset-password',
         name: 'reset-password',
         component: () => import('@/ui/views/public/auth/ResetPassword.vue'),
         meta: {
@@ -46,7 +46,7 @@ export default [
         },
       },
       {
-        path: '/login/restore-password',
+        path: 'login/restore-password',
         name: 'restore-password',
         component: () => import('@/ui/views/public/auth/RestorePassword.vue'),
         meta: {
@@ -55,7 +55,7 @@ export default [
         },
       },
       {
-        path: '/register',
+        path: 'register',
         name: 'register',
         component: () => import('@/ui/views/public/auth/Register.vue'),
         meta: {
@@ -64,7 +64,7 @@ export default [
         },
       },
       {
-        path: '/login',
+        path: 'login',
         name: 'admin-login',
         component: () => import('@/components/public/auth/LoginForm.vue'),
         meta: {

@@ -191,6 +191,8 @@ const isAdmin = (result: any) => {
       return;
     }
   }
+  router.push('/');
+  return
 };
 
 const cominSoon = () => {
