@@ -65,7 +65,7 @@ export default [
       },
       {
         path: 'login',
-        name: 'admin-login',
+        name: 'login',
         component: () => import('@/components/public/auth/LoginForm.vue'),
         meta: {
           metaTitle: 'register.metaTitle',

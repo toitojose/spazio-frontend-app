@@ -1,9 +1,9 @@
-import Admin from '@/layout/admin/AdminLayout.vue';
+import AdminLayout from '@/layout/admin/AdminLayout.vue';
 
 export default [
   {
     path: '/admin',
-    component: Admin,
+    component: AdminLayout,
     children: [
       {
         path: '',
@@ -19,7 +19,7 @@ export default [
       {
         path: 'products',
         name: 'Admin-products',
-        component: () => import('@/ui/views/private/admin/Products.vue'),
+        component: () => import('@/ui/views/private/admin/products/Index.vue'),
         meta: {
           metaTitle: 'login.metaTitle',
           metaDescription: 'login.metaDescription',

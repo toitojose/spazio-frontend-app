@@ -1,5 +1,5 @@
 import { defineStore } from 'pinia';
-import type { User } from '@/interfaces/user.interface';
+import type { User } from '@/interfaces/User.interface.ts';
 
 export const useUserStore = defineStore('user', {
   state: () => ({
@@ -14,6 +14,7 @@ export const useUserStore = defineStore('user', {
       if (token !== undefined) {
         this.token = token;
       }
+      localStorage.setItem('tokenTimestamp', Date.now().toString());
     },
     clearUser() {
       this.user = null;
@@ -26,15 +27,15 @@ export const useUserStore = defineStore('user', {
       this.entryCode = code;
     },
     isAdmin() {
-      if(this.user?.roles){
-        for(let role of this.user.roles){
-          if(role.name === 'ADMIN'){
+      if (this.user?.roles) {
+        for (let role of this.user.roles) {
+          if (role.name === 'ADMIN') {
             return true;
           }
         }
       }
       return false;
-    }
+    },
   },
   getters: {
     isAuthenticated: (state) => !!state.user,

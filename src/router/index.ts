@@ -27,35 +27,31 @@ const router = createRouter({
 });
 
 // Guard para proteger rutas de administrador
+
 router.beforeEach((to, from, next) => {
   const userStore = useUserStore();
-  const isAdminRoute = to.path.startsWith('/admin');
-  
-  console.log('Guard de navegación:', {
-    to: to.path,
-    isAdminRoute,
-    isAuthenticated: userStore.isAuthenticated,
-    isAdmin: userStore.isAdmin()
-  });
-  
-  // Si es una ruta de admin
-  if (isAdminRoute) {
-    // Verificar si el usuario está autenticado
-    if (!userStore.isAuthenticated) {
-      console.log('Usuario no autenticado, redirigiendo a login');
-      next({ path: '/auth' });
-      return;
-    }
 
-    // Verificar si el usuario tiene rol de admin
-    if (!userStore.isAdmin()) {
-      console.log('Usuario no es admin, redirigiendo a home');
-      next({ path: '/' });
-      return;
-    }
+  const requiresAuth = to.matched.some((record) => record.meta.requiresAuth);
+  const requiredRoles = to.meta.roles as string[] | undefined;
+
+  const EXPIRATION_MS = 2 * 60 * 60 * 1000;
+  const lastLoginTime = localStorage.getItem('tokenTimestamp');
+  const sessionExpired = lastLoginTime && Date.now() - parseInt(lastLoginTime) > EXPIRATION_MS;
+
+  if (sessionExpired) {
+    userStore.clearUser();
+    return next({ name: 'login', query: { expired: 'true' } });
   }
 
-  next();
+  if (requiresAuth && !userStore.isAuthenticated) {
+    return next({ name: 'login', query: { redirect: to.fullPath } });
+  }
+
+  if (requiredRoles && !requiredRoles.some((role) => userStore.userRoles.includes(role))) {
+    return next({ name: 'unauthorized' });
+  }
+
+  return next();
 });
 
 // Actualizar dinámicamente el título y las meta tags

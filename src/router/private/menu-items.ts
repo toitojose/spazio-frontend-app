@@ -1,5 +1,4 @@
 import AgentRoutes from './agent-routes';
-import BackofficeRoutes from './backoffice-routes';
 import RenterRoutes from './renter-routes';
 import PropertyOwnerRoutes from './property-owner-routes';
 import AdminRoutes from './admin-routes';
@@ -18,7 +17,7 @@ export const createRoleRouteMap = (
     name: t('agent.title'),
     routes: getChildrenFromRoutes(AgentRoutes),
   },
-  [RolesEnum.PROPERTY_AGENT]: {
+  [RolesEnum.PROPERTY_OWNER]: {
     name: t('propertyOwner.title'),
     routes: getChildrenFromRoutes(PropertyOwnerRoutes),
   },
