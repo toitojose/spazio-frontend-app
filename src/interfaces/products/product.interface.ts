@@ -10,11 +10,14 @@ export interface Product {
   name: string;
   imageURL: string;
   description: string;
-  precioCompra: number;
-  precioVenta: number;
-  tipo: string;
-  estado: boolean;
-  pedidos: number;
+  purchasePrice: number;
+  salePrice: number;
+  type: string;
+  status: boolean;
+  orders: number;
   ratio: number;
+  createdAt: string;
+  updatedAt: string;
+  deletedAt?: string | null;
 }
 /*Traducir nombres*/
