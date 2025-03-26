@@ -39,10 +39,19 @@
 
       <Column
         field="precioVenta"
-        header="Price"
+        header="Precio Venta"
         sortable>
         <template #body="{ data }">
           {{ formatCurrency(data.precioVenta) }}
+        </template>
+      </Column>
+
+      <Column
+        field="precioCompra"
+        header="Precio Compra"
+        sortable>
+        <template #body="{ data }">
+          {{ formatCurrency(data.precioCompra) }}
         </template>
       </Column>
 
