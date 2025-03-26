@@ -1,7 +1,7 @@
 <template>
   <!-- Header con título y botón -->
   <div class="mb-4 flex items-center justify-between">
-    <h2 class="text-2xl font-semibold">Products</h2>
+    <h2 class="text-2xl font-semibold">Productos</h2>
     <Button
       label="Agregar producto"
       icon="pi pi-plus"
@@ -11,14 +11,17 @@
 
   <div class="card">
     <div class="mb-4">
-      <InputText
-        v-model="filters['global'].value"
-        placeholder="Search products..."
-        class="p-input-icon-left w-full md:w-1/3">
-        <template #prefix>
-          <i class="pi pi-search"></i>
-        </template>
-      </InputText>
+      <InputGroup>
+        <InputText
+          v-model="filters['global'].value"
+          placeholder="Buscar productos..." />
+        <InputGroupAddon>
+          <Button
+            icon="pi pi-search"
+            severity="secondary"
+            variant="text" />
+        </InputGroupAddon>
+      </InputGroup>
     </div>
     <!-- Tabla -->
     <DataTable
@@ -29,17 +32,46 @@
       :rows="10"
       :rowsPerPageOptions="[10, 20, 50]"
       responsiveLayout="scroll"
-      class="p-datatable-sm">
+      size="small">
+      <Column
+        field="id"
+        header="ID"
+        sortable />
+
       <Column
         field="name"
-        header="Name"
+        header="Nombre"
         sortable
         filter
-        filterPlaceholder="Search by name" />
+        filterPlaceholder="Buscar por nombre" />
+
+      <Column
+        field="description"
+        header="Resumen"
+        sortable
+        filter
+        filterPlaceholder="Buscar por resumen" />
+
+      <Column
+        field="tipo"
+        header="Tipo"
+        sortable>
+        <template #body="{ data }">General</template>
+        <!-- Temporal -->
+      </Column>
+
+      <Column
+        field="precioCompra"
+        header="P/Compra"
+        sortable>
+        <template #body="{ data }">
+          {{ formatCurrency(data.precioCompra) }}
+        </template>
+      </Column>
 
       <Column
         field="precioVenta"
-        header="Price"
+        header="P/Venta"
         sortable>
         <template #body="{ data }">
           {{ formatCurrency(data.precioVenta) }}
@@ -47,24 +79,36 @@
       </Column>
 
       <Column
-        field="description"
-        header="Description"
-        sortable
-        filter
-        filterPlaceholder="Search by description" />
+        header="Ratio"
+        sortable>
+        <template #body="{ data }"> {{ getRatio(data) }}% </template>
+      </Column>
 
       <Column
-        field="stock"
-        header="Stock"
-        sortable />
+        header="Pedidos"
+        sortable>
+        <template #body="{ data }"> 0 </template>
+      </Column>
 
       <Column
-        header="Status"
+        header="Estado"
         sortable>
         <template #body="{ data }">
-          <Tag
-            :value="getStockStatus(data)"
-            :severity="getSeverity(data)" />
+          <i class="pi pi-circle-fill text-green-500"></i>
+          <!-- Simulamos todos como activos -->
+        </template>
+      </Column>
+
+      <Column header="Opciones">
+        <template #body="{ data }">
+          <Button
+            icon="pi pi-pencil"
+            class="p-button-text p-button-sm"
+            @click="() => onEdit(data)" />
+          <Button
+            icon="pi pi-trash"
+            class="p-button-text p-button-sm text-red-500"
+            @click="() => onDelete(data)" />
         </template>
       </Column>
     </DataTable>
@@ -76,7 +120,7 @@
 import { ref, onMounted } from 'vue';
 import { FilterMatchMode } from '@primevue/core/api';
 import { ProductService } from '@/services/product-service.js';
-import { Button, Tag, InputText } from 'primevue';
+import { Button, InputText, InputGroup, InputGroupAddon } from 'primevue';
 import DataTable from 'primevue/datatable';
 import Column from 'primevue/column';
 
@@ -109,23 +153,10 @@ const formatCurrency = (value) => {
   return value.toLocaleString('en-US', { style: 'currency', currency: 'USD' });
 };
 
-const getStockStatus = (product) => {
-  if (product.stock > 10) return 'INSTOCK';
-  if (product.stock > 0) return 'LOWSTOCK';
-  return 'OUTOFSTOCK';
-};
-
-const getSeverity = (product) => {
-  switch (getStockStatus(product)) {
-    case 'INSTOCK':
-      return 'success';
-    case 'LOWSTOCK':
-      return 'warn';
-    case 'OUTOFSTOCK':
-      return 'danger';
-    default:
-      return null;
-  }
+const getRatio = (product) => {
+  if (!product.precioCompra || !product.precioVenta) return '0.00';
+  const ratio = ((product.precioVenta - product.precioCompra) / product.precioCompra) * 100;
+  return ratio.toFixed(2);
 };
 </script>
 <style scoped>
