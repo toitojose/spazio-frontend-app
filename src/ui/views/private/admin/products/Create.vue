@@ -3,8 +3,8 @@
     <Form
       :initialValues
       :resolver
-      @submit="onFormSubmit"
-      class="flex w-full flex-col gap-4 sm:w-80">
+      class="flex w-full flex-col gap-4 sm:w-80"
+      @submit="onFormSubmit">
       <FormField
         v-slot="$field"
         name="username"
@@ -89,7 +89,7 @@
           >{{ $field.error?.message }}</Message
         >
       </FormField>
-      <Button
+      <PButton
         type="submit"
         severity="secondary"
         label="Submit" />
@@ -98,6 +98,7 @@
 </template>
 
 <script setup>
+import { InputText, Button as PButton, Textarea, Message, Password } from 'primevue';
 import { reactive } from 'vue';
 import { valibotResolver } from '@primevue/forms/resolvers/valibot';
 import { yupResolver } from '@primevue/forms/resolvers/yup';

@@ -65,7 +65,7 @@
         header="P/Compra"
         sortable>
         <template #body="{ data }">
-          {{ formatCurrency(data.precioCompra) }}
+          {{ formatCurrency(data.purchasePrice) }}
         </template>
       </Column>
 
@@ -74,7 +74,7 @@
         header="P/Venta"
         sortable>
         <template #body="{ data }">
-          {{ formatCurrency(data.precioVenta) }}
+          {{ formatCurrency(data.salePrice) }}
         </template>
       </Column>
 
@@ -123,9 +123,13 @@ import { ProductService } from '@/services/product-service.js';
 import { Button as PButton, InputText, InputGroup, InputGroupAddon } from 'primevue';
 import DataTable from 'primevue/datatable';
 import Column from 'primevue/column';
+import type { Product } from '@/interfaces/products/product.interface';
+import { useRouter } from 'vue-router';
 
 const productService = new ProductService();
-const products = ref([]);
+const productos: Product[] | undefined = [];
+const products = ref(productos);
+const router = useRouter();
 
 const filters = ref({
   global: { value: '', matchMode: FilterMatchMode.CONTAINS },
@@ -134,14 +138,14 @@ const filters = ref({
 const loadProducts = async () => {
   try {
     const response = await productService.products();
-    products.value = response.data;
+    products.value = response.data ?? [];
   } catch (error) {
     console.error('Error loading products:', error);
   }
 };
 
 const onCreate = () => {
-  // Redirigir a formulario de creación o mostrar modal
+  router.push('products/create');
   console.log('Create new ebook');
 };
 
@@ -149,14 +153,22 @@ onMounted(() => {
   loadProducts();
 });
 
-const formatCurrency = (value) => {
+const formatCurrency = (value: number) => {
   return value.toLocaleString('en-US', { style: 'currency', currency: 'USD' });
 };
 
-const getRatio = (product) => {
-  if (!product.precioCompra || !product.precioVenta) return '0.00';
-  const ratio = ((product.precioVenta - product.precioCompra) / product.precioCompra) * 100;
+const getRatio = (product: Product) => {
+  if (!product.purchasePrice || !product.salePrice) return '0.00';
+  const ratio = ((product.salePrice - product.purchasePrice) / product.purchasePrice) * 100;
   return ratio.toFixed(2);
+};
+
+const onEdit = (data: Product) => {
+  return;
+};
+
+const onDelete = (data: Product) => {
+  return;
 };
 </script>
 <style scoped>

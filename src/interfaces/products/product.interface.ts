@@ -20,4 +20,3 @@ export interface Product {
   updatedAt: string;
   deletedAt?: string | null;
 }
-/*Traducir nombres*/
