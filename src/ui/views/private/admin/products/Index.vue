@@ -2,7 +2,7 @@
   <!-- Header con título y botón -->
   <div class="mb-4 flex items-center justify-between">
     <h2 class="text-2xl font-semibold">Productos</h2>
-    <Button
+    <PButton
       label="Agregar producto"
       icon="pi pi-plus"
       class="p-button-primary"
@@ -101,11 +101,11 @@
 
       <Column header="Opciones">
         <template #body="{ data }">
-          <Button
+          <PButton
             icon="pi pi-pencil"
             class="p-button-text p-button-sm"
             @click="() => onEdit(data)" />
-          <Button
+          <PButton
             icon="pi pi-trash"
             class="p-button-text p-button-sm text-red-500"
             @click="() => onDelete(data)" />
@@ -120,7 +120,7 @@
 import { ref, onMounted } from 'vue';
 import { FilterMatchMode } from '@primevue/core/api';
 import { ProductService } from '@/services/product-service.js';
-import { Button, InputText, InputGroup, InputGroupAddon } from 'primevue';
+import { Button as PButton, InputText, InputGroup, InputGroupAddon } from 'primevue';
 import DataTable from 'primevue/datatable';
 import Column from 'primevue/column';
 

@@ -8,7 +8,7 @@ export interface ProductResult {
 export interface Product {
   id: number;
   name: string;
-  imagen: string;
+  imageURL: string;
   description: string;
   precioCompra: number;
   precioVenta: number;
@@ -16,4 +16,4 @@ export interface Product {
   estado: boolean;
   pedidos: number;
   ratio: number;
-}
+}/*Traducir nombres*/
