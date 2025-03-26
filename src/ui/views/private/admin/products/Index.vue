@@ -11,13 +11,14 @@
 
   <div class="card">
     <div class="mb-4">
-      <span class="p-input-icon-left w-full md:w-1/3">
-        <i class="pi pi-search"></i>
-        <InputText
-          v-model="filters['global'].value"
-          placeholder="Search products..."
-          class="w-full" />
-      </span>
+      <InputText
+        v-model="filters['global'].value"
+        placeholder="Search products..."
+        class="p-input-icon-left w-full md:w-1/3">
+        <template #prefix>
+          <i class="pi pi-search"></i>
+        </template>
+      </InputText>
     </div>
     <!-- Tabla -->
     <DataTable
@@ -73,11 +74,18 @@
 
 <script setup lang="ts">
 import { ref, onMounted } from 'vue';
+import { FilterMatchMode } from '@primevue/core/api';
 import { ProductService } from '@/services/product-service.js';
-import { Column, DataTable, Button, Tag } from 'primevue';
+import { Button, Tag, InputText } from 'primevue';
+import DataTable from 'primevue/datatable';
+import Column from 'primevue/column';
 
 const productService = new ProductService();
 const products = ref([]);
+
+const filters = ref({
+  global: { value: '', matchMode: FilterMatchMode.CONTAINS },
+});
 
 const loadProducts = async () => {
   try {
@@ -86,6 +94,11 @@ const loadProducts = async () => {
   } catch (error) {
     console.error('Error loading products:', error);
   }
+};
+
+const onCreate = () => {
+  // Redirigir a formulario de creación o mostrar modal
+  console.log('Create new ebook');
 };
 
 onMounted(() => {
