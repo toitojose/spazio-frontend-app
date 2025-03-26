@@ -145,13 +145,19 @@
   </div>
 </template>
 
-<script setup>
+<script setup lang="ts">
 import { Card, InputText, Button as PButton, Textarea, FloatLabel, InputNumber, Dropdown, Checkbox } from 'primevue';
 import { reactive, ref } from 'vue';
 import { useToast } from 'primevue/usetoast';
+import { CreateProductService } from '@/services/product-service';
+import { useRouter } from 'vue-router';
+import type { ProductCreateResult, ProductSend } from '@/interfaces/products/product.interface';
+import { backendClient } from '@/api/backend-client';
 
+const router = useRouter();
 const toast = useToast();
 const submitted = ref(false);
+const createService = new CreateProductService(backendClient);
 
 const formData = reactive({
   name: '',
@@ -172,7 +178,7 @@ const typeOptions = [
   { label: 'Hogar', value: 'Hogar' },
 ];
 
-const isValidUrl = (url) => {
+const isValidUrl = (url: string) => {
   try {
     new URL(url);
     return true;
@@ -192,15 +198,32 @@ const validateForm = () => {
   );
 };
 
-const onSubmit = () => {
+const onSubmit = async () => {
   submitted.value = true;
 
   if (validateForm()) {
-    toast.add({ severity: 'success', summary: 'Producto guardado correctamente', life: 3000 });
-    // Aquí iría la lógica para guardar el producto
+    console.log(formData);
+    const response: ProductCreateResult = await createService.create(prepareProduct());
+    const message = 'Producto ' + response + 'guardado correctamente';
+    console.log(response.data);
+    toast.add({ severity: 'success', summary: message, life: 3000 });
+    router.push('/admin/products');
     submitted.value = false;
   } else {
     toast.add({ severity: 'error', summary: 'Por favor, complete todos los campos requeridos', life: 3000 });
   }
+};
+
+const prepareProduct = (): ProductSend => {
+  const result: ProductSend = {
+    name: formData.name,
+    imageURL: formData.imageURL,
+    description: formData.description,
+    purchasePrice: formData.purchasePrice,
+    salePrice: formData.salePrice,
+    type: formData.type,
+    status: formData.status,
+  };
+  return result;
 };
 </script>

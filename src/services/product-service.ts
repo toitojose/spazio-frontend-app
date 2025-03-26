@@ -1,6 +1,12 @@
-import type { ProductResult } from '@/interfaces/products/product.interface';
+import type { ProductCreateResult, ProductResult, ProductSend } from '@/interfaces/products/product.interface';
 import type { AxiosInstance } from 'axios';
-import type { Product } from '@/interfaces/products/product.interface';
+
+let resultadoCreate: ProductCreateResult = {
+  result: true,
+  message: 'Exito',
+  error: undefined,
+  data: '',
+};
 
 const productosEjemplo: ProductResult = {
   result: true,
@@ -86,7 +92,6 @@ export class ProductService {
   }
 }
 
-
 export class CreateProductService {
   private authBackendClient: AxiosInstance;
 
@@ -94,11 +99,12 @@ export class CreateProductService {
     this.authBackendClient = authBackendClient;
   }
 
-  async create(data: Product): Promise<ProductResult> {
+  async create(data: ProductSend): Promise<ProductCreateResult> {
     /*const response = await this.authBackendClient.post<ProductResult>('/v1.0/products', {
       data,
     });
     return response.data;*/
-    return true;
+    resultadoCreate.data = data.name;
+    return resultadoCreate;
   }
 }
