@@ -16,6 +16,17 @@ export default [
           icon: 'pi pi-box',
         },
       },
+      {
+        path: 'products/edit',
+        name: 'Admin-products-edit',
+        component: () => import('@/ui/views/private/admin/products/Edit.vue'),
+        meta: {
+          metaTitle: 'login.metaTitle',
+          metaDescription: 'login.metaDescription',
+          title: 'admin.products.title',
+          icon: 'pi pi-box',
+        },
+      },
     ],
   },
 ];

@@ -1,7 +1,7 @@
 <template>
   <!-- Header con título y botón -->
   <div class="mb-4 flex items-center justify-center">
-    <h2 class="text-center text-2xl font-semibold">Agregar Producto</h2>
+    <h2 class="text-center text-2xl font-semibold">Editar Producto</h2>
   </div>
 
   <!-- Contenedor centrado -->

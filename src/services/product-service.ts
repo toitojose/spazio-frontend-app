@@ -1,4 +1,6 @@
 import type { ProductResult } from '@/interfaces/products/product.interface';
+import type { AxiosInstance } from 'axios';
+import type { Product } from '@/interfaces/products/product.interface';
 
 const productosEjemplo: ProductResult = {
   result: true,
@@ -81,5 +83,22 @@ const productosEjemplo: ProductResult = {
 export class ProductService {
   async products(): Promise<ProductResult> {
     return productosEjemplo;
+  }
+}
+
+
+export class CreateProductService {
+  private authBackendClient: AxiosInstance;
+
+  constructor(authBackendClient: AxiosInstance) {
+    this.authBackendClient = authBackendClient;
+  }
+
+  async create(data: Product): Promise<ProductResult> {
+    /*const response = await this.authBackendClient.post<ProductResult>('/v1.0/products', {
+      data,
+    });
+    return response.data;*/
+    return true;
   }
 }
