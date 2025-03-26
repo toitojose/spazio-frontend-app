@@ -16,4 +16,5 @@ export interface Product {
   estado: boolean;
   pedidos: number;
   ratio: number;
-}/*Traducir nombres*/
+}
+/*Traducir nombres*/
