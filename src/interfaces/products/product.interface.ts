@@ -12,9 +12,15 @@ export interface ProductCreateResult {
   data?: string;
 }
 
+export interface ImageURL {
+  id: number;
+  url: string;
+}
+
 export interface ProductSend {
   name: string;
-  imageURL: string;
+  imageURL?: ImageURL[];
+  resume: string;
   description: string;
   purchasePrice: number;
   salePrice: number;
@@ -25,7 +31,8 @@ export interface ProductSend {
 export interface Product {
   id: number;
   name: string;
-  imageURL: string;
+  imageURL?: ImageURL[];
+  resume: string;
   description: string;
   purchasePrice: number;
   salePrice: number;

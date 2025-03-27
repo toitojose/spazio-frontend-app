@@ -151,7 +151,7 @@ import { reactive, ref } from 'vue';
 import { useToast } from 'primevue/usetoast';
 import { CreateProductService } from '@/services/product-service';
 import { useRouter } from 'vue-router';
-import type { ProductCreateResult, ProductSend } from '@/interfaces/products/product.interface';
+import type { ImageURL, ProductCreateResult, ProductSend } from '@/interfaces/products/product.interface';
 import { backendClient } from '@/api/backend-client';
 
 const router = useRouter();
@@ -214,10 +214,28 @@ const onSubmit = async () => {
   }
 };
 
+const uploadImage = () => {
+  /*Logica para subir imagen */
+  return;
+};
+
+const prepareImage = (): ImageURL[] => {
+  /* un for para iterar cada imagen subida*/
+  const image: ImageURL[] = [
+    {
+      id: 1,
+      url: formData.imageURL,
+    },
+  ];
+
+  return image;
+};
+
 const prepareProduct = (): ProductSend => {
   const result: ProductSend = {
     name: formData.name,
-    imageURL: formData.imageURL,
+    imageURL: prepareImage(),
+    resume: formData.description,
     description: formData.description,
     purchasePrice: formData.purchasePrice,
     salePrice: formData.salePrice,
