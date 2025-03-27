@@ -1,6 +1,35 @@
 <template>
-  <div class="mb-4 flex items-center justify-center">
+  <div class="mb-4 flex items-center">
     <h2 class="text-center text-2xl font-semibold">Editar Producto</h2>
+  </div>
+
+  <div class="flex">
+    <Breadcrumb
+      :home="home"
+      :model="items">
+      <template #item="{ item, props }">
+        <router-link
+          v-if="item.route"
+          v-slot="{ href, navigate }"
+          :to="item.route"
+          custom>
+          <a
+            :href="href"
+            v-bind="props.action"
+            @click="navigate">
+            <span :class="[item.icon, 'text-color']"></span>
+            <span class="font-semibold text-primary">{{ item.label }}</span>
+          </a>
+        </router-link>
+        <a
+          v-else
+          :href="item.url"
+          :target="item.target"
+          v-bind="props.action">
+          <span class="text-surface-700 dark:text-surface-0">{{ item.label }}</span>
+        </a>
+      </template>
+    </Breadcrumb>
   </div>
 
   <div class="flex justify-center">
@@ -137,15 +166,22 @@ import {
   Checkbox,
   Toast,
   FileUpload,
+  Breadcrumb,
 } from 'primevue';
 import { reactive, ref, onMounted } from 'vue';
 import { useToast } from 'primevue/usetoast';
 import { CreateProductService } from '@/services/product-service';
 import { useRouter, useRoute } from 'vue-router';
-import type { ImageURL, ProductSend } from '@/interfaces/products/product.interface';
+import type { ImageURL, Product, ProductSend } from '@/interfaces/products/product.interface';
 import { backendClient } from '@/api/backend-client';
 import { ProductService } from '@/services/product-service.js';
-import type { Product } from '@/interfaces/products/product.interface';
+
+//Constantes de Breadcrumb
+const home = ref({
+  icon: 'pi pi-home',
+  route: '/admin',
+});
+const items = ref([{ label: 'Lista', route: '/admin/products' }, { label: 'Update' }]);
 
 const router = useRouter();
 const toast = useToast();
@@ -159,15 +195,6 @@ onMounted(() => {
   loadProduct();
 });
 
-const loadProduct = async () => {
-  try {
-    const response = await productService.productsById(productId.value);
-    console.log('********** ', response);
-  } catch (error) {
-    console.error('Error loading products:', error);
-  }
-};
-
 const formData = reactive({
   name: '',
   resume: '',
@@ -180,6 +207,30 @@ const formData = reactive({
   ratio: 0,
   imageURL: [] as ImageURL[],
 });
+
+const loadProduct = async () => {
+  try {
+    const response = await productService.productsById(Number(productId.value));
+    const productResponse: Product | undefined = response.data;
+    formData.name = productResponse?.name ? productResponse.name : '';
+    formData.resume = productResponse?.resume ? productResponse.resume : '';
+    formData.description = productResponse?.description ? productResponse.description : '';
+    formData.purchasePrice = productResponse?.purchasePrice ? productResponse.purchasePrice : 0;
+    formData.salePrice = productResponse?.salePrice ? productResponse.salePrice : 0;
+    formData.orders = productResponse?.orders ? productResponse.orders : 0;
+    formData.ratio = productResponse?.ratio ? productResponse.ratio : 0;
+    formData.imageURL = productResponse?.imageURL ? productResponse.imageURL : [];
+    console.log('********** ', response);
+
+    // 🟢 Setear el campo type con el valor obtenido de la base de datos
+    if (productResponse?.type) {
+      const foundType = typeOptions.find((option) => option.value === productResponse.type);
+      formData.type = foundType ? foundType.value : ''; // Asignar el valor si existe, sino un string vacío
+    }
+  } catch (error) {
+    console.error('Error loading products:', error);
+  }
+};
 
 const typeOptions = [
   { label: 'General', value: 'General' },

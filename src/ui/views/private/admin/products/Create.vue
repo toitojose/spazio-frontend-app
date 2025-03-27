@@ -1,10 +1,38 @@
 <template>
-  <div class="mb-4 flex items-center justify-center">
+  <div class="mb-4 flex items-center">
     <h2 class="text-center text-2xl font-semibold">Agregar Producto</h2>
+  </div>
+  <div class="flex">
+    <Breadcrumb
+      :home="home"
+      :model="items">
+      <template #item="{ item, props }">
+        <router-link
+          v-if="item.route"
+          v-slot="{ href, navigate }"
+          :to="item.route"
+          custom>
+          <a
+            :href="href"
+            v-bind="props.action"
+            @click="navigate">
+            <span :class="[item.icon, 'text-color']"></span>
+            <span class="font-semibold text-primary">{{ item.label }}</span>
+          </a>
+        </router-link>
+        <a
+          v-else
+          :href="item.url"
+          :target="item.target"
+          v-bind="props.action">
+          <span class="text-surface-700 dark:text-surface-0">{{ item.label }}</span>
+        </a>
+      </template>
+    </Breadcrumb>
   </div>
 
   <div class="flex justify-center">
-    <Card style="width: 50rem; overflow: hidden">
+    <Card style="width: 50em; overflow: hidden">
       <template #content>
         <form
           class="grid grid-cols-[2fr_1fr] gap-4 p-4"
@@ -137,6 +165,7 @@ import {
   Checkbox,
   Toast,
   FileUpload,
+  Breadcrumb,
 } from 'primevue';
 import { reactive, ref } from 'vue';
 import { useToast } from 'primevue/usetoast';
@@ -144,6 +173,13 @@ import { CreateProductService } from '@/services/product-service';
 import { useRouter } from 'vue-router';
 import type { ImageURL, ProductSend } from '@/interfaces/products/product.interface';
 import { backendClient } from '@/api/backend-client';
+
+//Constantes de Breadcrumb
+const home = ref({
+  icon: 'pi pi-home',
+  route: '/admin',
+});
+const items = ref([{ label: 'Lista', route: '/admin/products' }, { label: 'Create' }]);
 
 const router = useRouter();
 const toast = useToast();

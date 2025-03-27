@@ -137,7 +137,7 @@ export class ProductService {
     };
     if (data) {
       for (let dato of data) {
-        if (dato.id === id) {
+        if (dato.id == id) {
           result = {
             result: true,
             message: 'Ninguno',
