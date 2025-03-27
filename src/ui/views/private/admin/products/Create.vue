@@ -1,139 +1,102 @@
 <template>
-  <!-- Header con título y botón -->
   <div class="mb-4 flex items-center justify-center">
     <h2 class="text-center text-2xl font-semibold">Agregar Producto</h2>
   </div>
 
-  <!-- Contenedor centrado -->
   <div class="flex justify-center">
     <Card style="width: 50rem; overflow: hidden">
       <template #content>
         <form
-          class="grid grid-cols-2 gap-4 p-4"
+          class="grid grid-cols-[2fr_1fr] gap-4 p-4"
           @submit.prevent="onSubmit">
-          <!-- Nombre -->
-          <div class="flex w-full max-w-md flex-col gap-1">
-            <FloatLabel variant="on">
-              <InputText
-                id="name"
-                v-model="formData.name"
-                :class="{ 'p-invalid': submitted && !formData.name }"
-                class="w-full" />
-              <label for="name">Nombre</label>
-            </FloatLabel>
-            <small
-              v-if="submitted && !formData.name"
-              class="p-error"
-              >El nombre es requerido</small
-            >
-          </div>
+          <!-- 🟢 Columna 1: Inputs desde Nombre hasta Estado -->
+          <div class="flex flex-col gap-4">
+            <!-- Nombre -->
+            <div class="flex w-full flex-col gap-1">
+              <FloatLabel variant="on">
+                <InputText
+                  id="name"
+                  v-model="formData.name"
+                  class="w-full" />
+                <label for="name">Nombre</label>
+              </FloatLabel>
+            </div>
 
-          <!-- Resumen -->
-          <div class="flex w-full max-w-md flex-col gap-1">
-            <FloatLabel variant="on">
-              <InputText
-                id="resume"
-                v-model="formData.resume"
-                :class="{ 'p-invalid': submitted && !formData.resume }"
-                class="w-full" />
-              <label for="resume">Resumen</label>
-            </FloatLabel>
-            <small
-              v-if="submitted && !formData.resume"
-              class="p-error"
-              >El resumen es requerido</small
-            >
-          </div>
+            <!-- Resumen -->
+            <div class="flex w-full flex-col gap-1">
+              <FloatLabel variant="on">
+                <InputText
+                  id="resume"
+                  v-model="formData.resume"
+                  class="w-full" />
+                <label for="resume">Resumen</label>
+              </FloatLabel>
+            </div>
 
-          <!-- Descripción -->
-          <div class="flex w-full max-w-md flex-col gap-1">
-            <FloatLabel variant="on">
-              <Textarea
-                id="description"
-                v-model="formData.description"
-                :class="{ 'p-invalid': submitted && !formData.description }"
-                class="w-full" />
-              <label for="description">Descripción</label>
-            </FloatLabel>
-            <small
-              v-if="submitted && !formData.description"
-              class="p-error"
-              >La descripción es requerida</small
-            >
-          </div>
+            <!-- Descripción -->
+            <div class="flex w-full flex-col gap-1">
+              <FloatLabel variant="on">
+                <Textarea
+                  id="description"
+                  v-model="formData.description"
+                  class="w-full" />
+                <label for="description">Descripción</label>
+              </FloatLabel>
+            </div>
 
-          <!-- Precio de compra -->
-          <div class="flex w-full max-w-md flex-col gap-1">
-            <FloatLabel variant="on">
-              <InputNumber
-                id="purchasePrice"
-                v-model="formData.purchasePrice"
-                mode="currency"
-                currency="USD"
-                :class="{ 'p-invalid': submitted && formData.purchasePrice <= 0 }"
-                class="w-full" />
-              <label for="purchasePrice">Precio de compra</label>
-            </FloatLabel>
-            <small
-              v-if="submitted && formData.purchasePrice <= 0"
-              class="p-error"
-              >El precio debe ser mayor a 0</small
-            >
-          </div>
+            <!-- Precio de compra -->
+            <div class="flex w-full flex-col gap-1">
+              <FloatLabel variant="on">
+                <InputNumber
+                  id="purchasePrice"
+                  v-model="formData.purchasePrice"
+                  mode="currency"
+                  currency="USD"
+                  class="w-full" />
+                <label for="purchasePrice">Precio de compra</label>
+              </FloatLabel>
+            </div>
 
-          <!-- Precio de venta -->
-          <div class="flex w-full max-w-md flex-col gap-1">
-            <FloatLabel variant="on">
-              <InputNumber
-                id="salePrice"
-                v-model="formData.salePrice"
-                mode="currency"
-                currency="USD"
-                :class="{ 'p-invalid': submitted && formData.salePrice <= 0 }"
-                class="w-full" />
-              <label for="salePrice">Precio de venta</label>
-            </FloatLabel>
-            <small
-              v-if="submitted && formData.salePrice <= 0"
-              class="p-error"
-              >El precio debe ser mayor a 0</small
-            >
-          </div>
+            <!-- Precio de venta -->
+            <div class="flex w-full flex-col gap-1">
+              <FloatLabel variant="on">
+                <InputNumber
+                  id="salePrice"
+                  v-model="formData.salePrice"
+                  mode="currency"
+                  currency="USD"
+                  class="w-full" />
+                <label for="salePrice">Precio de venta</label>
+              </FloatLabel>
+            </div>
 
-          <!-- Tipo -->
-          <div class="flex w-full max-w-md flex-col gap-1">
-            <FloatLabel variant="on">
-              <Dropdown
-                id="type"
-                v-model="formData.type"
-                :options="typeOptions"
-                optionLabel="label"
-                optionValue="value"
-                placeholder="Seleccione un tipo"
-                :class="{ 'p-invalid': submitted && !formData.type }"
-                class="w-full" />
-            </FloatLabel>
-            <small
-              v-if="submitted && !formData.type"
-              class="p-error"
-              >El tipo es requerido</small
-            >
-          </div>
+            <!-- Tipo -->
+            <div class="flex w-full flex-col gap-1">
+              <FloatLabel variant="on">
+                <Dropdown
+                  id="type"
+                  v-model="formData.type"
+                  :options="typeOptions"
+                  optionLabel="label"
+                  optionValue="value"
+                  class="w-full" />
+              </FloatLabel>
+            </div>
 
-          <!-- Estado -->
-          <div class="flex w-full max-w-md flex-col gap-1">
-            <div class="flex items-center gap-2">
-              <Checkbox
-                id="status"
-                v-model="formData.status"
-                :binary="true"
-                class="w-full" />
-              <label for="status">Activo</label>
+            <!-- Estado -->
+            <div class="flex w-full flex-col gap-1">
+              <div class="flex items-center gap-2">
+                <Checkbox
+                  id="status"
+                  v-model="formData.status"
+                  :binary="true" />
+                <label for="status">Activo</label>
+              </div>
             </div>
           </div>
 
-          <!-- Subida de imagenes -->
-          <div class="card">
+          <!-- 🔵 Columna 2: Subida de imágenes -->
+          <div class="flex flex-col items-center">
             <Toast />
             <FileUpload
               :multiple="true"
@@ -141,14 +104,14 @@
               :maxFileSize="1000000"
               name="demo[]"
               url="/api/upload"
-              @upload="uploadImage">
+              @upload="uploadImage($event)">
               <template #empty>
-                <span>Drag and drop files to here to upload.</span>
+                <span>Arrastra y suelta las imágenes aquí</span>
               </template>
             </FileUpload>
           </div>
 
-          <!-- Botón alineado -->
+          <!-- 🟠 Botón alineado -->
           <div class="col-span-2 flex justify-end">
             <PButton
               type="submit"
@@ -178,7 +141,7 @@ import { reactive, ref } from 'vue';
 import { useToast } from 'primevue/usetoast';
 import { CreateProductService } from '@/services/product-service';
 import { useRouter } from 'vue-router';
-import type { ImageURL, ProductCreateResult, ProductSend } from '@/interfaces/products/product.interface';
+import type { ImageURL, ProductSend } from '@/interfaces/products/product.interface';
 import { backendClient } from '@/api/backend-client';
 
 const router = useRouter();
@@ -250,7 +213,8 @@ const prepareProduct = (): ProductSend => {
   return result;
 };
 
-const uploadImage = () => {
+const uploadImage = async (event: any) => {
+  console.log(event.files);
   toast.add({ severity: 'info', summary: 'Success', detail: 'File Uploaded', life: 3000 });
 };
 
@@ -259,7 +223,10 @@ const onSubmit = async () => {
 
   if (validateForm()) {
     try {
+      console.log(formData.imageURL);
+      console.log(prepareProduct());
       const response = await createService.create(prepareProduct());
+      console.log(response);
       toast.add({
         severity: 'success',
         summary: 'Éxito',

@@ -81,7 +81,7 @@ export class IdentityVerificationService {
       throw error;
     }
   }
-  
+
   /**
    * Obtiene la URL de carga de una imagen
    * @param userId
