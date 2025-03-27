@@ -1,6 +1,6 @@
 <template>
   <div class="mb-4 flex items-center justify-center">
-    <h2 class="text-center text-2xl font-semibold">Agregar Producto</h2>
+    <h2 class="text-center text-2xl font-semibold">Editar Producto</h2>
   </div>
 
   <div class="flex justify-center">
@@ -138,17 +138,35 @@ import {
   Toast,
   FileUpload,
 } from 'primevue';
-import { reactive, ref } from 'vue';
+import { reactive, ref, onMounted } from 'vue';
 import { useToast } from 'primevue/usetoast';
 import { CreateProductService } from '@/services/product-service';
-import { useRouter } from 'vue-router';
+import { useRouter, useRoute } from 'vue-router';
 import type { ImageURL, ProductSend } from '@/interfaces/products/product.interface';
 import { backendClient } from '@/api/backend-client';
+import { ProductService } from '@/services/product-service.js';
+import type { Product } from '@/interfaces/products/product.interface';
 
 const router = useRouter();
 const toast = useToast();
 const submitted = ref(false);
 const createService = new CreateProductService(backendClient);
+const productService = new ProductService();
+const route = useRoute();
+const productId = ref(route.params.id);
+
+onMounted(() => {
+  loadProduct();
+});
+
+const loadProduct = async () => {
+  try {
+    const response = await productService.productsById(productId.value);
+    console.log('********** ', response);
+  } catch (error) {
+    console.error('Error loading products:', error);
+  }
+};
 
 const formData = reactive({
   name: '',
