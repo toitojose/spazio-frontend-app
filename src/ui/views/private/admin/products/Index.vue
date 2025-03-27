@@ -164,7 +164,6 @@ const getRatio = (product: Product) => {
 };
 
 const onEdit = (id: Product) => {
-  console.log('----------- ', id);
   router.push(`/admin/products/edit/${id}`);
   return;
 };

@@ -1,12 +1,12 @@
 <template>
   <div class="mb-4 flex items-center">
-    <h2 class="text-center text-2xl font-semibold">Editar Producto</h2>
+    <h2 class="text-center text-2xl font-semibold">Agregar Producto</h2>
   </div>
-
   <div class="flex">
     <Breadcrumb
       :home="home"
-      :model="items">
+      :model="items"
+      class="border-0 bg-transparent p-0">
       <template #item="{ item, props }">
         <router-link
           v-if="item.route"
@@ -16,9 +16,10 @@
           <a
             :href="href"
             v-bind="props.action"
+            class="text-gray-600 hover:font-semibold"
             @click="navigate">
-            <span :class="[item.icon, 'text-color']"></span>
-            <span class="font-semibold text-primary">{{ item.label }}</span>
+            <span :class="[item.icon, 'text-gray-600']"></span>
+            <span class="text-dark">{{ item.label }}</span>
           </a>
         </router-link>
         <a
@@ -26,17 +27,17 @@
           :href="item.url"
           :target="item.target"
           v-bind="props.action">
-          <span class="text-surface-700 dark:text-surface-0">{{ item.label }}</span>
+          <span class="text-dark font-semibold">{{ item.label }}</span>
         </a>
       </template>
     </Breadcrumb>
   </div>
 
-  <div class="flex justify-center">
-    <Card style="width: 50rem; overflow: hidden">
+  <div class="flex justify-center pt-5">
+    <Card style="width: 65em; overflow: hidden">
       <template #content>
         <form
-          class="grid grid-cols-[2fr_1fr] gap-4 p-4"
+          class="grid grid-cols-[2fr_1fr] gap-4 p-1"
           @submit.prevent="onSubmit">
           <!-- 🟢 Columna 1: Inputs desde Nombre hasta Estado -->
           <div class="flex flex-col gap-4">
@@ -46,9 +47,15 @@
                 <InputText
                   id="name"
                   v-model="formData.name"
+                  :class="{ 'p-invalid': submitted && !formData.name }"
                   class="w-full" />
                 <label for="name">Nombre</label>
               </FloatLabel>
+              <small
+                v-if="submitted && !formData.name"
+                class="p-error text-red-500"
+                >El nombre es requerido</small
+              >
             </div>
 
             <!-- Resumen -->
@@ -57,20 +64,30 @@
                 <InputText
                   id="resume"
                   v-model="formData.resume"
+                  :class="{ 'p-invalid': submitted && !formData.resume }"
                   class="w-full" />
                 <label for="resume">Resumen</label>
               </FloatLabel>
+              <small
+                v-if="submitted && !formData.resume"
+                class="p-error text-red-500"
+                >El resumen es requerido</small
+              >
             </div>
 
             <!-- Descripción -->
             <div class="flex w-full flex-col gap-1">
-              <FloatLabel variant="on">
-                <Textarea
-                  id="description"
-                  v-model="formData.description"
-                  class="w-full" />
-                <label for="description">Descripción</label>
-              </FloatLabel>
+              <label class="mb-2 text-sm font-medium">Descripción</label>
+              <Editor
+                v-model="formData.description"
+                editorStyle="height: 320px"
+                :class="{ 'p-invalid': submitted && !formData.description }"
+                class="w-full" />
+              <small
+                v-if="submitted && !formData.description"
+                class="p-error text-red-500">
+                La descripción es requerida
+              </small>
             </div>
 
             <!-- Precio de compra -->
@@ -81,9 +98,15 @@
                   v-model="formData.purchasePrice"
                   mode="currency"
                   currency="USD"
+                  :class="{ 'p-invalid': submitted && formData.purchasePrice <= 0 }"
                   class="w-full" />
                 <label for="purchasePrice">Precio de compra</label>
               </FloatLabel>
+              <small
+                v-if="submitted && formData.purchasePrice <= 0"
+                class="p-error text-red-500"
+                >El precio debe ser mayor a 0</small
+              >
             </div>
 
             <!-- Precio de venta -->
@@ -94,9 +117,15 @@
                   v-model="formData.salePrice"
                   mode="currency"
                   currency="USD"
+                  :class="{ 'p-invalid': submitted && formData.salePrice <= 0 }"
                   class="w-full" />
                 <label for="salePrice">Precio de venta</label>
               </FloatLabel>
+              <small
+                v-if="submitted && formData.salePrice <= 0"
+                class="p-error text-red-500"
+                >El precio debe ser mayor a 0</small
+              >
             </div>
 
             <!-- Tipo -->
@@ -108,8 +137,15 @@
                   :options="typeOptions"
                   optionLabel="label"
                   optionValue="value"
+                  placeholder="Seleccione un tipo"
+                  :class="{ 'p-invalid': submitted && !formData.type }"
                   class="w-full" />
               </FloatLabel>
+              <small
+                v-if="submitted && !formData.type"
+                class="p-error"
+                >El tipo es requerido</small
+              >
             </div>
 
             <!-- Estado -->
@@ -134,9 +170,13 @@
               name="demo[]"
               :url="''"
               :auto="true"
+              :showUploadButton="false"
               @upload="uploadImage($event)">
               <template #empty>
-                <span>Arrastra y suelta las imágenes aquí</span>
+                <div class="flex h-full flex-col items-center justify-center">
+                  <i class="pi pi-image mb-2 text-3xl"></i>
+                  <span>Arrastra y suelta las imágenes aquí</span>
+                </div>
               </template>
             </FileUpload>
           </div>
@@ -168,6 +208,7 @@ import {
   FileUpload,
   Breadcrumb,
 } from 'primevue';
+import Editor from 'primevue/editor';
 import { reactive, ref, onMounted } from 'vue';
 import { useToast } from 'primevue/usetoast';
 import { CreateProductService } from '@/services/product-service';
@@ -337,3 +378,11 @@ const onSubmit = async () => {
   }
 };
 </script>
+
+<style lang="scss" scoped>
+:deep(.p-breadcrumb) {
+  background: transparent;
+  border: none;
+  padding: 0;
+}
+</style>
