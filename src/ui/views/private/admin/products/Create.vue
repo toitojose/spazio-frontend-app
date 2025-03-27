@@ -28,20 +28,20 @@
             >
           </div>
 
-          <!-- URL de imagen -->
+          <!-- Resumen -->
           <div class="flex w-full max-w-md flex-col gap-1">
             <FloatLabel variant="on">
               <InputText
-                id="imageURL"
-                v-model="formData.imageURL"
-                :class="{ 'p-invalid': submitted && !isValidUrl(formData.imageURL) }"
+                id="resume"
+                v-model="formData.resume"
+                :class="{ 'p-invalid': submitted && !formData.resume }"
                 class="w-full" />
-              <label for="imageURL">URL de imagen</label>
+              <label for="resume">Resumen</label>
             </FloatLabel>
             <small
-              v-if="submitted && !isValidUrl(formData.imageURL)"
+              v-if="submitted && !formData.resume"
               class="p-error"
-              >URL de imagen inválida</small
+              >El resumen es requerido</small
             >
           </div>
 
@@ -132,6 +132,22 @@
             </div>
           </div>
 
+          <!-- Subida de imagenes -->
+          <div class="card">
+            <Toast />
+            <FileUpload
+              :multiple="true"
+              accept="image/*"
+              :maxFileSize="1000000"
+              name="demo[]"
+              url="/api/upload"
+              @upload="uploadImage">
+              <template #empty>
+                <span>Drag and drop files to here to upload.</span>
+              </template>
+            </FileUpload>
+          </div>
+
           <!-- Botón alineado -->
           <div class="col-span-2 flex justify-end">
             <PButton
@@ -146,7 +162,18 @@
 </template>
 
 <script setup lang="ts">
-import { Card, InputText, Button as PButton, Textarea, FloatLabel, InputNumber, Dropdown, Checkbox } from 'primevue';
+import {
+  Card,
+  InputText,
+  Button as PButton,
+  Textarea,
+  FloatLabel,
+  InputNumber,
+  Dropdown,
+  Checkbox,
+  Toast,
+  FileUpload,
+} from 'primevue';
 import { reactive, ref } from 'vue';
 import { useToast } from 'primevue/usetoast';
 import { CreateProductService } from '@/services/product-service';
@@ -161,7 +188,7 @@ const createService = new CreateProductService(backendClient);
 
 const formData = reactive({
   name: '',
-  imageURL: '',
+  resume: '',
   description: '',
   purchasePrice: 0,
   salePrice: 0,
@@ -169,6 +196,7 @@ const formData = reactive({
   status: true,
   orders: 0,
   ratio: 0,
+  imageURL: '',
 });
 
 const typeOptions = [
@@ -190,7 +218,7 @@ const isValidUrl = (url: string) => {
 const validateForm = () => {
   return (
     formData.name &&
-    isValidUrl(formData.imageURL) &&
+    formData.resume &&
     formData.description &&
     formData.purchasePrice > 0 &&
     formData.salePrice > 0 &&
@@ -198,50 +226,65 @@ const validateForm = () => {
   );
 };
 
-const onSubmit = async () => {
-  submitted.value = true;
-
-  if (validateForm()) {
-    console.log(formData);
-    const response: ProductCreateResult = await createService.create(prepareProduct());
-    const message = 'Producto ' + response + 'guardado correctamente';
-    console.log(response.data);
-    toast.add({ severity: 'success', summary: message, life: 3000 });
-    router.push('/admin/products');
-    submitted.value = false;
-  } else {
-    toast.add({ severity: 'error', summary: 'Por favor, complete todos los campos requeridos', life: 3000 });
-  }
-};
-
-const uploadImage = () => {
-  /*Logica para subir imagen */
-  return;
-};
-
 const prepareImage = (): ImageURL[] => {
-  /* un for para iterar cada imagen subida*/
   const image: ImageURL[] = [
     {
       id: 1,
       url: formData.imageURL,
     },
   ];
-
   return image;
 };
 
 const prepareProduct = (): ProductSend => {
   const result: ProductSend = {
     name: formData.name,
-    imageURL: prepareImage(),
     resume: formData.description,
     description: formData.description,
     purchasePrice: formData.purchasePrice,
     salePrice: formData.salePrice,
     type: formData.type,
     status: formData.status,
+    imageURL: prepareImage(),
   };
   return result;
+};
+
+const uploadImage = () => {
+  toast.add({ severity: 'info', summary: 'Success', detail: 'File Uploaded', life: 3000 });
+};
+
+const onSubmit = async () => {
+  submitted.value = true;
+
+  if (validateForm()) {
+    try {
+      const response = await createService.create(prepareProduct());
+      toast.add({
+        severity: 'success',
+        summary: 'Éxito',
+        detail: 'Producto guardado correctamente',
+        life: 3000,
+      });
+      setTimeout(() => {
+        router.push('/admin/products');
+        submitted.value = false;
+      }, 1000);
+    } catch (error) {
+      toast.add({
+        severity: 'error',
+        summary: 'Error',
+        detail: 'Error al guardar el producto',
+        life: 3000,
+      });
+    }
+  } else {
+    toast.add({
+      severity: 'error',
+      summary: 'Error',
+      detail: 'Por favor, complete todos los campos requeridos',
+      life: 3000,
+    });
+  }
 };
 </script>
