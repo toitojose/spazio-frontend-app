@@ -39,12 +39,25 @@ router.beforeEach((to, from, next) => {
   const EXPIRATION_MS = 2 * 60 * 60 * 1000;
   const lastLoginTime = localStorage.getItem('tokenTimestamp');
   const sessionExpired = lastLoginTime && Date.now() - parseInt(lastLoginTime) > EXPIRATION_MS;
+  const isAdminRoute = to.path.startsWith('/admin');
+
+  console.log(to.name, userStore.isAdmin());
 
   if (sessionExpired) {
     userStore.clearUser();
     if (to.name !== 'login') {
       return next({ name: 'login', query: { expired: 'true' } });
     }
+  }
+
+  if (isAdminRoute && !userStore.isAuthenticated) {
+    console.log(to.name, userStore.isAdmin());
+    return next({ name: 'login' });
+  }
+
+  if (isAdminRoute && !userStore.isAdmin()) {
+    console.log(to.name, userStore.isAdmin());
+    return next({ name: '' });
   }
 
   if (requiresAuth && !userStore.isAuthenticated) {
