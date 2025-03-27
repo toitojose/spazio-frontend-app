@@ -103,7 +103,8 @@
               accept="image/*"
               :maxFileSize="1000000"
               name="demo[]"
-              url="/api/upload"
+              :url="''"
+              :auto="true"
               @upload="uploadImage($event)">
               <template #empty>
                 <span>Arrastra y suelta las imágenes aquí</span>
@@ -159,7 +160,7 @@ const formData = reactive({
   status: true,
   orders: 0,
   ratio: 0,
-  imageURL: '',
+  imageURL: [] as ImageURL[],
 });
 
 const typeOptions = [
@@ -190,13 +191,7 @@ const validateForm = () => {
 };
 
 const prepareImage = (): ImageURL[] => {
-  const image: ImageURL[] = [
-    {
-      id: 1,
-      url: formData.imageURL,
-    },
-  ];
-  return image;
+  return formData.imageURL;
 };
 
 const prepareProduct = (): ProductSend => {
@@ -214,7 +209,25 @@ const prepareProduct = (): ProductSend => {
 };
 
 const uploadImage = async (event: any) => {
-  console.log(event.files);
+  event.files.forEach((file: any, index: number) => {
+    // Simular una URL de imagen de prueba para cada archivo subido
+    const fakeUrl = `https://via.placeholder.com/150?text=Image+${formData.imageURL.length + 1}`;
+
+    // Agregar la URL simulada al array de imágenes
+    formData.imageURL.push({
+      id: formData.imageURL.length + 1, // ID único
+      url: fakeUrl,
+    });
+  });
+
+  toast.add({
+    severity: 'info',
+    summary: 'Imagen subida',
+    detail: 'Se han agregado imágenes de prueba',
+    life: 3000,
+  });
+
+  console.log('Imágenes simuladas:', formData.imageURL);
   toast.add({ severity: 'info', summary: 'Success', detail: 'File Uploaded', life: 3000 });
 };
 

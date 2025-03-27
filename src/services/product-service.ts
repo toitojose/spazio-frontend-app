@@ -1,4 +1,10 @@
-import type { ProductCreateResult, ProductResult, ProductSend } from '@/interfaces/products/product.interface';
+import type {
+  Product,
+  ProductCreateResult,
+  ProductResult,
+  ProductResultFindByID,
+  ProductSend,
+} from '@/interfaces/products/product.interface';
 import type { AxiosInstance } from 'axios';
 
 let resultadoCreate: ProductCreateResult = {
@@ -119,6 +125,29 @@ const productosEjemplo: ProductResult = {
 export class ProductService {
   async products(): Promise<ProductResult> {
     return productosEjemplo;
+  }
+
+  async productsById(id: number): Promise<ProductResultFindByID> {
+    const data: Product[] | undefined = productosEjemplo.data;
+    let result: ProductResultFindByID = {
+      result: false,
+      message: 'Ninguno',
+      error: { statusCode: 400, key: 'No se encontro' },
+      data: undefined,
+    };
+    if (data) {
+      for (let dato of data) {
+        if (dato.id === id) {
+          result = {
+            result: true,
+            message: 'Ninguno',
+            error: null,
+            data: dato,
+          };
+        }
+      }
+    }
+    return result;
   }
 }
 
