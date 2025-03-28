@@ -4,9 +4,20 @@ import type {
   CatalogResult,
   CatalogSend,
   CatalogResultFindByID,
+  CatalogSendUpdate,
+  CatalogUpdateResult,
 } from '@/interfaces/catalogs/catalogs.interface';
 
+import type { AxiosInstance } from 'axios';
+
 let resultadoCreate: CatalogCreateResult = {
+  result: true,
+  message: 'Exito',
+  error: undefined,
+  data: '',
+};
+
+let resultadoUpdate: CatalogUpdateResult = {
   result: true,
   message: 'Exito',
   error: undefined,
@@ -23,40 +34,61 @@ const catalogEjemplo: CatalogResult = {
       name: 'Introducción a TypeScript',
       description: 'Curso básico sobre TypeScript, incluyendo tipado y clases.',
       isPublic: true,
-      category: 'General',
+      category: 'Nivel 1',
+      createdAt: '',
+      updatedAt: '',
+      deletedAt: undefined,
     },
     {
       id: 2,
       name: 'Recetas Saludables',
       description: 'Colección de recetas saludables para el día a día.',
       isPublic: true,
-      category: 'General',
+      category: 'Nivel 1',
+      createdAt: '',
+      updatedAt: '',
+      deletedAt: undefined,
     },
     {
       id: 3,
       name: 'Guía de Diseño UX/UI',
       description: 'Principios fundamentales para diseñar interfaces efectivas.',
       isPublic: false,
-      category: 'General',
+      category: 'Nivel 1',
+      createdAt: '',
+      updatedAt: '',
+      deletedAt: undefined,
     },
     {
       id: 4,
       name: 'Historia del Arte',
       description: 'Resumen de los movimientos artísticos más importantes.',
       isPublic: true,
-      category: 'General',
+      category: 'Nivel 1',
+      createdAt: '',
+      updatedAt: '',
+      deletedAt: undefined,
     },
     {
       id: 5,
       name: 'Guía de Seguridad en Aplicaciones Web',
       description: 'Buenas prácticas para proteger aplicaciones contra vulnerabilidades.',
       isPublic: false,
-      category: 'General',
+      category: 'Nivel 1',
+      createdAt: '',
+      updatedAt: '',
+      deletedAt: undefined,
     },
   ],
 };
 
 export class CatalogService {
+  private authBackendClient: AxiosInstance;
+
+  constructor(authBackendClient: AxiosInstance) {
+    this.authBackendClient = authBackendClient;
+  }
+
   async products(): Promise<CatalogResult> {
     return catalogEjemplo;
   }
@@ -82,13 +114,14 @@ export class CatalogService {
     }
     return result;
   }
-}
 
-export class CreateCatalogService {
-  private authBackendClient: AxiosInstance;
-
-  constructor(authBackendClient: AxiosInstance) {
-    this.authBackendClient = authBackendClient;
+  async update(data: CatalogSendUpdate): Promise<CatalogUpdateResult> {
+    /*const response = await this.authBackendClient.post<ProductResult>('/v1.0/products/data.id', {
+      data,
+    });
+    return response.data;*/
+    resultadoUpdate.data = data.name;
+    return resultadoUpdate;
   }
 
   async create(data: CatalogSend): Promise<CatalogCreateResult> {

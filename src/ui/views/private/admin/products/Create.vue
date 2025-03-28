@@ -210,10 +210,10 @@ import {
 import Editor from 'primevue/editor';
 import { reactive, ref } from 'vue';
 import { useToast } from 'primevue/usetoast';
-import { CreateProductService } from '@/services/product-service';
 import { useRouter } from 'vue-router';
 import type { ImageURL, ProductSend } from '@/interfaces/products/product.interface';
 import { backendClient } from '@/api/backend-client';
+import { ProductService } from '@/services/product-service';
 
 //Constantes de Breadcrumb
 const home = ref({
@@ -225,7 +225,7 @@ const items = ref([{ label: 'Productos', route: '/admin/products' }, { label: 'C
 const router = useRouter();
 const toast = useToast();
 const submitted = ref(false);
-const createService = new CreateProductService(backendClient);
+const createService = new ProductService(backendClient);
 
 const formData = reactive({
   name: '',

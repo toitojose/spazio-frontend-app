@@ -4,10 +4,19 @@ import type {
   ProductResult,
   ProductResultFindByID,
   ProductSend,
+  ProductSendUpdate,
+  ProductUpdateResult,
 } from '@/interfaces/products/product.interface';
 import type { AxiosInstance } from 'axios';
 
 let resultadoCreate: ProductCreateResult = {
+  result: true,
+  message: 'Exito',
+  error: undefined,
+  data: '',
+};
+
+let resultadoUpdate: ProductUpdateResult = {
   result: true,
   message: 'Exito',
   error: undefined,
@@ -123,6 +132,12 @@ const productosEjemplo: ProductResult = {
 };
 
 export class ProductService {
+  private authBackendClient: AxiosInstance;
+
+  constructor(authBackendClient: AxiosInstance) {
+    this.authBackendClient = authBackendClient;
+  }
+
   async products(): Promise<ProductResult> {
     return productosEjemplo;
   }
@@ -149,14 +164,6 @@ export class ProductService {
     }
     return result;
   }
-}
-
-export class CreateProductService {
-  private authBackendClient: AxiosInstance;
-
-  constructor(authBackendClient: AxiosInstance) {
-    this.authBackendClient = authBackendClient;
-  }
 
   async create(data: ProductSend): Promise<ProductCreateResult> {
     /*const response = await this.authBackendClient.post<ProductResult>('/v1.0/products', {
@@ -165,5 +172,14 @@ export class CreateProductService {
     return response.data;*/
     resultadoCreate.data = data.name;
     return resultadoCreate;
+  }
+
+  async update(data: ProductSendUpdate): Promise<ProductUpdateResult> {
+    /*const response = await this.authBackendClient.post<ProductResult>('/v1.0/products', {
+      data,
+    });
+    return response.data;*/
+    resultadoUpdate.data = data.name;
+    return resultadoUpdate;
   }
 }

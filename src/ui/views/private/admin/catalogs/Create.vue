@@ -127,7 +127,7 @@ import { useToast } from 'primevue/usetoast';
 import { useRouter } from 'vue-router';
 import { backendClient } from '@/api/backend-client';
 import type { CatalogSend } from '@/interfaces/catalogs/catalogs.interface';
-import { CreateCatalogService } from '@/services/catalogs-services';
+import { CatalogService } from '@/services/catalogs-services';
 
 //Constantes de Breadcrumb
 const home = ref({
@@ -139,7 +139,7 @@ const items = ref([{ label: 'Catálogos', route: '/admin/catalogs' }, { label: '
 const router = useRouter();
 const toast = useToast();
 const submitted = ref(false);
-const createCatalog = new CreateCatalogService(backendClient);
+const createCatalog = new CatalogService(backendClient);
 
 const formData = reactive({
   name: '',
@@ -153,7 +153,6 @@ const categoryOptions = [
   { label: 'Nivel 2', value: 'Nivel 2' },
   { label: 'Nivel 3', value: 'Nivel 3' },
 ];
-
 
 const validateForm = () => {
   return formData.name && formData.description && formData.category;

@@ -11,15 +11,27 @@ export interface CatalogResultFindByID {
   error?: { statusCode: number; key: string } | null;
   data?: Catalog;
 }
+
 export interface Catalog {
   id: number;
   name: string;
   description: string;
   isPublic: boolean;
   category: string;
+  createdAt: string;
+  updatedAt: string;
+  deletedAt?: string | null;
 }
 
 export interface CatalogSend {
+  name: string;
+  description: string;
+  isPublic: boolean;
+  category: string;
+}
+
+export interface CatalogSendUpdate {
+  id: number;
   name: string;
   description: string;
   isPublic: boolean;
@@ -33,13 +45,9 @@ export interface CatalogCreateResult {
   data?: string;
 }
 
-export interface Catalog {
-  id: number;
-  name: string;
-  description: string;
-  isPublic: boolean;
-  category: string;
-  createdAt: string;
-  updatedAt: string;
-  deletedAt?: string | null;
+export interface CatalogUpdateResult {
+  result: boolean;
+  message: string;
+  error?: { statusCode: number; key: string } | null;
+  data?: string;
 }

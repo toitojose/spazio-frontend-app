@@ -19,12 +19,31 @@ export interface ProductCreateResult {
   data?: string;
 }
 
+export interface ProductUpdateResult {
+  result: boolean;
+  message: string;
+  error?: { statusCode: number; key: string } | null;
+  data?: string;
+}
+
 export interface ImageURL {
   id: number;
   url: string;
 }
 
 export interface ProductSend {
+  name: string;
+  imageURL?: ImageURL[];
+  resume: string;
+  description: string;
+  purchasePrice: number;
+  salePrice: number;
+  type: string;
+  status: boolean;
+}
+
+export interface ProductSendUpdate {
+  id: number;
   name: string;
   imageURL?: ImageURL[];
   resume: string;

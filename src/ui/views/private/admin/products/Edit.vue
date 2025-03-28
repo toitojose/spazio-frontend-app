@@ -199,7 +199,6 @@ import {
   Card,
   InputText,
   Button as PButton,
-  Textarea,
   FloatLabel,
   InputNumber,
   Dropdown,
@@ -211,17 +210,15 @@ import {
 import Editor from 'primevue/editor';
 import { reactive, ref, onMounted, watch } from 'vue';
 import { useToast } from 'primevue/usetoast';
-import { CreateProductService } from '@/services/product-service';
 import { useRouter, useRoute } from 'vue-router';
-import type { ImageURL, Product, ProductSend } from '@/interfaces/products/product.interface';
+import type { ImageURL, Product, ProductSendUpdate } from '@/interfaces/products/product.interface';
 import { backendClient } from '@/api/backend-client';
 import { ProductService } from '@/services/product-service.js';
 
 const router = useRouter();
 const toast = useToast();
 const submitted = ref(false);
-const createService = new CreateProductService(backendClient);
-const productService = new ProductService();
+const productService = new ProductService(backendClient);
 const route = useRoute();
 const productId = ref(route.params.id);
 
@@ -302,8 +299,9 @@ const prepareImage = (): ImageURL[] => {
   return formData.imageURL;
 };
 
-const prepareProduct = (): ProductSend => {
-  const result: ProductSend = {
+const prepareProduct = (): ProductSendUpdate => {
+  const result: ProductSendUpdate = {
+    id: Number(productId.value),
     name: formData.name,
     resume: formData.description,
     description: formData.description,
@@ -346,7 +344,7 @@ const onSubmit = async () => {
     try {
       console.log(formData.imageURL);
       console.log(prepareProduct());
-      const response = await createService.create(prepareProduct());
+      const response = await productService.update(prepareProduct());
       console.log(response);
       toast.add({
         severity: 'success',

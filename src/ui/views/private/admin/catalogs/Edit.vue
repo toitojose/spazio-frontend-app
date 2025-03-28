@@ -126,15 +126,13 @@ import { reactive, ref, onMounted, watch } from 'vue';
 import { useToast } from 'primevue/usetoast';
 import { useRouter, useRoute } from 'vue-router';
 import { backendClient } from '@/api/backend-client';
-import type { Catalog, CatalogSend } from '@/interfaces/catalogs/catalogs.interface';
-import { CatalogService, CreateCatalogService } from '@/services/catalogs-services';
-
+import type { Catalog, CatalogSendUpdate } from '@/interfaces/catalogs/catalogs.interface';
+import { CatalogService } from '@/services/catalogs-services';
 
 const router = useRouter();
 const toast = useToast();
 const submitted = ref(false);
-const createCatalog = new CreateCatalogService(backendClient);
-const productService = new CatalogService();
+const catalogService = new CatalogService(backendClient);
 const route = useRoute();
 const productId = ref(route.params.id);
 
@@ -151,12 +149,10 @@ const formData = reactive({
 
 const loadProduct = async () => {
   try {
-    const response = await productService.catalogsById(Number(productId.value));
+    const response = await catalogService.catalogsById(Number(productId.value));
     const catalogResponse: Catalog | undefined = response.data;
     formData.name = catalogResponse?.name ? catalogResponse.name : '';
     formData.description = catalogResponse?.description ? catalogResponse.description : '';
-    formData.category = catalogResponse?.category ? catalogResponse.category : '';
-
 
     console.log('********** ', response);
 
@@ -194,8 +190,9 @@ const validateForm = () => {
   return formData.name && formData.description && formData.category;
 };
 
-const prepareCatalog = (): CatalogSend => {
-  const result: CatalogSend = {
+const prepareCatalog = (): CatalogSendUpdate => {
+  const result: CatalogSendUpdate = {
+    id: Number(productId.value),
     name: formData.name,
     description: formData.description,
     isPublic: formData.isPublic,
@@ -209,7 +206,7 @@ const onSubmit = async () => {
 
   if (validateForm()) {
     try {
-      const response = await createCatalog.create(prepareCatalog());
+      const response = await catalogService.update(prepareCatalog());
       console.log(response);
       toast.add({
         severity: 'success',
