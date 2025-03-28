@@ -1,4 +1,10 @@
-import type { CatalogCreateResult, CatalogResult, CatalogSend } from '@/interfaces/catalogs/catalogs.interface';
+import type {
+  Catalog,
+  CatalogCreateResult,
+  CatalogResult,
+  CatalogSend,
+  CatalogResultFindByID,
+} from '@/interfaces/catalogs/catalogs.interface';
 
 let resultadoCreate: CatalogCreateResult = {
   result: true,
@@ -54,10 +60,9 @@ export class CatalogService {
   async products(): Promise<CatalogResult> {
     return catalogEjemplo;
   }
-  /*
-  async productsById(id: number): Promise<ProductResultFindByID> {
-    const data: Product[] | undefined = productosEjemplo.data;
-    let result: ProductResultFindByID = {
+  async catalogsById(id: number): Promise<CatalogResultFindByID> {
+    const data: Catalog[] | undefined = catalogEjemplo.data;
+    let result: CatalogResultFindByID = {
       result: false,
       message: 'Ninguno',
       error: { statusCode: 400, key: 'No se encontro' },
@@ -76,7 +81,7 @@ export class CatalogService {
       }
     }
     return result;
-  }*/
+  }
 }
 
 export class CreateCatalogService {

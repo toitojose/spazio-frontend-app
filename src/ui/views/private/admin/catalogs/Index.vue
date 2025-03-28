@@ -155,7 +155,7 @@ const formatCurrency = (value: number) => {
 };
 
 const onEdit = (id: number) => {
-  router.push(`/admin/products/edit/${id}`);
+  router.push(`/admin/catalogs/edit/${id}`);
   return;
 };
 

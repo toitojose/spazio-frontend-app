@@ -154,14 +154,6 @@ const categoryOptions = [
   { label: 'Nivel 3', value: 'Nivel 3' },
 ];
 
-const isValidUrl = (url: string) => {
-  try {
-    new URL(url);
-    return true;
-  } catch {
-    return false;
-  }
-};
 
 const validateForm = () => {
   return formData.name && formData.description && formData.category;
