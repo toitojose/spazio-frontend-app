@@ -43,11 +43,18 @@ router.beforeEach((to, from, next) => {
 
   console.log(to.name, userStore.isAdmin());
 
+  const isLoginRoute = to.name === 'login';
+  const isUnauthorizedRoute = to.name === 'unauthorized';
+
   if (sessionExpired) {
     userStore.clearUser();
     if (to.name !== 'login') {
       return next({ name: 'login', query: { expired: 'true' } });
     }
+    if (!isLoginRoute) {
+      return next({ name: 'login', query: { expired: 'true' } });
+    }
+    return next();
   }
 
   if (isAdminRoute && !userStore.isAuthenticated) {
@@ -61,11 +68,17 @@ router.beforeEach((to, from, next) => {
   }
 
   if (requiresAuth && !userStore.isAuthenticated) {
-    return next({ name: 'login', query: { redirect: to.fullPath } });
+    if (!isLoginRoute) {
+      return next({ name: 'login', query: { redirect: to.fullPath } });
+    }
+    return next();
   }
 
   if (requiredRoles && !requiredRoles.some((role) => userStore.userRoles.includes(role))) {
-    return next({ name: 'unauthorized' });
+    if (!isUnauthorizedRoute) {
+      return next({ name: 'unauthorized' });
+    }
+    return next();
   }
 
   return next();

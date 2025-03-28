@@ -159,7 +159,7 @@ const handleScenarioSelection = async (scenario: Scenario) => {
 
   try {
     const response = await renterStatusService.updateRenterStatus(scenario.name as RenterStatusEnum);
-    if (response.result && response.data) {
+    if (response.success && response.data) {
       renterProgressStore.setScenario(scenario.name, scenario.onSelected);
       renterProgressStore.updateStepSummary(currentStep, scenario.name);
     }

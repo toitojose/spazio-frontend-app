@@ -35,7 +35,7 @@ export interface GeneralFormData {
 }
 
 export interface UserCreationResult {
-  result: boolean;
+  success: boolean;
   message: string | string[];
   error: { statusCode: number; key: string } | null;
   data?: {

@@ -187,7 +187,7 @@
 
 <script setup lang="ts">
 import { InputText, InputMask, Button, Message } from 'primevue';
-import { Form } from '@primevue/forms';
+import { Form, type FormSubmitEvent } from '@primevue/forms';
 import { defineProps, defineEmits, ref } from 'vue';
 import { zodResolver } from '@primevue/forms/resolvers/zod';
 import { useToast } from 'primevue/usetoast';
@@ -261,6 +261,9 @@ const schema = z.object({
   secondLastName: requiredFields.includes('secondLastName')
     ? z.string().min(1, { message: 'Es obligatorio' })
     : z.string().optional(),
+  idNumber: requiredFields.includes('idNumber')
+    ? z.string().length(10, { message: 'La cédula debe tener 10 dígitos' })
+    : z.string().optional(),
   mobile: requiredFields.includes('mobile') ? z.string().min(1, { message: 'Es obligatorio' }) : z.string().optional(),
   landline: requiredFields.includes('landline')
     ? z.string().min(1, { message: 'Es obligatorio' })
@@ -287,18 +290,15 @@ const initialValues = ref<GeneralFormData>({
   roleType: props.formType as RolesEnum,
 });
 
-const formData = ref<GeneralFormData>({ ...initialValues.value });
-
 // Enviar el formulario
-const submitForm = ({ valid }: { valid: boolean }) => {
+const submitForm = (event: FormSubmitEvent) => {
+  const { valid, values } = event;
+
   if (!valid) {
     toast.add({ severity: 'error', summary: 'Por favor, corrige los errores en el formulario.', life: 3000 });
     return;
   }
 
-  // Emitir los datos al componente padre
-  emit('formUpdated', formData.value);
-
-  toast.add({ severity: 'success', summary: 'Formulario enviado correctamente.', life: 3000 });
+  emit('formUpdated', values as GeneralFormData); // puedes castear si sabes que el tipo es correcto
 };
 </script>

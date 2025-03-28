@@ -1,6 +1,7 @@
 import { UserClient } from '@/api/UserClient.ts';
 import type { GeneralFormData } from '@/interfaces/User.interface.ts';
 import type { UserValidationResult } from '@/interfaces/UserValidationResult.interface.ts';
+import { useUserStore } from '@/store/user.ts';
 
 export class UserService {
   private userClient: UserClient;
@@ -10,18 +11,19 @@ export class UserService {
   }
 
   async registerUser(data: GeneralFormData) {
-    // Aquí podrías hacer validaciones previas
-    return this.userClient.createUserWithRole(data);
+    const userStore = useUserStore();
+    const token = userStore.token;
+    return this.userClient.createUserWithRole(data, token);
   }
 
   async verifyUser(data: GeneralFormData): Promise<UserValidationResult> {
+    const response = await this.userClient.validateUser(data);
+
+    if (!response || typeof response !== 'object' || !('success' in response)) {
+      throw new Error('Formato de respuesta no válido');
+    }
+
     try {
-      const response = await this.userClient.validateUser(data);
-
-      if (!response || typeof response !== 'object' || !('success' in response)) {
-        throw new Error('Formato de respuesta no válido');
-      }
-
       return {
         success: response.success,
         message: response.message,
