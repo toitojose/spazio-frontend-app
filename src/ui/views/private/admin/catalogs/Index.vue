@@ -6,7 +6,7 @@
     :closable="true"
     header="Confirmación de Eliminación"
     class="w-11/12 sm:w-5/12">
-    <p>¿Estás seguro de eliminar este producto?</p>
+    <p>¿Estás seguro de eliminar este catálogo?</p>
     <div class="mt-4 flex justify-end gap-2">
       <PButton
         label="No"
@@ -20,7 +20,7 @@
   </PDialog>
   <!-- Header con título y botón -->
   <div class="mb-4 flex items-center justify-between">
-    <h2 class="text-2xl font-semibold">Productos</h2>
+    <h2 class="text-2xl font-semibold">Catálogos</h2>
     <PButton
       label="Agregar producto"
       icon="pi pi-plus"
@@ -33,7 +33,7 @@
       <InputGroup>
         <InputText
           v-model="filters['global'].value"
-          placeholder="Buscar productos..." />
+          placeholder="Buscar catálogo..." />
         <InputGroupAddon>
           <Button
             class="pi pi-search"
@@ -65,57 +65,26 @@
         filterPlaceholder="Buscar por nombre" />
 
       <Column
-        field="description"
+        field="resume"
         header="Resumen"
         sortable
         filter
         filterPlaceholder="Buscar por resumen" />
 
       <Column
-        field="tipo"
-        header="Tipo"
+        field="access"
+        header="Acceso"
         sortable>
-        <template #body="{ data }">General</template>
+        <template #body="{ data }">Acceso</template>
         <!-- Temporal -->
       </Column>
 
       <Column
-        field="precioCompra"
-        header="P/Compra"
+        field="category"
+        header="Categoría"
         sortable>
-        <template #body="{ data }">
-          {{ formatCurrency(data.purchasePrice) }}
-        </template>
-      </Column>
-
-      <Column
-        field="precioVenta"
-        header="P/Venta"
-        sortable>
-        <template #body="{ data }">
-          {{ formatCurrency(data.salePrice) }}
-        </template>
-      </Column>
-
-      <Column
-        header="Ratio"
-        sortable>
-        <template #body="{ data }"> {{ getRatio(data) }}% </template>
-      </Column>
-
-      <Column
-        header="Pedidos"
-        sortable>
-        <template #body="{ data }"> 0 </template>
-      </Column>
-
-      <Column
-        header="Estado"
-        sortable>
-        <template #body="{ data }">
-          <i class="pi pi-circle-fill text-green-500"></i>
-          <!-- Simulamos todos como activos -->
-        </template>
+        <template #body="{ data }">Categoría</template>
+        <!-- Temporal -->
       </Column>
 
       <Column header="Opciones">
@@ -126,6 +95,10 @@
             @click="() => onEdit(data.id)" />
           <PButton
             icon="pi pi-trash"
+            class="p-button-text p-button-sm text-red-500"
+            @click="() => onDelete(data.id)" />
+          <PButton
+            icon="pi pi-box"
             class="p-button-text p-button-sm text-red-500"
             @click="() => onDelete(data.id)" />
         </template>
@@ -211,28 +184,28 @@ const confirmDelete = () => {
     showDeleteDialog.value = false; // Cierra el diálogo
     productIdToDelete.value = null; // Limpia el ID
     /*productService
-      .delete(productIdToDelete.value)
-      .then(() => {
-        toast.add({
-          severity: 'success',
-          summary: 'Éxito',
-          detail: 'Producto eliminado correctamente',
-          life: 3000,
-        });
-        loadProducts(); // Recarga la lista de productos
-      })
-      .catch(() => {
-        toast.add({
-          severity: 'error',
-          summary: 'Error',
-          detail: 'No se pudo eliminar el producto',
-          life: 3000,
-        });
-      })
-      .finally(() => {
-        showDeleteDialog.value = false; // Cierra el diálogo
-        productIdToDelete.value = null; // Limpia el ID
-      });*/
+        .delete(productIdToDelete.value)
+        .then(() => {
+          toast.add({
+            severity: 'success',
+            summary: 'Éxito',
+            detail: 'Producto eliminado correctamente',
+            life: 3000,
+          });
+          loadProducts(); // Recarga la lista de productos
+        })
+        .catch(() => {
+          toast.add({
+            severity: 'error',
+            summary: 'Error',
+            detail: 'No se pudo eliminar el producto',
+            life: 3000,
+          });
+        })
+        .finally(() => {
+          showDeleteDialog.value = false; // Cierra el diálogo
+          productIdToDelete.value = null; // Limpia el ID
+        });*/
   }
 };
 </script>

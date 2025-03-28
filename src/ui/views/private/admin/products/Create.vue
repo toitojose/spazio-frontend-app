@@ -143,7 +143,7 @@
               </FloatLabel>
               <small
                 v-if="submitted && !formData.type"
-                class="p-error"
+                class="p-error text-red-500"
                 >El tipo es requerido</small
               >
             </div>
@@ -220,7 +220,7 @@ const home = ref({
   icon: 'pi pi-home',
   route: '/admin',
 });
-const items = ref([{ label: 'Lista', route: '/admin/products' }, { label: 'Create' }]);
+const items = ref([{ label: 'Productos', route: '/admin/products' }, { label: 'Crear' }]);
 
 const router = useRouter();
 const toast = useToast();

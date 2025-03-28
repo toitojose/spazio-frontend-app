@@ -1,6 +1,6 @@
 <template>
   <div class="mb-4 flex items-center">
-    <h2 class="text-center text-2xl font-semibold">Agregar Producto</h2>
+    <h2 class="text-center text-2xl font-semibold">Editar Producto</h2>
   </div>
   <div class="flex">
     <Breadcrumb
@@ -143,7 +143,7 @@
               </FloatLabel>
               <small
                 v-if="submitted && !formData.type"
-                class="p-error"
+                class="p-error text-red-500"
                 >El tipo es requerido</small
               >
             </div>
@@ -209,20 +209,13 @@ import {
   Breadcrumb,
 } from 'primevue';
 import Editor from 'primevue/editor';
-import { reactive, ref, onMounted } from 'vue';
+import { reactive, ref, onMounted, watch } from 'vue';
 import { useToast } from 'primevue/usetoast';
 import { CreateProductService } from '@/services/product-service';
 import { useRouter, useRoute } from 'vue-router';
 import type { ImageURL, Product, ProductSend } from '@/interfaces/products/product.interface';
 import { backendClient } from '@/api/backend-client';
 import { ProductService } from '@/services/product-service.js';
-
-//Constantes de Breadcrumb
-const home = ref({
-  icon: 'pi pi-home',
-  route: '/admin',
-});
-const items = ref([{ label: 'Lista', route: '/admin/products' }, { label: 'Update' }]);
 
 const router = useRouter();
 const toast = useToast();
@@ -272,6 +265,20 @@ const loadProduct = async () => {
     console.error('Error loading products:', error);
   }
 };
+
+//Constantes de Breadcrumb
+const home = ref({
+  icon: 'pi pi-home',
+  route: '/admin',
+});
+const items = ref([{ label: 'Productos', route: '/admin/products' }, { label: '' }]);
+
+watch(
+  () => formData.name,
+  (newName) => {
+    items.value[1].label = newName;
+  },
+);
 
 const typeOptions = [
   { label: 'General', value: 'General' },
