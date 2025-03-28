@@ -118,8 +118,9 @@ import Toast from 'primevue/toast';
 import { useRouter } from 'vue-router';
 import { CatalogService } from '@/services/catalogs-services';
 import type { Catalog } from '@/interfaces/catalogs/catalogs.interface';
+import { backendClient } from '@/api/backend-client';
 
-const catalogService = new CatalogService();
+const catalogService = new CatalogService(backendClient);
 const catalog: Catalog[] | undefined = [];
 const catalogs = ref(catalog);
 const router = useRouter();
