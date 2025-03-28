@@ -27,6 +27,39 @@ export default [
           icon: 'pi pi-box',
         },
       },
+      {
+        path: 'catalogs/create',
+        name: 'Admin-catalogs-create',
+        component: () => import('@/ui/views/private/admin/catalogs/Create.vue'),
+        meta: {
+          metaTitle: 'login.metaTitle',
+          metaDescription: 'login.metaDescription',
+          title: 'admin.products.title',
+          icon: 'pi pi-box',
+        },
+      },
+      {
+        path: 'catalogs/edit/:id',
+        name: 'Admin-catalogs-edit',
+        component: () => import('@/ui/views/private/admin/catalogs/Edit.vue'),
+        meta: {
+          metaTitle: 'login.metaTitle',
+          metaDescription: 'login.metaDescription',
+          title: 'admin.products.title',
+          icon: 'pi pi-box',
+        },
+      },
+      {
+        path: 'catalogs/edit/products/:id',
+        name: 'Admin-catalogs-products-edit',
+        component: () => import('@/ui/views/private/admin/catalogs/InsertProducts.vue'),
+        meta: {
+          metaTitle: 'login.metaTitle',
+          metaDescription: 'login.metaDescription',
+          title: 'admin.products.title',
+          icon: 'pi pi-box',
+        },
+      },
     ],
   },
 ];

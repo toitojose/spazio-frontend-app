@@ -22,7 +22,7 @@
   <div class="mb-4 flex items-center justify-between">
     <h2 class="text-2xl font-semibold">Catálogos</h2>
     <PButton
-      label="Agregar producto"
+      label="Agregar catálogo"
       icon="pi pi-plus"
       class="p-button-primary"
       @click="onCreate" />
@@ -45,7 +45,7 @@
     <!-- Tabla -->
     <DataTable
       v-model:filters="filters"
-      :value="products"
+      :value="catalogs"
       :stripedRows="true"
       :paginator="true"
       :rows="10"
@@ -104,7 +104,7 @@
         </template>
       </Column>
     </DataTable>
-    <div class="mt-4 flex justify-end text-lg font-semibold"> Existen {{ products.length }} productos. </div>
+    <div class="mt-4 flex justify-end text-lg font-semibold"> Existen {{ catalogs.length }} catálogos. </div>
   </div>
 </template>
 
@@ -143,8 +143,7 @@ const loadProducts = async () => {
 };
 
 const onCreate = () => {
-  router.push('products/create');
-  console.log('Create new ebook');
+  router.push('catalogs/create');
 };
 
 onMounted(() => {

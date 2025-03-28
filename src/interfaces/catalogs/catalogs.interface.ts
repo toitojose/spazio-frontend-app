@@ -8,7 +8,7 @@ export interface CatalogResult {
 export interface Catalog {
   id: number;
   name: string;
-  resume: string;
+  description: string;
   isPublic: boolean;
   category: string;
 }

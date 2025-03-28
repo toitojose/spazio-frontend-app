@@ -34,8 +34,8 @@ export default [
         meta: {
           metaTitle: 'login.metaTitle',
           metaDescription: 'login.metaDescription',
-          title: 'admin.products.title',
-          icon: 'pi pi-box',
+          title: 'admin.catalogs.title',
+          icon: 'pi pi-book',
         },
       },
     ],
