@@ -111,17 +111,17 @@
 <script setup lang="ts">
 import { ref, onMounted } from 'vue';
 import { FilterMatchMode } from '@primevue/core/api';
-import { ProductService } from '@/services/product-service.js';
 import { Button as PButton, InputText, InputGroup, InputGroupAddon, useToast, Dialog as PDialog } from 'primevue';
 import DataTable from 'primevue/datatable';
 import Column from 'primevue/column';
 import Toast from 'primevue/toast';
-import type { Product } from '@/interfaces/products/product.interface';
 import { useRouter } from 'vue-router';
+import { CatalogService } from '@/services/catalogs-services';
+import type { Catalog } from '@/interfaces/catalogs/catalogs.interface';
 
-const productService = new ProductService();
-const productos: Product[] | undefined = [];
-const products = ref(productos);
+const catalogService = new CatalogService();
+const catalog: Catalog[] | undefined = [];
+const catalogs = ref(catalog);
 const router = useRouter();
 const toast = useToast();
 
@@ -135,8 +135,8 @@ const filters = ref({
 
 const loadProducts = async () => {
   try {
-    const response = await productService.products();
-    products.value = response.data ?? [];
+    const response = await catalogService.products();
+    catalogs.value = response.data ?? [];
   } catch (error) {
     console.error('Error loading products:', error);
   }
@@ -155,13 +155,7 @@ const formatCurrency = (value: number) => {
   return value.toLocaleString('en-US', { style: 'currency', currency: 'USD' });
 };
 
-const getRatio = (product: Product) => {
-  if (!product.purchasePrice || !product.salePrice) return '0.00';
-  const ratio = ((product.salePrice - product.purchasePrice) / product.purchasePrice) * 100;
-  return ratio.toFixed(2);
-};
-
-const onEdit = (id: Product) => {
+const onEdit = (id: number) => {
   router.push(`/admin/products/edit/${id}`);
   return;
 };
