@@ -12,3 +12,17 @@ export interface Catalog {
   isPublic: boolean;
   category: string;
 }
+
+export interface CatalogSend {
+  name: string;
+  description: string;
+  isPublic: boolean;
+  category: string;
+}
+
+export interface CatalogCreateResult {
+  result: boolean;
+  message: string;
+  error?: { statusCode: number; key: string } | null;
+  data?: string;
+}

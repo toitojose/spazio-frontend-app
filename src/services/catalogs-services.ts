@@ -1,4 +1,11 @@
-import type { CatalogResult } from '@/interfaces/catalogs/catalogs.interface';
+import type { CatalogCreateResult, CatalogResult, CatalogSend } from '@/interfaces/catalogs/catalogs.interface';
+
+let resultadoCreate: CatalogCreateResult = {
+  result: true,
+  message: 'Exito',
+  error: undefined,
+  data: '',
+};
 
 const catalogEjemplo: CatalogResult = {
   result: true,
@@ -8,35 +15,35 @@ const catalogEjemplo: CatalogResult = {
     {
       id: 1,
       name: 'Introducción a TypeScript',
-      resume: 'Curso básico sobre TypeScript, incluyendo tipado y clases.',
+      description: 'Curso básico sobre TypeScript, incluyendo tipado y clases.',
       isPublic: true,
       category: 'General',
     },
     {
       id: 2,
       name: 'Recetas Saludables',
-      resume: 'Colección de recetas saludables para el día a día.',
+      description: 'Colección de recetas saludables para el día a día.',
       isPublic: true,
       category: 'General',
     },
     {
       id: 3,
       name: 'Guía de Diseño UX/UI',
-      resume: 'Principios fundamentales para diseñar interfaces efectivas.',
+      description: 'Principios fundamentales para diseñar interfaces efectivas.',
       isPublic: false,
       category: 'General',
     },
     {
       id: 4,
       name: 'Historia del Arte',
-      resume: 'Resumen de los movimientos artísticos más importantes.',
+      description: 'Resumen de los movimientos artísticos más importantes.',
       isPublic: true,
       category: 'General',
     },
     {
       id: 5,
       name: 'Guía de Seguridad en Aplicaciones Web',
-      resume: 'Buenas prácticas para proteger aplicaciones contra vulnerabilidades.',
+      description: 'Buenas prácticas para proteger aplicaciones contra vulnerabilidades.',
       isPublic: false,
       category: 'General',
     },
@@ -70,4 +77,21 @@ export class CatalogService {
     }
     return result;
   }*/
+}
+
+export class CreateCatalogService {
+  private authBackendClient: AxiosInstance;
+
+  constructor(authBackendClient: AxiosInstance) {
+    this.authBackendClient = authBackendClient;
+  }
+
+  async create(data: CatalogSend): Promise<CatalogCreateResult> {
+    /*const response = await this.authBackendClient.post<ProductResult>('/v1.0/products', {
+      data,
+    });
+    return response.data;*/
+    resultadoCreate.data = data.name;
+    return resultadoCreate;
+  }
 }

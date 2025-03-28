@@ -274,7 +274,7 @@ const prepareImage = (): ImageURL[] => {
 const prepareProduct = (): ProductSend => {
   const result: ProductSend = {
     name: formData.name,
-    resume: formData.description,
+    resume: formData.resume,
     description: formData.description,
     purchasePrice: formData.purchasePrice,
     salePrice: formData.salePrice,

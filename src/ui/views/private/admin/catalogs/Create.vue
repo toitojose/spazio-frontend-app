@@ -100,9 +100,9 @@
               <div class="flex items-center gap-2">
                 <Checkbox
                   id="access"
-                  v-model="formData.access"
+                  v-model="formData.isPublic"
                   :binary="true" />
-                <label for="access">Es publico?</label>
+                <label for="access">¿Es publico?</label>
               </div>
             </div>
           </div>
@@ -121,25 +121,13 @@
 </template>
 
 <script setup lang="ts">
-import {
-  Card,
-  InputText,
-  Button as PButton,
-  FloatLabel,
-  InputNumber,
-  Dropdown,
-  Checkbox,
-  Toast,
-  FileUpload,
-  Breadcrumb,
-} from 'primevue';
-import Editor from 'primevue/editor';
+import { Card, InputText, Button as PButton, FloatLabel, Dropdown, Checkbox, Breadcrumb } from 'primevue';
 import { reactive, ref } from 'vue';
 import { useToast } from 'primevue/usetoast';
-import { CreateProductService } from '@/services/product-service';
 import { useRouter } from 'vue-router';
-import type { ImageURL, ProductSend } from '@/interfaces/products/product.interface';
 import { backendClient } from '@/api/backend-client';
+import type { CatalogSend } from '@/interfaces/catalogs/catalogs.interface';
+import { CreateCatalogService } from '@/services/catalogs-services';
 
 //Constantes de Breadcrumb
 const home = ref({
@@ -151,7 +139,7 @@ const items = ref([{ label: 'Catálogos', route: '/admin/catalogs' }, { label: '
 const router = useRouter();
 const toast = useToast();
 const submitted = ref(false);
-const createService = new CreateProductService(backendClient);
+const createCatalog = new CreateCatalogService(backendClient);
 
 const formData = reactive({
   name: '',
@@ -176,55 +164,17 @@ const isValidUrl = (url: string) => {
 };
 
 const validateForm = () => {
-  return (
-    formData.name &&
-    formData.resume &&
-    formData.description &&
-    formData.purchasePrice > 0 &&
-    formData.salePrice > 0 &&
-    formData.type
-  );
+  return formData.name && formData.description && formData.category;
 };
 
-const prepareImage = (): ImageURL[] => {
-  return formData.imageURL;
-};
-
-const prepareProduct = (): ProductSend => {
-  const result: ProductSend = {
+const prepareCatalog = (): CatalogSend => {
+  const result: CatalogSend = {
     name: formData.name,
-    resume: formData.description,
     description: formData.description,
-    purchasePrice: formData.purchasePrice,
-    salePrice: formData.salePrice,
-    type: formData.type,
-    status: formData.status,
-    imageURL: prepareImage(),
+    isPublic: formData.isPublic,
+    category: formData.category,
   };
   return result;
-};
-
-const uploadImage = async (event: any) => {
-  event.files.forEach((file: any, index: number) => {
-    // Simular una URL de imagen de prueba para cada archivo subido
-    const fakeUrl = `https://via.placeholder.com/150?text=Image+${formData.imageURL.length + 1}`;
-
-    // Agregar la URL simulada al array de imágenes
-    formData.imageURL.push({
-      id: formData.imageURL.length + 1, // ID único
-      url: fakeUrl,
-    });
-  });
-
-  toast.add({
-    severity: 'info',
-    summary: 'Imagen subida',
-    detail: 'Se han agregado imágenes de prueba',
-    life: 3000,
-  });
-
-  console.log('Imágenes simuladas:', formData.imageURL);
-  toast.add({ severity: 'info', summary: 'Success', detail: 'File Uploaded', life: 3000 });
 };
 
 const onSubmit = async () => {
@@ -232,9 +182,7 @@ const onSubmit = async () => {
 
   if (validateForm()) {
     try {
-      console.log(formData.imageURL);
-      console.log(prepareProduct());
-      const response = await createService.create(prepareProduct());
+      const response = await createCatalog.create(prepareCatalog());
       console.log(response);
       toast.add({
         severity: 'success',
@@ -243,7 +191,7 @@ const onSubmit = async () => {
         life: 3000,
       });
       setTimeout(() => {
-        router.push('/admin/products');
+        router.push('/admin/catalogs');
         submitted.value = false;
       }, 1000);
     } catch (error) {

@@ -65,11 +65,11 @@
         filterPlaceholder="Buscar por nombre" />
 
       <Column
-        field="resume"
-        header="Resumen"
+        field="description"
+        header="Descripción"
         sortable
         filter
-        filterPlaceholder="Buscar por resumen" />
+        filterPlaceholder="Buscar por descripción" />
 
       <Column
         field="access"
