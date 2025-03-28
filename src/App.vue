@@ -1,10 +1,13 @@
 <template>
   <RouterView />
+  <Toast />
 </template>
 <script setup lang="ts">
 import { RouterView, useRoute } from 'vue-router';
 import { onMounted } from 'vue';
 import { useUserStore } from '@/store/user.ts';
+import Toast from 'primevue/toast';
+
 const userStore = useUserStore();
 const route = useRoute();
 onMounted(() => {

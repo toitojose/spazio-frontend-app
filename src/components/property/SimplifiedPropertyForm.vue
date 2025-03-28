@@ -5,6 +5,7 @@
 
     <Form
       class="flex w-full flex-col space-y-6"
+      :resolver="resolver"
       @submit="onFormSubmit">
       <!-- Ciudad -->
       <div class="flex items-start gap-4">
@@ -29,9 +30,9 @@
       <div class="flex items-start gap-4">
         <label
           for="neighborhood"
-          class="mt-2 w-2/5 text-right text-xs font-medium"
-          >Barrio</label
-        >
+          class="mt-2 w-2/5 text-right text-xs font-medium">
+          Barrio
+        </label>
         <div class="w-full">
           <Select
             id="neighborhood"
@@ -154,11 +155,19 @@
 </template>
 
 <script setup lang="ts">
-import { computed, ref } from 'vue';
+import { computed, defineEmits, ref } from 'vue';
 import { InputText, Select, Button } from 'primevue';
 import { Form } from '@primevue/forms';
+import { useToast } from 'primevue/usetoast';
+import { z } from 'zod';
+import { zodResolver } from '@primevue/forms/resolvers/zod';
+import { PropertyOwnerClient } from '@/api/PropertyOwnerClient.ts';
+import { PropertyOwnerService } from '@/services/property-owner-service.ts';
 
-const props = defineProps<{ contextType: 'NEW_OWNER' | 'NEW_PROPERTY' }>();
+const props = defineProps<{ contextType: 'NEW_OWNER' | 'NEW_PROPERTY'; ownerId: number | null }>();
+const toast = useToast();
+const propertyOwnerClient = new PropertyOwnerClient();
+const propertyOwnerService = new PropertyOwnerService(propertyOwnerClient);
 
 const formDescription = computed(() => {
   return props.contextType === 'NEW_OWNER'
@@ -235,10 +244,32 @@ function onPropertyTypeChange() {
   const type = property.value.type as unknown as string;
   dynamicFields.value = fieldsByType[type] || [];
 }
+const schema = z.object({
+  neighborhood: z.string().min(1, 'El barrio es obligatorio'),
+  mainStreet: z.string().min(1, 'La calle principal es obligatoria'),
+  numeration: z.string().min(1, 'La numeración es obligatoria'),
+  secondaryStreet: z.string().min(1, 'La calle secundaria es obligatoria'),
+  type: z.string().min(1, 'El tipo de inmueble es obligatorio'),
+});
+const resolver = zodResolver(schema);
 
-// Métodos
-function onFormSubmit() {
-  console.log('Datos del inmueble simplificado:', property.value);
+const emit = defineEmits(['propertyRegistered']);
+async function onFormSubmit() {
+  const payload = {
+    ...property.value,
+    ownerId: props.ownerId,
+  };
+
+  try {
+    console.log('Enviando propiedad al backend:', payload);
+    // Aquí deberías llamar a tu servicio realEstateService.createProperty(payload);
+
+    // Simulación de éxito
+    toast.add({ severity: 'success', summary: 'Propiedad registrada', life: 3000 });
+    emit('propertyRegistered', payload);
+  } catch (error) {
+    toast.add({ severity: 'error', summary: 'Error al registrar propiedad', detail: error.message, life: 5000 });
+  }
 }
 </script>
 

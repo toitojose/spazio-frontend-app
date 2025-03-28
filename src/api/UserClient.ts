@@ -3,8 +3,13 @@ import type { GeneralFormData, UserCreationResult } from '@/interfaces/User.inte
 import type { UserValidationResult } from '@/interfaces/UserValidationResult.interface.ts';
 
 export class UserClient {
-  async createUserWithRole(body: GeneralFormData): Promise<UserCreationResult> {
-    const response = await backendClient.post<UserCreationResult>('/v1.0/user/create', body);
+  async createUserWithRole(body: GeneralFormData, token: string): Promise<UserCreationResult> {
+    const response = await backendClient.post<UserCreationResult>('/v1.0/user/create', body, {
+      headers: {
+        Authorization: `Bearer ${token}`,
+        'Content-Type': 'application/json',
+      },
+    });
     return response.data;
   }
 

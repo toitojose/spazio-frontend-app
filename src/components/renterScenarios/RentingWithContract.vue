@@ -92,7 +92,9 @@
           v-if="showPropertyForm"
           id="property-form"
           class="flex h-[calc(100vh-3rem)] w-full items-center space-x-6 pt-16">
-          <SimplifiedPropertyForm :context-type="propertyContextType" />
+          <SimplifiedPropertyForm
+            :context-type="propertyContextType"
+            :owner-id="propertyOwnerId" />
           <Message severity="info">
             <h3 class="mb-4 text-sm font-semibold">¿Por qué solicitamos esta información?</h3>
 
@@ -143,15 +145,20 @@ import { computed, nextTick, ref } from 'vue';
 import type { PropertyData } from '@/interfaces/real-estate/property-data.interface.ts';
 import { RolesEnum } from '@/enums/roles.enum.ts';
 import type { GeneralFormData } from '@/interfaces/User.interface.ts';
-import { PropertyOwnerClient } from '@/api/PropertyOwnerClient.ts';
 import { PropertyOwnerService } from '@/services/property-owner-service.ts';
+import { UserClient } from '@/api/UserClient.ts';
+import { UserService } from '@/services/user-service.ts';
 import { UserValidationStatus } from '@/enums/user-validation-status.enum.ts';
 import { useToast } from 'primevue/usetoast';
+import { PropertyOwnerClient } from '@/api/PropertyOwnerClient.ts';
 
 const propertyOwnerClient = new PropertyOwnerClient();
 const propertyOwnerService = new PropertyOwnerService(propertyOwnerClient);
+const userClient = new UserClient();
+const userService = new UserService(userClient);
 const propertyOwnerIsRegistered = ref(false);
-const propertyOwnerData = ref<any>(null);
+let propertyOwnerData = ref<GeneralFormData | null>(null);
+const propertyOwnerId = ref<number | null>(null);
 const properties = ref<PropertyData[]>([]);
 const propertyContextType = ref<'NEW_OWNER' | 'NEW_PROPERTY'>('NEW_PROPERTY');
 const selectedProperty = ref<PropertyData | null>(null);
@@ -181,12 +188,12 @@ const handleOwnerSearch = async (formData: any) => {
   }
 
   try {
-    const propertyOwnerDataReady = prepareValidateData(formData);
-    const response = await propertyOwnerService.validatePropertyOwner(propertyOwnerDataReady);
+    propertyOwnerData.value = prepareValidateData(formData);
+    const response = await propertyOwnerService.validatePropertyOwner(propertyOwnerData.value);
+    console.log('=>(RentingWithContract.vue:193) response', response);
 
     if (response.success && response.data) {
       const data = response.data;
-      // Caso verde: propietario encontrado y confirmado
       if (data.status === UserValidationStatus.CONFIRMED) {
         proceedToPropertySelection(data.properties);
       }
@@ -195,8 +202,22 @@ const handleOwnerSearch = async (formData: any) => {
         ownerDialogHeader.value = 'No encontramos un propietario con estos datos';
       }
     }
-  } catch (error) {
-    toast.add({ severity: 'error', summary: 'Error', detail: error, life: 3000 });
+  } catch (error: any) {
+    const errorResponse = error?.response?.data;
+    const summary = errorResponse?.message || 'Error inesperado al validar el propietario';
+    const errorKey = errorResponse?.error?.error || 'ERROR_DESCONOCIDO';
+
+    const friendlyError =
+      errorKey === 'AggregateError'
+        ? 'Ocurrió un error inesperado al consultar las propiedades. Intenta más tarde o contacta soporte.'
+        : errorKey;
+
+    toast.add({
+      severity: 'error',
+      summary,
+      detail: friendlyError,
+      life: 4000,
+    });
   }
   propertyOwnerIsRegistered.value = false;
 };
@@ -220,11 +241,6 @@ const proceedToPropertySelection = (receivedProperties: PropertyData[]) => {
     // Caso: Propietario con propiedades, mostrar la selección de propiedades
     selectedProperty.value = receivedProperties[0];
     showPropertyForm.value = false;
-    console.log('=>(RentingWithContract.vue:195) data', [hasSearched.value, !showPropertyForm.value]);
-    console.log(
-      '=>(RentingWithContract.vue:195) hasSearched && !showPropertyForm',
-      hasSearched.value && !showPropertyForm.value,
-    );
     nextTick(() => {
       const section = document.getElementById('property-selection');
       if (section) {
@@ -265,31 +281,29 @@ const returnToOwnerForm = () => {
 const continueWithPreRegistration = async () => {
   showDialog.value = false;
   try {
-    /**
-     * Simulación de registro de propietario en el backend
-     * 1. Utilizar la data que recibimos del formulario de propietario para enviarle al servicio, esta data se encuentra en propertyOwnerData
-     * 2. llamamos al servicio propertyOwnerService.createPropertyOwner con propertyOwnerData.value
-     * 3. si el registro es exitoso, mostramos mensaje de exito
-     * 4. Mostramos el formulario de propiedad
-     */
-    if (!propertyOwnerData.value) {
+    if (!propertyOwnerData) {
       alert('No hay datos de propietario para registrar');
       return;
     }
-    const response = await propertyOwnerService.createPropertyOwner(propertyOwnerData.value);
-    if (response.result) {
-      showPropertyForm.value = true;
-      nextTick(() => {
-        const section = document.getElementById('property-form');
-        if (section) {
-          section.scrollIntoView({ behavior: 'smooth' });
-        }
-      });
-    } else {
-      console.error('Error en el pre-registro:', response.message);
+    if (propertyOwnerData.value) {
+      const response = await userService.registerUser(propertyOwnerData.value);
+
+      if (response.success && response.data) {
+        propertyOwnerId.value = response.data.id;
+        propertyContextType.value = 'NEW_OWNER';
+        showPropertyForm.value = true;
+        nextTick(() => {
+          const section = document.getElementById('property-form');
+          if (section) {
+            section.scrollIntoView({ behavior: 'smooth' });
+          }
+        });
+      } else {
+        toast.add({ severity: 'error', summary: 'Error en el pre-registro', detail: response.message, life: 3000 });
+      }
     }
   } catch (error) {
-    console.error('Error al registrar propietario:', error);
+    toast.add({ severity: 'error', summary: 'Error al registrar propietario', detail: error, life: 3000 });
   }
 };
 

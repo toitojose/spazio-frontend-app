@@ -40,17 +40,29 @@ router.beforeEach((to, from, next) => {
   const lastLoginTime = localStorage.getItem('tokenTimestamp');
   const sessionExpired = lastLoginTime && Date.now() - parseInt(lastLoginTime) > EXPIRATION_MS;
 
+  const isLoginRoute = to.name === 'login';
+  const isUnauthorizedRoute = to.name === 'unauthorized';
+
   if (sessionExpired) {
     userStore.clearUser();
-    return next({ name: 'login', query: { expired: 'true' } });
+    if (!isLoginRoute) {
+      return next({ name: 'login', query: { expired: 'true' } });
+    }
+    return next();
   }
 
   if (requiresAuth && !userStore.isAuthenticated) {
-    return next({ name: 'login', query: { redirect: to.fullPath } });
+    if (!isLoginRoute) {
+      return next({ name: 'login', query: { redirect: to.fullPath } });
+    }
+    return next();
   }
 
   if (requiredRoles && !requiredRoles.some((role) => userStore.userRoles.includes(role))) {
-    return next({ name: 'unauthorized' });
+    if (!isUnauthorizedRoute) {
+      return next({ name: 'unauthorized' });
+    }
+    return next();
   }
 
   return next();
