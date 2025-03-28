@@ -19,6 +19,7 @@
     "pinia-plugin-persistedstate": "^4.2.0",
     "primeicons": "^7.0.0",
     "primevue": "^4.2.5",
+    "quill": "^2.0.3",
     "typed.js": "^2.1.0",
     "valibot": "^1.0.0",
     "vee-validate": "^4.15.0",

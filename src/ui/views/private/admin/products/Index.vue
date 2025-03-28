@@ -104,11 +104,11 @@
           <PButton
             icon="pi pi-pencil"
             class="p-button-text p-button-sm"
-            @click="() => onEdit(data)" />
+            @click="() => onEdit(data.id)" />
           <PButton
             icon="pi pi-trash"
             class="p-button-text p-button-sm text-red-500"
-            @click="() => onDelete(data)" />
+            @click="() => onDelete(data.id)" />
         </template>
       </Column>
     </DataTable>
@@ -163,8 +163,8 @@ const getRatio = (product: Product) => {
   return ratio.toFixed(2);
 };
 
-const onEdit = (data: Product) => {
-  router.push('products/edit');
+const onEdit = (id: Product) => {
+  router.push(`/admin/products/edit/${id}`);
   return;
 };
 

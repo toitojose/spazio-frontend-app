@@ -17,7 +17,7 @@ export default [
         },
       },
       {
-        path: 'products/edit',
+        path: 'products/edit/:id',
         name: 'Admin-products-edit',
         component: () => import('@/ui/views/private/admin/products/Edit.vue'),
         meta: {
