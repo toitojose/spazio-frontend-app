@@ -89,7 +89,7 @@ export class CatalogService {
     this.authBackendClient = authBackendClient;
   }
 
-  async products(): Promise<CatalogResult> {
+  async catalog(): Promise<CatalogResult> {
     return catalogEjemplo;
   }
   async catalogsById(id: number): Promise<CatalogResultFindByID> {

@@ -242,6 +242,7 @@ const formData = reactive({
 const loadProduct = async () => {
   try {
     const response = await productService.productsById(Number(productId.value));
+    /*Verificar el success de la respuesta */
     const productResponse: Product | undefined = response.data;
     formData.name = productResponse?.name ? productResponse.name : '';
     formData.resume = productResponse?.resume ? productResponse.resume : '';
@@ -342,10 +343,10 @@ const onSubmit = async () => {
 
   if (validateForm()) {
     try {
-      console.log(formData.imageURL);
-      console.log(prepareProduct());
       const response = await productService.update(prepareProduct());
       console.log(response);
+      /*Verificar el success de la respuesta */
+      /*Probar el caso de error tambien*/
       toast.add({
         severity: 'success',
         summary: 'Éxito',

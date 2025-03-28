@@ -208,6 +208,7 @@ const onSubmit = async () => {
     try {
       const response = await catalogService.update(prepareCatalog());
       console.log(response);
+      /*dinamizar la respuesta */
       toast.add({
         severity: 'success',
         summary: 'Éxito',

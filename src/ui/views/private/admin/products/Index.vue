@@ -1,5 +1,4 @@
 <template>
-  <Toast />
   <PDialog
     v-model:visible="showDeleteDialog"
     :modal="true"
@@ -142,11 +141,11 @@ import { ProductService } from '@/services/product-service.js';
 import { Button as PButton, InputText, InputGroup, InputGroupAddon, useToast, Dialog as PDialog } from 'primevue';
 import DataTable from 'primevue/datatable';
 import Column from 'primevue/column';
-import Toast from 'primevue/toast';
 import type { Product } from '@/interfaces/products/product.interface';
 import { useRouter } from 'vue-router';
+import { backendClient } from '@/api/backend-client';
 
-const productService = new ProductService();
+const productService = new ProductService(backendClient);
 const productos: Product[] | undefined = [];
 const products = ref(productos);
 const router = useRouter();

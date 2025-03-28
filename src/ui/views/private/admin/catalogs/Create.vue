@@ -175,6 +175,7 @@ const onSubmit = async () => {
     try {
       const response = await createCatalog.create(prepareCatalog());
       console.log(response);
+      /*Verificar el success */
       toast.add({
         severity: 'success',
         summary: 'Éxito',

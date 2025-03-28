@@ -48,9 +48,6 @@ router.beforeEach((to, from, next) => {
 
   if (sessionExpired) {
     userStore.clearUser();
-    if (to.name !== 'login') {
-      return next({ name: 'login', query: { expired: 'true' } });
-    }
     if (!isLoginRoute) {
       return next({ name: 'login', query: { expired: 'true' } });
     }

@@ -162,7 +162,6 @@
 
           <!-- 🔵 Columna 2: Subida de imágenes -->
           <div class="flex flex-col items-center">
-            <Toast />
             <FileUpload
               :multiple="true"
               accept="image/*"
@@ -203,7 +202,6 @@ import {
   InputNumber,
   Dropdown,
   Checkbox,
-  Toast,
   FileUpload,
   Breadcrumb,
 } from 'primevue';
@@ -313,9 +311,11 @@ const onSubmit = async () => {
 
   if (validateForm()) {
     try {
-      console.log(formData.imageURL);
-      console.log(prepareProduct());
       const response = await createService.create(prepareProduct());
+      /* Agrgar verificacion del success
+      if(response.success){
+
+      }*/
       console.log(response);
       toast.add({
         severity: 'success',
