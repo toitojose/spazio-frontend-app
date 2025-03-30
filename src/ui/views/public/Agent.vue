@@ -75,8 +75,9 @@ import { inject, ref } from 'vue';
 import MainUser from '@/components/public/MainUser.vue';
 import { useI18n } from 'vue-i18n';
 import { i18n } from '@/locales/i18n.ts';
-import type { LocaleMessageInterface } from '@/interfaces/locale-message.interface.ts';
 import HowWorks from '@/components/public/HowWorks.vue';
+import type { LocaleMessageInterface } from '@/interfaces/LocaleMessage.interface.ts';
+
 const { t: $t, locale } = useI18n();
 const currentLocale = locale.value;
 

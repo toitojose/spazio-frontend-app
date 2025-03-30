@@ -261,6 +261,14 @@
       "exploring_options": "Explorando opciones",
       "agreement_pending_contract": "Tengo acuerdo pendiente de contrato"
     },
+    "renting_with_contract": {
+      "property_validation": {
+        "properties_found": "Propiedades encontradas",
+        "properties_not_found": "No se encontraron propiedades",
+        "role_not_property_owner": "No eres propietario de esta propiedad",
+        "property_owner_not_found": "Propietario no encontrado"
+      }
+    },
     "identityVerification": {
       "title": "Verificación de identidad",
       "subtitle": "Verifica tu identidad para acceder a más beneficios",

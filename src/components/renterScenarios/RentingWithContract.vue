@@ -148,10 +148,11 @@ import type { GeneralFormData } from '@/interfaces/User.interface.ts';
 import { PropertyOwnerService } from '@/services/property-owner-service.ts';
 import { UserClient } from '@/api/UserClient.ts';
 import { UserService } from '@/services/user-service.ts';
-import { UserValidationStatus } from '@/enums/user-validation-status.enum.ts';
 import { useToast } from 'primevue/usetoast';
 import { PropertyOwnerClient } from '@/api/PropertyOwnerClient.ts';
+import { useI18n } from 'vue-i18n';
 
+const { t: $t } = useI18n();
 const propertyOwnerClient = new PropertyOwnerClient();
 const propertyOwnerService = new PropertyOwnerService(propertyOwnerClient);
 const userClient = new UserClient();
@@ -190,17 +191,44 @@ const handleOwnerSearch = async (formData: any) => {
   try {
     propertyOwnerData.value = prepareValidateData(formData);
     const response = await propertyOwnerService.validatePropertyOwner(propertyOwnerData.value);
-    console.log('=>(RentingWithContract.vue:193) response', response);
 
     if (response.success && response.data) {
       const data = response.data;
-      if (data.status === UserValidationStatus.CONFIRMED) {
-        proceedToPropertySelection(data.properties);
+      switch (data.status) {
+        case 'PROPERTY_OWNER_NOT_FOUND':
+          showDialog.value = true;
+          ownerDialogHeader.value = 'No encontramos un propietario con estos datos';
+          toast.add({
+            severity: 'warn',
+            summary: response.message,
+            detail: $t('renter.renting_with_contract.property_validation.' + data.status.toLowerCase()),
+            life: 3000,
+          });
+          break;
+        case 'PROPERTIES_NOT_FOUND':
+          toast.add({
+            severity: 'warn',
+            summary: response.message,
+            detail: $t('renter.renting_with_contract.property_validation.' + data.status.toLowerCase()),
+            life: 3000,
+          });
+          proceedToPropertySelection(data.properties);
+          break;
+        case 'PROPERTIES_FOUND':
+          toast.add({
+            severity: 'info',
+            summary: response.message,
+            detail: $t('renter.renting_with_contract.property_validation.' + data.status.toLowerCase()),
+            life: 3000,
+          });
+          proceedToPropertySelection(data.properties);
+          break;
+        default:
+          toast.add({ severity: 'info', summary: 'Resultado de la búsqueda', detail: response.message, life: 3000 });
+          break;
       }
-      if (data.status === UserValidationStatus.NOT_FOUND) {
-        showDialog.value = true;
-        ownerDialogHeader.value = 'No encontramos un propietario con estos datos';
-      }
+    } else {
+      toast.add({ severity: 'error', summary: response.message, detail: response.error, life: 3000 });
     }
   } catch (error: any) {
     const errorResponse = error?.response?.data;
