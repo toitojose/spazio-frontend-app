@@ -1,140 +1,142 @@
 <template>
-  <div class="">
-    <h4 class="mb-2 text-lg font-bold">Estoy arrendando o tengo un pre-acuerdo</h4>
-    <p class="mb-4 text-sm"> Verifica si tu arrendador está registrado en SPAZIO y continúa con el proceso. </p>
-    <div class="content-inner w-full">
-      <div class="w-full">
-        <GeneralForm
-          form-type="renter"
-          user-role="renter"
-          action-type="search"
-          @submit="handleOwnerSearch" />
-        <div
-          v-if="hasSearched && !showPropertyForm"
-          id="property-selection"
-          class="flex h-[calc(100vh-3rem)] w-full items-center pt-16">
+  <div class="flex flex-col space-y-12">
+    <div class="space-y-2">
+      <h4 class="mb-2 text-lg font-bold">Estoy arrendando o tengo un pre-acuerdo</h4>
+      <p class="mb-4 text-sm"> Verifica si tu arrendador está registrado en SPAZIO y continúa con el proceso. </p>
+    </div>
+    <div class="w-full">
+      <GeneralForm
+        form-type="renter"
+        user-role="renter"
+        action-type="search"
+        @submit="handleOwnerSearch" />
+    </div>
+
+    <!--Se encontro al menos una propiedad-->
+    <div
+      v-if="hasSearched && !showPropertyForm"
+      id="property-selection"
+      class="flex h-[calc(100vh-3rem)] w-full items-center pt-16">
+      <div
+        v-if="properties.length > 0"
+        class="w-full space-y-6">
+        <h4 class="mb-2 text-lg font-bold">¡Genial! Tu arrendador ya está en SPAZIO</h4>
+        <p class="mb-4 text-sm">
+          Hemos encontrado propiedades registradas a nombre de tu arrendador. Elige la que corresponde a tu contrato o
+          acuerdo. <br />
+          ¡Estás cada vez más cerca de gestionar tu arriendo con facilidad!
+        </p>
+
+        <RadioButtonGroup
+          v-model="selectedProperty"
+          name="propertySelection"
+          :class="gridColumns"
+          class="!grid gap-4">
           <div
-            v-if="properties.length > 0"
-            class="w-full space-y-6">
-            <h4 class="mb-2 text-lg font-bold">¡Genial! Tu arrendador ya está en SPAZIO</h4>
-            <p class="mb-4 text-sm">
-              Hemos encontrado propiedades registradas a nombre de tu arrendador. Elige la que corresponde a tu contrato
-              o acuerdo. <br />
-              ¡Estás cada vez más cerca de gestionar tu arriendo con facilidad!
-            </p>
-
-            <RadioButtonGroup
-              v-model="selectedProperty"
-              name="propertySelection"
-              :class="gridColumns"
-              class="!grid gap-4">
-              <div
-                v-for="property in properties"
-                :key="property.id"
-                class="flex cursor-pointer items-center rounded-lg border p-4 shadow-sm transition hover:shadow-md">
-                <RadioButton
-                  :inputId="'property-' + property.id"
-                  :value="property"
-                  class="mr-3" />
-                <label
-                  :for="'property-' + property.id"
-                  class="flex flex-col">
-                  <span class="text-md font-semibold">{{ property.mainStreet }}, {{ property.number }}</span>
-                  <span class="text-xs text-gray-600"
-                    >{{ property.propertyNumber }} - {{ formatPropertyDetails(property) }}</span
-                  >
-                </label>
-              </div>
-            </RadioButtonGroup>
-
-            <div class="flex w-full justify-between">
-              <Button
-                label="No encuentro mi propiedad"
-                variant="outlined"
-                icon="pi pi-times"
-                @click="showNoPropertyDialog = true" />
-              <Button
-                :disabled="!selectedProperty"
-                label="Confirmar propiedad"
-                icon="pi pi-check"
-                icon-pos="right"
-                @click="confirmPropertySelection" />
-            </div>
-            <Dialog
-              v-model:visible="showNoPropertyDialog"
-              :style="{ width: '50rem' }"
-              :breakpoints="{ '768px': '50rem', '0px': '75%' }"
-              modal
-              header="No encuentro mi propiedad en la lista"
-              class="w-96">
-              <p class="mb-4">
-                El propietario ha sido encontrado en el sistema y ya tiene propiedades registradas. Sin embargo, si la
-                propiedad que deseas arrendar no está en la lista, puedes agregar una nueva propiedad a su nombre.
-              </p>
-
-              <template #footer>
-                <Button
-                  label="Buscar nuevamente al propietario"
-                  icon="pi pi-arrow-up"
-                  variant="outlined"
-                  @click="returnToOwnerForm" />
-                <Button
-                  label="Crear nueva propiedad"
-                  icon="pi pi-plus"
-                  icon-pos="right"
-                  @click="createNewPropertyForOwner" />
-              </template>
-            </Dialog>
+            v-for="property in properties"
+            :key="property.id"
+            class="flex cursor-pointer items-center rounded-lg border p-4 shadow-sm transition hover:shadow-md">
+            <RadioButton
+              :inputId="'property-' + property.id"
+              :value="property"
+              class="mr-3" />
+            <label
+              :for="'property-' + property.id"
+              class="flex flex-col">
+              <span class="text-md font-semibold">{{ property.mainStreet }}, {{ property.number }}</span>
+              <span class="text-xs text-gray-600"
+                >{{ property.propertyNumber }} - {{ formatPropertyDetails(property) }}</span
+              >
+            </label>
           </div>
+        </RadioButtonGroup>
+
+        <div class="flex w-full justify-between">
+          <Button
+            label="No encuentro mi propiedad"
+            variant="outlined"
+            icon="pi pi-times"
+            @click="showNoPropertyDialog = true" />
+          <Button
+            :disabled="!selectedProperty"
+            label="Confirmar propiedad"
+            icon="pi pi-check"
+            icon-pos="right"
+            @click="confirmPropertySelection" />
         </div>
-
-        <div
-          v-if="showPropertyForm"
-          id="property-form"
-          class="flex h-[calc(100vh-3rem)] w-full items-center space-x-6 pt-16">
-          <SimplifiedPropertyForm
-            :context-type="propertyContextType"
-            :owner-id="propertyOwnerId" />
-          <Message severity="info">
-            <h3 class="mb-4 text-sm font-semibold">¿Por qué solicitamos esta información?</h3>
-
-            <ul class="ml-4 list-disc space-y-2 text-xs">
-              <li>Esta información será utilizada para generar el contrato de arriendo de manera automática.</li>
-              <li>Facilita el proceso legal y administrativo del arrendamiento.</li>
-              <li>Garantiza que los datos estén completos y correctos para ambas partes.</li>
-            </ul>
-          </Message>
-        </div>
-
         <Dialog
-          v-model:visible="showDialog"
+          v-model:visible="showNoPropertyDialog"
           :style="{ width: '50rem' }"
           :breakpoints="{ '768px': '50rem', '0px': '75%' }"
           modal
-          :header="ownerDialogHeader"
+          header="No encuentro mi propiedad en la lista"
           class="w-96">
           <p class="mb-4">
-            Es posible que haya un error en los datos del propietario o que su información aún no esté registrada en el
-            sistema. ¿Cómo deseas continuar?
+            El propietario ha sido encontrado en el sistema y ya tiene propiedades registradas. Sin embargo, si la
+            propiedad que deseas arrendar no está en la lista, puedes agregar una nueva propiedad a su nombre.
           </p>
 
           <template #footer>
-            <!-- Opción 1: Volver al formulario del propietario -->
             <Button
-              label="buscar nuevamente al propietario"
+              label="Buscar nuevamente al propietario"
               icon="pi pi-arrow-up"
+              variant="outlined"
               @click="returnToOwnerForm" />
-
-            <!-- Opción 2: Continuar con pre-registro -->
             <Button
-              label="registrar propietario y continuar"
-              icon="pi pi-arrow-right"
+              label="Crear nueva propiedad"
+              icon="pi pi-plus"
               icon-pos="right"
-              @click="continueWithPreRegistration" />
+              @click="createNewPropertyForOwner" />
           </template>
         </Dialog>
       </div>
     </div>
+
+    <!--No se encontro ninguna propiedad-->
+    <div
+      v-if="showPropertyForm"
+      id="property-form"
+      class="flex h-[calc(100vh-3rem)] w-full items-center space-x-6">
+      <SimplifiedPropertyForm
+        :context-type="propertyContextType"
+        :owner-id="propertyOwnerId" />
+      <Message severity="info">
+        <h3 class="mb-4 text-sm font-semibold">¿Por qué solicitamos esta información?</h3>
+
+        <ul class="ml-4 list-disc space-y-2 text-xs">
+          <li>Esta información será utilizada para generar el contrato de arriendo de manera automática.</li>
+          <li>Facilita el proceso legal y administrativo del arrendamiento.</li>
+          <li>Garantiza que los datos estén completos y correctos para ambas partes.</li>
+        </ul>
+      </Message>
+    </div>
+    <Dialog
+      v-model:visible="showDialog"
+      :style="{ width: '50rem' }"
+      :breakpoints="{ '768px': '50rem', '0px': '75%' }"
+      modal
+      :header="ownerDialogHeader"
+      class="w-96">
+      <p class="mb-4">
+        Es posible que haya un error en los datos del propietario o que su información aún no esté registrada en el
+        sistema. ¿Cómo deseas continuar?
+      </p>
+
+      <template #footer>
+        <!-- Opción 1: Volver al formulario del propietario -->
+        <Button
+          label="buscar nuevamente al propietario"
+          icon="pi pi-arrow-up"
+          @click="returnToOwnerForm" />
+
+        <!-- Opción 2: Continuar con pre-registro -->
+        <Button
+          label="registrar propietario y continuar"
+          icon="pi pi-arrow-right"
+          icon-pos="right"
+          @click="continueWithPreRegistration" />
+      </template>
+    </Dialog>
   </div>
 </template>
 <script setup lang="ts">
@@ -152,7 +154,7 @@ import { useToast } from 'primevue/usetoast';
 import { PropertyOwnerClient } from '@/api/PropertyOwnerClient.ts';
 import { useI18n } from 'vue-i18n';
 
-const { t: $t } = useI18n();
+const { t } = useI18n();
 const propertyOwnerClient = new PropertyOwnerClient();
 const propertyOwnerService = new PropertyOwnerService(propertyOwnerClient);
 const userClient = new UserClient();
@@ -201,7 +203,7 @@ const handleOwnerSearch = async (formData: any) => {
           toast.add({
             severity: 'warn',
             summary: response.message,
-            detail: $t('renter.renting_with_contract.property_validation.' + data.status.toLowerCase()),
+            detail: t('renter.renting_with_contract.property_validation.' + data.status.toLowerCase()),
             life: 3000,
           });
           break;
@@ -209,7 +211,7 @@ const handleOwnerSearch = async (formData: any) => {
           toast.add({
             severity: 'warn',
             summary: response.message,
-            detail: $t('renter.renting_with_contract.property_validation.' + data.status.toLowerCase()),
+            detail: t('renter.renting_with_contract.property_validation.' + data.status.toLowerCase()),
             life: 3000,
           });
           proceedToPropertySelection(data.properties);
@@ -218,7 +220,7 @@ const handleOwnerSearch = async (formData: any) => {
           toast.add({
             severity: 'info',
             summary: response.message,
-            detail: $t('renter.renting_with_contract.property_validation.' + data.status.toLowerCase()),
+            detail: t('renter.renting_with_contract.property_validation.' + data.status.toLowerCase()),
             life: 3000,
           });
           proceedToPropertySelection(data.properties);
