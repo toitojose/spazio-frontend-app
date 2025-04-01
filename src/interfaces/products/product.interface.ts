@@ -5,27 +5,6 @@ export interface ProductResult {
   data?: Product[];
 }
 
-export interface ProductResultFindByID {
-  result: boolean;
-  message: string;
-  error?: { statusCode: number; key: string } | null;
-  data?: Product[];
-}
-
-export interface ProductCreateResult {
-  result: boolean;
-  message: string;
-  error?: { statusCode: number; key: string } | null;
-  data?: Product[];
-}
-
-export interface ProductUpdateResult {
-  result: boolean;
-  message: string;
-  error?: { statusCode: number; key: string } | null;
-  data?: Product[];
-}
-
 export interface ImageURL {
   id: number;
   url: string;

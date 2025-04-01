@@ -1,11 +1,4 @@
-import type {
-  ProductCreateResult,
-  ProductResult,
-  ProductResultFindByID,
-  ProductSend,
-  ProductSendUpdate,
-  ProductUpdateResult,
-} from '@/interfaces/products/product.interface';
+import type { ProductResult, ProductSend, ProductSendUpdate } from '@/interfaces/products/product.interface';
 import type { AxiosInstance } from 'axios';
 
 export class ProductService {
@@ -46,9 +39,9 @@ export class ProductService {
     }
   }
 
-  async productsById(id: number): Promise<ProductResultFindByID> {
+  async productsById(id: number): Promise<ProductResult> {
     try {
-      const response = await this.authBackendClient.get<ProductResultFindByID>(`http://localhost:7000/products/${id}`);
+      const response = await this.authBackendClient.get<ProductResult>(`http://localhost:7000/products/${id}`);
       return response.data;
     } catch (error: unknown) {
       if (error instanceof Error && 'response' in error) {
@@ -77,12 +70,9 @@ export class ProductService {
     }
   }
 
-  async create(data: ProductSend): Promise<ProductCreateResult> {
+  async create(data: ProductSend): Promise<ProductResult> {
     try {
-      const response = await this.authBackendClient.post<ProductCreateResult>(
-        'http://localhost:7000/admin/product',
-        data,
-      );
+      const response = await this.authBackendClient.post<ProductResult>('http://localhost:7000/admin/product', data);
       return response.data;
     } catch (error: unknown) {
       console.error('Error al crear producto:', error);
@@ -95,12 +85,9 @@ export class ProductService {
     }
   }
 
-  async update(data: ProductSendUpdate): Promise<ProductUpdateResult> {
+  async update(data: ProductSendUpdate): Promise<ProductResult> {
     try {
-      const response = await this.authBackendClient.put<ProductUpdateResult>(
-        `http://localhost:7000/admin/product`,
-        data,
-      );
+      const response = await this.authBackendClient.put<ProductResult>(`http://localhost:7000/admin/product`, data);
       return response.data;
     } catch (error: unknown) {
       console.error('Error al actualizar producto:', error);
