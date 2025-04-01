@@ -45,7 +45,15 @@
       responsiveLayout="scroll"
       size="small">
       <template #header>
-        <div class="flex justify-between">
+        <div class="flex justify-between gap-10">
+          <Dropdown
+            v-model="selectedTipo"
+            :options="tipos"
+            optionLabel="label"
+            optionValue="value"
+            placeholder="Filtrar por tipo"
+            @change="filterByTipo" />
+
           <InputGroup>
             <InputText
               v-model="filters['global'].value"
@@ -127,10 +135,10 @@ import {
   useToast,
   Dialog as PDialog,
   Breadcrumb,
+  Dropdown,
 } from 'primevue';
 import DataTable from 'primevue/datatable';
 import Column from 'primevue/column';
-
 
 const router = useRouter();
 const route = useRoute();
@@ -146,6 +154,25 @@ const catalogId = ref(route.params.id);
 const filters = ref({
   global: { value: '', matchMode: FilterMatchMode.CONTAINS },
 });
+
+const selectedTipo = ref(null);
+const tipos = [
+  { label: 'Todos', value: null },
+  { label: 'Físico', value: 'fisico' },
+  { label: 'Digital', value: 'digital' },
+  { label: 'Servicio', value: 'servicio' },
+];
+
+const filterByTipo = () => {
+  if (selectedTipo.value) {
+    filters.value['tipo'] = {
+      value: selectedTipo.value,
+      matchMode: FilterMatchMode.EQUALS,
+    };
+  } else {
+    delete filters.value['tipo']; // limpia si selecciona "Todos"
+  }
+};
 
 onMounted(() => {
   loadProducts();
@@ -211,7 +238,7 @@ const onSave = (data: string) => {
     router.push('/admin/catalogs');
     submitted.value = false;
   }, 1000);
-/*
+  /*
 
   if (validateForm()) {
     try {
@@ -251,8 +278,8 @@ const formatCurrency = (value: number) => {
 };
 
 const getRatio = (product: Product) => {
-  if (!product.purchasePrice || !product.salePrice) return '0.00';
-  const ratio = ((product.salePrice - product.purchasePrice) / product.purchasePrice) * 100;
+  if (!product.purchase_price || !product.sale_price) return '0.00';
+  const ratio = ((product.sale_price - product.purchase_price) / product.purchase_price) * 100;
   return ratio.toFixed(2);
 };
 </script>

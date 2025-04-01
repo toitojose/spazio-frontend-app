@@ -79,20 +79,20 @@
       </Column>
 
       <Column
-        field="precioCompra"
+        field="purchase_price"
         header="P/Compra"
         sortable>
         <template #body="{ data }">
-          {{ formatCurrency(data.purchasePrice) }}
+          {{ formatCurrency(data.purchase_price) }}
         </template>
       </Column>
 
       <Column
-        field="precioVenta"
+        field="sale_price"
         header="P/Venta"
         sortable>
         <template #body="{ data }">
-          {{ formatCurrency(data.salePrice) }}
+          {{ formatCurrency(data.sale_price) }}
         </template>
       </Column>
 
@@ -163,6 +163,7 @@ const loadProducts = async () => {
   try {
     const response = await productService.products();
     products.value = response.data ?? [];
+    console.log('Products loaded: *********', products.value);
   } catch (error) {
     console.error('Error loading products:', error);
   }
@@ -182,8 +183,8 @@ const formatCurrency = (value: number) => {
 };
 
 const getRatio = (product: Product) => {
-  if (!product.purchasePrice || !product.salePrice) return '0.00';
-  const ratio = ((product.salePrice - product.purchasePrice) / product.purchasePrice) * 100;
+  if (!product.purchase_price || !product.sale_price) return '0.00';
+  const ratio = ((product.sale_price - product.purchase_price) / product.purchase_price) * 100;
   return ratio.toFixed(2);
 };
 
