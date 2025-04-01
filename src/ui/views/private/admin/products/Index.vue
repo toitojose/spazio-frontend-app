@@ -137,7 +137,7 @@
 <script setup lang="ts">
 import { ref, onMounted } from 'vue';
 import { FilterMatchMode } from '@primevue/core/api';
-import { ProductService } from '@/services/product-service.js';
+import { ProductService } from '@/services/product-service.ts';
 import { Button as PButton, InputText, InputGroup, InputGroupAddon, useToast, Dialog as PDialog } from 'primevue';
 import DataTable from 'primevue/datatable';
 import Column from 'primevue/column';

@@ -136,7 +136,7 @@ const toast = useToast();
 
 // Variables para el PDialog
 const showDeleteDialog = ref(false);
-const productIdToDelete = ref<string | null>(null);
+const catalogIdToDelete = ref<string | null>(null);
 
 const filters = ref({
   global: { value: '', matchMode: FilterMatchMode.CONTAINS },
@@ -169,18 +169,18 @@ const onEdit = (id: number) => {
 };
 
 const onDelete = (id: string) => {
-  productIdToDelete.value = id; // Almacena el ID del producto a eliminar
+  catalogIdToDelete.value = id; // Almacena el ID del producto a eliminar
   showDeleteDialog.value = true; // Muestra el diálogo
   return;
 };
 
 const onInsertProducts = (id: string) => {
-  router.push(`/admin/catalogs/edit/${id}`);
+  router.push(`/admin/catalogs/edit/products/${id}`);
   return;
 };
 
 const confirmDelete = () => {
-  if (productIdToDelete.value) {
+  if (catalogIdToDelete.value) {
     toast.add({
       severity: 'success',
       summary: 'Éxito',
@@ -189,7 +189,7 @@ const confirmDelete = () => {
     });
     loadCatalogs(); // Recarga la lista de productos
     showDeleteDialog.value = false; // Cierra el diálogo
-    productIdToDelete.value = null; // Limpia el ID
+    catalogIdToDelete.value = null; // Limpia el ID
     /*catalogservice
         .delete(productIdToDelete.value)
         .then(() => {

@@ -134,10 +134,10 @@ const toast = useToast();
 const submitted = ref(false);
 const catalogService = new CatalogService(backendClient);
 const route = useRoute();
-const productId = ref(route.params.id);
+const catalogId = ref(route.params.id);
 
 onMounted(() => {
-  loadProduct();
+  loadCatalog();
 });
 
 const formData = reactive({
@@ -147,9 +147,9 @@ const formData = reactive({
   category: '',
 });
 
-const loadProduct = async () => {
+const loadCatalog = async () => {
   try {
-    const response = await catalogService.catalogsById(Number(productId.value));
+    const response = await catalogService.catalogsById(Number(catalogId.value));
     const catalogResponse: Catalog | undefined = response.data;
     formData.name = catalogResponse?.name ? catalogResponse.name : '';
     formData.description = catalogResponse?.description ? catalogResponse.description : '';
@@ -192,7 +192,7 @@ const validateForm = () => {
 
 const prepareCatalog = (): CatalogSendUpdate => {
   const result: CatalogSendUpdate = {
-    id: Number(productId.value),
+    id: Number(catalogId.value),
     name: formData.name,
     description: formData.description,
     isPublic: formData.isPublic,
