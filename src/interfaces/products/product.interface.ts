@@ -9,21 +9,21 @@ export interface ProductResultFindByID {
   result: boolean;
   message: string;
   error?: { statusCode: number; key: string } | null;
-  data?: Product;
+  data?: Product[];
 }
 
 export interface ProductCreateResult {
   result: boolean;
   message: string;
   error?: { statusCode: number; key: string } | null;
-  data?: string;
+  data?: Product[];
 }
 
 export interface ProductUpdateResult {
   result: boolean;
   message: string;
   error?: { statusCode: number; key: string } | null;
-  data?: string;
+  data?: Product[];
 }
 
 export interface ImageURL {
@@ -33,40 +33,35 @@ export interface ImageURL {
 
 export interface ProductSend {
   name: string;
-  imageURL?: ImageURL[];
-  resume: string;
   description: string;
   purchasePrice: number;
   salePrice: number;
-  type: string;
-  status: boolean;
+  stock: number;
+  productType: number;
 }
 
 export interface ProductSendUpdate {
   id: number;
-  name: string;
-  imageURL?: ImageURL[];
-  resume: string;
+  name: number;
   description: string;
   purchasePrice: number;
   salePrice: number;
-  type: string;
-  status: boolean;
+  stock: number;
+  productType: number;
+  status: string;
+  deletedAt: string;
 }
 
 export interface Product {
   id: number;
   name: string;
-  imageURL?: ImageURL[];
-  resume: string;
   description: string;
-  purchasePrice: number;
-  salePrice: number;
-  type: string;
-  status: boolean;
-  orders: number;
+  purchase_price: number;
+  sale_price: number;
+  stock: number;
   ratio: number;
-  createdAt: string;
-  updatedAt: string;
-  deletedAt?: string | null;
+  status: string;
+  created_at: string;
+  updated_at: string;
+  deleted_at?: string | null;
 }
