@@ -1,4 +1,9 @@
-import type { ProductResult, ProductSend, ProductSendUpdate } from '@/interfaces/products/product.interface';
+import type {
+  ProductResult,
+  ProductSend,
+  ProductDeleteResult,
+  ProductSendUpdate,
+} from '@/interfaces/products/product.interface';
 import type { AxiosInstance } from 'axios';
 
 export class ProductService {
@@ -96,6 +101,28 @@ export class ProductService {
         message: 'Error al actualizar el producto',
         error: { statusCode: 500, key: 'INTERNAL_SERVER_ERROR' },
         data: undefined,
+      };
+    }
+  }
+
+  async delete(productId: number): Promise<ProductDeleteResult> {
+    try {
+      const response = await this.authBackendClient.delete<{ message: string }>(
+        `http://localhost:7000/admin/product/${productId}`,
+      );
+
+      return {
+        result: true,
+        message: response.data.message, // Tomamos el mensaje del backend
+        error: null,
+      };
+    } catch (error: unknown) {
+      console.error('Error al eliminar producto:', error);
+
+      return {
+        result: false,
+        message: 'Error al eliminar el producto',
+        error: { statusCode: 500, key: 'INTERNAL_SERVER_ERROR' },
       };
     }
   }
