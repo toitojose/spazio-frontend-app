@@ -87,6 +87,14 @@
         <!-- Temporal -->
       </Column>
 
+      <Column
+        field="products"
+        header="Productos"
+        sortable>
+        <template #body="{ data }">Productos</template>
+        <!-- Temporal -->
+      </Column>
+
       <Column header="Opciones">
         <template #body="{ data }">
           <PButton
@@ -100,7 +108,7 @@
           <PButton
             icon="pi pi-box"
             class="p-button-text p-button-sm text-red-500"
-            @click="() => onDelete(data.id)" />
+            @click="() => onInsertProducts(data.id)" />
         </template>
       </Column>
     </DataTable>
@@ -121,8 +129,8 @@ import type { Catalog } from '@/interfaces/catalogs/catalogs.interface';
 import { backendClient } from '@/api/backend-client';
 
 const catalogService = new CatalogService(backendClient);
-const catalog: Catalog[] | undefined = [];
-const catalogs = ref(catalog);
+const catalogos: Catalog[] | undefined = [];
+const catalogs = ref(catalogos);
 const router = useRouter();
 const toast = useToast();
 
@@ -134,12 +142,12 @@ const filters = ref({
   global: { value: '', matchMode: FilterMatchMode.CONTAINS },
 });
 
-const loadProducts = async () => {
+const loadCatalogs = async () => {
   try {
-    const response = await catalogService.products();
+    const response = await catalogService.catalogs();
     catalogs.value = response.data ?? [];
   } catch (error) {
-    console.error('Error loading products:', error);
+    console.error('Error loading catalogs:', error);
   }
 };
 
@@ -148,7 +156,7 @@ const onCreate = () => {
 };
 
 onMounted(() => {
-  loadProducts();
+  loadCatalogs();
 });
 
 const formatCurrency = (value: number) => {
@@ -166,6 +174,11 @@ const onDelete = (id: string) => {
   return;
 };
 
+const onInsertProducts = (id: string) => {
+  router.push(`/admin/catalogs/edit/${id}`);
+  return;
+};
+
 const confirmDelete = () => {
   if (productIdToDelete.value) {
     toast.add({
@@ -174,10 +187,10 @@ const confirmDelete = () => {
       detail: 'Producto eliminado correctamente',
       life: 3000,
     });
-    loadProducts(); // Recarga la lista de productos
+    loadCatalogs(); // Recarga la lista de productos
     showDeleteDialog.value = false; // Cierra el diálogo
     productIdToDelete.value = null; // Limpia el ID
-    /*productService
+    /*catalogservice
         .delete(productIdToDelete.value)
         .then(() => {
           toast.add({
@@ -186,7 +199,7 @@ const confirmDelete = () => {
             detail: 'Producto eliminado correctamente',
             life: 3000,
           });
-          loadProducts(); // Recarga la lista de productos
+          loadcatalogs(); // Recarga la lista de productos
         })
         .catch(() => {
           toast.add({
