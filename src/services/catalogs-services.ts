@@ -1,28 +1,11 @@
 import type {
-  Catalog,
-  CatalogCreateResult,
+  CatalogDeleteResult,
   CatalogResult,
   CatalogSend,
-  CatalogResultFindByID,
   CatalogSendUpdate,
-  CatalogUpdateResult,
 } from '@/interfaces/catalogs/catalogs.interface';
 
 import type { AxiosInstance } from 'axios';
-
-let resultadoCreate: CatalogCreateResult = {
-  result: true,
-  message: 'Exito',
-  error: undefined,
-  data: '',
-};
-
-let resultadoUpdate: CatalogUpdateResult = {
-  result: true,
-  message: 'Exito',
-  error: undefined,
-  data: '',
-};
 
 const catalogEjemplo: CatalogResult = {
   result: true,
@@ -90,46 +73,116 @@ export class CatalogService {
   }
 
   async catalogs(): Promise<CatalogResult> {
-    return catalogEjemplo;
-  }
-  async catalogsById(id: number): Promise<CatalogResultFindByID> {
-    const data: Catalog[] | undefined = catalogEjemplo.data;
-    let result: CatalogResultFindByID = {
-      result: false,
-      message: 'Ninguno',
-      error: { statusCode: 400, key: 'No se encontro' },
-      data: undefined,
-    };
-    if (data) {
-      for (let dato of data) {
-        if (dato.id == id) {
-          result = {
-            result: true,
-            message: 'Ninguno',
-            error: null,
-            data: dato,
-          };
-        }
+    try {
+      const response = await this.authBackendClient.get<CatalogResult>(`http://localhost:7000/admin/catalog`);
+      return response.data;
+    } catch (error: unknown) {
+      if (error instanceof Error && 'response' in error) {
+        const axiosError = error as any; // Cast a 'any' o un tipo más específico si usas Axios
+        return {
+          result: false,
+          message: 'Error al obtener el producto',
+          error: {
+            statusCode: axiosError.response?.status || 500,
+            key: axiosError.response?.statusText || 'INTERNAL_SERVER_ERROR',
+          },
+          data: undefined,
+        };
       }
+
+      // Manejo genérico para otros tipos de errores
+      return {
+        result: false,
+        message: 'Error desconocido',
+        error: {
+          statusCode: 500,
+          key: 'UNKNOWN_ERROR',
+        },
+        data: undefined,
+      };
     }
-    return result;
   }
 
-  async update(data: CatalogSendUpdate): Promise<CatalogUpdateResult> {
-    /*const response = await this.authBackendClient.post<ProductResult>('/v1.0/products/data.id', {
-      data,
-    });
-    return response.data;*/
-    resultadoUpdate.data = data.name;
-    return resultadoUpdate;
+  async catalogsById(id: number): Promise<CatalogResult> {
+    try {
+      const response = await this.authBackendClient.get<CatalogResult>(`http://localhost:7000/products/${id}`);
+      return response.data;
+    } catch (error: unknown) {
+      if (error instanceof Error && 'response' in error) {
+        const axiosError = error as any; // Cast a 'any' o un tipo más específico si usas Axios
+        return {
+          result: false,
+          message: 'Error al obtener el producto',
+          error: {
+            statusCode: axiosError.response?.status || 500,
+            key: axiosError.response?.statusText || 'INTERNAL_SERVER_ERROR',
+          },
+          data: undefined,
+        };
+      }
+
+      // Manejo genérico para otros tipos de errores
+      return {
+        result: false,
+        message: 'Error desconocido',
+        error: {
+          statusCode: 500,
+          key: 'UNKNOWN_ERROR',
+        },
+        data: undefined,
+      };
+    }
   }
 
-  async create(data: CatalogSend): Promise<CatalogCreateResult> {
-    /*const response = await this.authBackendClient.post<ProductResult>('/v1.0/products', {
-      data,
-    });
-    return response.data;*/
-    resultadoCreate.data = data.name;
-    return resultadoCreate;
+  async update(data: CatalogSendUpdate): Promise<CatalogResult> {
+    try {
+      const response = await this.authBackendClient.put<CatalogResult>(`http://localhost:7000/admin/product`, data);
+      return response.data;
+    } catch (error: unknown) {
+      console.error('Error al actualizar producto:', error);
+      return {
+        result: false,
+        message: 'Error al actualizar el producto',
+        error: { statusCode: 500, key: 'INTERNAL_SERVER_ERROR' },
+        data: undefined,
+      };
+    }
+  }
+
+  async create(data: CatalogSend): Promise<CatalogResult> {
+    try {
+      const response = await this.authBackendClient.post<CatalogResult>('http://localhost:7000/admin/product', data);
+      return response.data;
+    } catch (error: unknown) {
+      console.error('Error al crear producto:', error);
+      return {
+        result: false,
+        message: 'Error al crear el producto',
+        error: { statusCode: 500, key: 'INTERNAL_SERVER_ERROR' },
+        data: undefined,
+      };
+    }
+  }
+
+  async delete(catalogId: number): Promise<CatalogDeleteResult> {
+    try {
+      const response = await this.authBackendClient.delete<{ message: string }>(
+        `http://localhost:7000/admin/catalog/${catalogId}`,
+      );
+
+      return {
+        result: true,
+        message: response.data.message, // Tomamos el mensaje del backend
+        error: null,
+      };
+    } catch (error: unknown) {
+      console.error('Error al eliminar producto:', error);
+
+      return {
+        result: false,
+        message: 'Error al eliminar el producto',
+        error: { statusCode: 500, key: 'INTERNAL_SERVER_ERROR' },
+      };
+    }
   }
 }

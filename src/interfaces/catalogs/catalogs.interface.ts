@@ -5,11 +5,10 @@ export interface CatalogResult {
   data?: Catalog[];
 }
 
-export interface CatalogResultFindByID {
+export interface CatalogDeleteResult {
   result: boolean;
   message: string;
   error?: { statusCode: number; key: string } | null;
-  data?: Catalog;
 }
 
 export interface Catalog {
@@ -36,18 +35,4 @@ export interface CatalogSendUpdate {
   description: string;
   isPublic: boolean;
   category: string;
-}
-
-export interface CatalogCreateResult {
-  result: boolean;
-  message: string;
-  error?: { statusCode: number; key: string } | null;
-  data?: string;
-}
-
-export interface CatalogUpdateResult {
-  result: boolean;
-  message: string;
-  error?: { statusCode: number; key: string } | null;
-  data?: string;
 }
