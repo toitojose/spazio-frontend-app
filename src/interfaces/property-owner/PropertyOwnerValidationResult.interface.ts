@@ -6,7 +6,8 @@ export interface PropertyOwnerValidationResult {
   message: string;
   error: any;
   data?: {
-    status: UserValidationStatus;
+    status: UserValidationStatus | null;
+    ownerId: number | null;
     properties: PropertyData[];
   } | null;
   statusCode?: number;

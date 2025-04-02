@@ -1,34 +1,39 @@
+import type { PropertySubtype, PropertyType, Zone } from '@/interfaces/real-estate/basic.interface.ts';
+
+export interface PropertyAddress {
+  id: number;
+  mainStreet: string;
+  propertyNumber?: string;
+  secondaryStreet?: string;
+  postalCode?: string;
+  zone: Zone;
+  zoneId: number;
+  cityId: number;
+}
+
 export interface PropertyData {
   id: number;
-  country: string;
-  city: string;
+  ownerId: number;
   mainStreet: string;
-  number: string;
-  secondaryStreet?: string;
-  neighborhood?: string;
   propertyTypeId: number;
-  propertyArea?: number;
+  propertySubtypeId?: number;
   bedrooms?: number;
   bathrooms?: number;
+  halfBathrooms?: number;
   parkingSpaces?: number;
+  constructedArea?: number;
+  propertyArea?: number;
+  condoFee?: number;
   propertyNumber: string;
   additionalInfo?: any;
-}
-export interface CreatePropertyDto {
-  ownerId: number;
-  city: string;
-  neighborhood: string;
-  mainStreet: string;
-  numeration: string;
-  secondaryStreet?: string;
-  type: 'department' | 'house' | 'warehouse' | 'parking' | 'land';
-  buildingName?: string;
-  apartmentNumber?: string;
-  tower?: string;
-  lotSize?: string;
-  garageSpaces?: string;
-  warehouseNumber?: string;
-  parkingNumber?: string;
+  createdAt: string;
+  updatedAt: string;
+  deletedAt?: string | null;
+
+  // Relaciones
+  propertyType: PropertyType;
+  subtype?: PropertySubtype;
+  address: PropertyAddress;
 }
 
 export interface PropertyCreationResult {
@@ -36,17 +41,24 @@ export interface PropertyCreationResult {
   message: string | string[];
   error: { statusCode: number; key: string } | null;
   data?: {
-    id: number;
-    ownerId: number;
-    city: string;
-    neighborhood: string;
-    mainStreet: string;
-    numeration: string;
-    secondaryStreet?: string;
-    type: string;
-    createdAt: string;
-    updatedAt: string;
-    // Se pueden incluir los campos adicionales guardados según el tipo
-    [key: string]: any;
+    status: string;
   };
+}
+
+export interface CreateSimplifiedPropertyDto {
+  ownerId: number;
+  zoneId: number | null;
+  mainStreet: string;
+  propertyNumber?: string;
+  secondaryStreet?: string;
+  propertyTypeId: number | null;
+  propertySubtypeId?: number | null;
+  bedrooms?: number | null;
+  bathrooms?: number | null;
+  halfBathrooms?: number | null;
+  parkingSpaces?: number | null;
+  constructedArea?: number;
+  propertyArea?: number;
+  monthlyRent: number | null;
+  currency?: string; // Default: USD
 }

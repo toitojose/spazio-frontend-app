@@ -1,26 +1,17 @@
-import type { AxiosInstance } from 'axios';
-import type { RenterStatusEnum } from '@/enums/RenterStatusEnum.ts';
 import { useUserStore } from '@/store/user.ts';
-interface UpdateRenterStatusResult {
-  result: boolean;
-  message: string;
-  error: { statusCode: number; key: string } | null;
-  data?: {
-    renterStatus: RenterStatusEnum;
-  };
-}
+import type { RenterStatusEnum } from '@/enums/renter-status.enum.ts';
+import type { RenterClient } from '@/api/RenterClient.ts';
+import type { UpdateRenterStatusResult } from '@/interfaces/renter/Renter.interface.ts';
 
 export class RenterStatusService {
-  private backendClient: AxiosInstance;
-  version = '/v1.0';
+  private backendClient: RenterClient;
 
-  constructor(backendClient: AxiosInstance) {
+  constructor(backendClient: RenterClient) {
     this.backendClient = backendClient;
   }
 
   /**
    * Actualiza el estado del inquilino dado el estado (body) y el id del inquilino
-   * @param renterId
    * @param status
    */
   async updateRenterStatus(status: RenterStatusEnum): Promise<UpdateRenterStatusResult> {
@@ -30,17 +21,6 @@ export class RenterStatusService {
     if (!token) throw new Error('Token de autenticación no disponible.');
     if (!userId) throw new Error('ID de usuario no disponible.');
 
-    const response = await this.backendClient.put<UpdateRenterStatusResult>(
-      `${this.version}/renter-status/${userId}`,
-      {
-        status,
-      },
-      {
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-      },
-    );
-    return response.data;
+    return this.backendClient.updateRenterStatus(userId, token, status);
   }
 }

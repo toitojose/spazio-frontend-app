@@ -14,31 +14,42 @@ export class PropertyOwnerService {
     const userStore = useUserStore();
     const token = userStore.token;
     if (!token) throw new Error('Token de autenticación no disponible.');
-    const response = await this.propertyOwnerClient.validatePropertyOwner(data, token);
+    try {
+      const response = await this.propertyOwnerClient.validatePropertyOwner(data, token);
 
-    if (!response.success) {
-      throw {
+      if (!response.success) {
+        return {
+          success: false,
+          message: response.message,
+          error: response.error,
+          data: null,
+          statusCode: response.statusCode ?? 500,
+        };
+      }
+
+      return {
+        success: true,
+        message: response.message,
+        error: null,
+        data: {
+          status: response.data?.status ?? null,
+          ownerId: response.data?.ownerId ?? null,
+          properties: response.data?.properties ?? [],
+        },
+        statusCode: response.statusCode ?? 200,
+      };
+    } catch (error: any) {
+      console.error('Error al validar propietario:', error);
+
+      return {
         success: false,
-        message: 'Error al validar el propietario',
+        message: error?.message || 'Ocurrió un error inesperado al validar el propietario.',
         error: {
-          key: response.error?.data?.error?.key || 'UNKNOWN_ERROR',
+          key: error?.response?.data?.error?.error || 'UNKNOWN_ERROR',
         },
         data: null,
-        statusCode: response.error?.status || 500,
+        statusCode: error?.response?.status || 500,
       };
     }
-    return {
-      success: response.success,
-      message: response.message,
-      error: response.error ?? null,
-      data:
-        response.success && response.data
-          ? {
-              status: response.data.status,
-              properties: response.data.properties ?? [],
-            }
-          : null,
-      statusCode: response.statusCode ?? 500,
-    };
   }
 }
