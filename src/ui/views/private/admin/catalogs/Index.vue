@@ -72,7 +72,7 @@
         filterPlaceholder="Buscar por descripción" />
 
       <Column
-        field="access"
+        field="is_public"
         header="Acceso"
         sortable>
         <template #body="{ data }">Acceso</template>
@@ -80,7 +80,7 @@
       </Column>
 
       <Column
-        field="category"
+        field="category_level"
         header="Categoría"
         sortable>
         <template #body="{ data }">Categoría</template>
@@ -88,11 +88,9 @@
       </Column>
 
       <Column
-        field="products"
         header="Productos"
         sortable>
-        <template #body="{ data }">Productos</template>
-        <!-- Temporal -->
+        <template #body="{ data }">0</template>
       </Column>
 
       <Column header="Opciones">
@@ -125,12 +123,11 @@ import Column from 'primevue/column';
 import Toast from 'primevue/toast';
 import { useRouter } from 'vue-router';
 import { CatalogService } from '@/services/catalogs-services';
-import type { Catalog } from '@/interfaces/catalogs/catalogs.interface';
+import type { Catalog, CatalogResult } from '@/interfaces/catalogs/catalogs.interface';
 import { backendClient } from '@/api/backend-client';
 
 const catalogService = new CatalogService(backendClient);
-const catalogos: Catalog[] | undefined = [];
-const catalogs = ref(catalogos);
+const catalogs = ref<Catalog[]>([]);
 const router = useRouter();
 const toast = useToast();
 
@@ -145,7 +142,8 @@ const filters = ref({
 const loadCatalogs = async () => {
   try {
     const response = await catalogService.catalogs();
-    catalogs.value = response.data ?? [];
+    catalogs.value = response ?? [];
+    console.log('Catalogos cargados:', response);
   } catch (error) {
     console.error('Error loading catalogs:', error);
   }

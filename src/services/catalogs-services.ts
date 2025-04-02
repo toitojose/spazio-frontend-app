@@ -7,64 +7,6 @@ import type {
 
 import type { AxiosInstance } from 'axios';
 
-const catalogEjemplo: CatalogResult = {
-  result: true,
-  message: 'Nada importante',
-  error: undefined,
-  data: [
-    {
-      id: 1,
-      name: 'Introducción a TypeScript',
-      description: 'Curso básico sobre TypeScript, incluyendo tipado y clases.',
-      isPublic: true,
-      category: 'Nivel 1',
-      createdAt: '',
-      updatedAt: '',
-      deletedAt: undefined,
-    },
-    {
-      id: 2,
-      name: 'Recetas Saludables',
-      description: 'Colección de recetas saludables para el día a día.',
-      isPublic: true,
-      category: 'Nivel 1',
-      createdAt: '',
-      updatedAt: '',
-      deletedAt: undefined,
-    },
-    {
-      id: 3,
-      name: 'Guía de Diseño UX/UI',
-      description: 'Principios fundamentales para diseñar interfaces efectivas.',
-      isPublic: false,
-      category: 'Nivel 1',
-      createdAt: '',
-      updatedAt: '',
-      deletedAt: undefined,
-    },
-    {
-      id: 4,
-      name: 'Historia del Arte',
-      description: 'Resumen de los movimientos artísticos más importantes.',
-      isPublic: true,
-      category: 'Nivel 1',
-      createdAt: '',
-      updatedAt: '',
-      deletedAt: undefined,
-    },
-    {
-      id: 5,
-      name: 'Guía de Seguridad en Aplicaciones Web',
-      description: 'Buenas prácticas para proteger aplicaciones contra vulnerabilidades.',
-      isPublic: false,
-      category: 'Nivel 1',
-      createdAt: '',
-      updatedAt: '',
-      deletedAt: undefined,
-    },
-  ],
-};
-
 export class CatalogService {
   private authBackendClient: AxiosInstance;
 
@@ -75,6 +17,7 @@ export class CatalogService {
   async catalogs(): Promise<CatalogResult> {
     try {
       const response = await this.authBackendClient.get<CatalogResult>(`http://localhost:7000/admin/catalog`);
+      console.log('Catalogs response *******:', response); // Log para verificar la respuesta
       return response.data;
     } catch (error: unknown) {
       if (error instanceof Error && 'response' in error) {

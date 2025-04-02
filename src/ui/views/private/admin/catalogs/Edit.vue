@@ -171,7 +171,7 @@ const home = ref({
   icon: 'pi pi-home',
   route: '/admin',
 });
-const items = ref([{ label: 'Catálogos', route: '/admin/catalogs' }, { label: 'Crear' }]);
+const items = ref([{ label: 'Catálogos', route: '/admin/catalogs' }, { label: 'Editar' }]);
 
 watch(
   () => formData.name,
