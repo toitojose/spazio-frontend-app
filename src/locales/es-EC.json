@@ -511,6 +511,9 @@
     "title": "Home - Administración",
     "products": {
       "title": "Productos"
+    },
+    "catalogs": {
+      "title": "Catálogos"
     }
   },
   "backoffice": {

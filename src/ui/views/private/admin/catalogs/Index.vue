@@ -1,11 +1,12 @@
 <template>
+  <Toast />
   <PDialog
     v-model:visible="showDeleteDialog"
     :modal="true"
     :closable="true"
     header="Confirmación de Eliminación"
     class="w-11/12 sm:w-5/12">
-    <p>¿Estás seguro de eliminar este producto?</p>
+    <p>¿Estás seguro de eliminar este catálogo?</p>
     <div class="mt-4 flex justify-end gap-2">
       <PButton
         label="No"
@@ -19,9 +20,9 @@
   </PDialog>
   <!-- Header con título y botón -->
   <div class="mb-4 flex items-center justify-between">
-    <h2 class="text-2xl font-semibold">Productos</h2>
+    <h2 class="text-2xl font-semibold">Catálogos</h2>
     <PButton
-      label="Agregar producto"
+      label="Agregar catálogo"
       icon="pi pi-plus"
       class="p-button-primary"
       @click="onCreate" />
@@ -32,7 +33,7 @@
       <InputGroup>
         <InputText
           v-model="filters['global'].value"
-          placeholder="Buscar productos..." />
+          placeholder="Buscar catálogo..." />
         <InputGroupAddon>
           <Button
             class="pi pi-search"
@@ -44,7 +45,7 @@
     <!-- Tabla -->
     <DataTable
       v-model:filters="filters"
-      :value="products"
+      :value="catalogs"
       :stripedRows="true"
       :paginator="true"
       :rows="10"
@@ -65,56 +66,33 @@
 
       <Column
         field="description"
-        header="Resumen"
+        header="Descripción"
         sortable
         filter
-        filterPlaceholder="Buscar por resumen" />
+        filterPlaceholder="Buscar por descripción" />
 
       <Column
-        field="tipo"
-        header="Tipo"
+        field="access"
+        header="Acceso"
         sortable>
-        <template #body="{ data }">General</template>
+        <template #body="{ data }">Acceso</template>
         <!-- Temporal -->
       </Column>
 
       <Column
-        field="purchase_price"
-        header="P/Compra"
+        field="category"
+        header="Categoría"
         sortable>
-        <template #body="{ data }">
-          {{ formatCurrency(data.purchase_price) }}
-        </template>
+        <template #body="{ data }">Categoría</template>
+        <!-- Temporal -->
       </Column>
 
       <Column
-        field="sale_price"
-        header="P/Venta"
+        field="products"
+        header="Productos"
         sortable>
-        <template #body="{ data }">
-          {{ formatCurrency(data.sale_price) }}
-        </template>
-      </Column>
-
-      <Column
-        header="Ratio"
-        sortable>
-        <template #body="{ data }"> {{ getRatio(data) }}% </template>
-      </Column>
-
-      <Column
-        header="Pedidos"
-        sortable>
-        <template #body="{ data }"> 0 </template>
-      </Column>
-
-      <Column
-        header="Estado"
-        sortable>
-        <template #body="{ data }">
-          <i class="pi pi-circle-fill text-green-500"></i>
-          <!-- Simulamos todos como activos -->
-        </template>
+        <template #body="{ data }">Productos</template>
+        <!-- Temporal -->
       </Column>
 
       <Column header="Opciones">
@@ -127,112 +105,114 @@
             icon="pi pi-trash"
             class="p-button-text p-button-sm text-red-500"
             @click="() => onDelete(data.id)" />
+          <PButton
+            icon="pi pi-box"
+            class="p-button-text p-button-sm text-red-500"
+            @click="() => onInsertProducts(data.id)" />
         </template>
       </Column>
     </DataTable>
-    <div class="mt-4 flex justify-end text-lg font-semibold"> Existen {{ products.length }} productos. </div>
+    <div class="mt-4 flex justify-end text-lg font-semibold"> Existen {{ catalogs.length }} catálogos. </div>
   </div>
 </template>
 
 <script setup lang="ts">
 import { ref, onMounted } from 'vue';
 import { FilterMatchMode } from '@primevue/core/api';
-import { ProductService } from '@/services/product-service.ts';
 import { Button as PButton, InputText, InputGroup, InputGroupAddon, useToast, Dialog as PDialog } from 'primevue';
 import DataTable from 'primevue/datatable';
 import Column from 'primevue/column';
-import type { Product } from '@/interfaces/products/product.interface';
+import Toast from 'primevue/toast';
 import { useRouter } from 'vue-router';
+import { CatalogService } from '@/services/catalogs-services';
+import type { Catalog } from '@/interfaces/catalogs/catalogs.interface';
 import { backendClient } from '@/api/backend-client';
 
-const productService = new ProductService(backendClient);
-const productos: Product[] | undefined = [];
-const products = ref(productos);
+const catalogService = new CatalogService(backendClient);
+const catalogos: Catalog[] | undefined = [];
+const catalogs = ref(catalogos);
 const router = useRouter();
 const toast = useToast();
 
 // Variables para el PDialog
 const showDeleteDialog = ref(false);
-const productIdToDelete = ref<string | null>(null);
+const catalogIdToDelete = ref<string | null>(null);
 
 const filters = ref({
   global: { value: '', matchMode: FilterMatchMode.CONTAINS },
 });
 
-const loadProducts = async () => {
+const loadCatalogs = async () => {
   try {
-    const response = await productService.products();
-    products.value = response.data ?? [];
-    console.log('Products loaded: *********', products.value);
+    const response = await catalogService.catalogs();
+    catalogs.value = response.data ?? [];
   } catch (error) {
-    console.error('Error loading products:', error);
+    console.error('Error loading catalogs:', error);
   }
 };
 
 const onCreate = () => {
-  router.push('products/create');
-  console.log('Create new ebook');
+  router.push('catalogs/create');
 };
 
 onMounted(() => {
-  loadProducts();
+  loadCatalogs();
 });
 
 const formatCurrency = (value: number) => {
   return value.toLocaleString('en-US', { style: 'currency', currency: 'USD' });
 };
 
-const getRatio = (product: Product) => {
-  if (!product.purchase_price || !product.sale_price) return '0.00';
-  const ratio = ((product.sale_price - product.purchase_price) / product.purchase_price) * 100;
-  return ratio.toFixed(2);
-};
-
-const onEdit = (id: Product) => {
-  router.push(`/admin/products/edit/${id}`);
+const onEdit = (id: number) => {
+  router.push(`/admin/catalogs/edit/${id}`);
   return;
 };
 
 const onDelete = (id: string) => {
-  productIdToDelete.value = id; // Almacena el ID del producto a eliminar
+  catalogIdToDelete.value = id; // Almacena el ID del producto a eliminar
   showDeleteDialog.value = true; // Muestra el diálogo
   return;
 };
 
+const onInsertProducts = (id: string) => {
+  router.push(`/admin/catalogs/edit/products/${id}`);
+  return;
+};
+
 const confirmDelete = () => {
-  if (productIdToDelete.value) {
+  if (catalogIdToDelete.value) {
     toast.add({
       severity: 'success',
       summary: 'Éxito',
       detail: 'Producto eliminado correctamente',
       life: 3000,
     });
-    loadProducts(); // Recarga la lista de productos
+    loadCatalogs(); // Recarga la lista de productos
     showDeleteDialog.value = false; // Cierra el diálogo
-    productIdToDelete.value = null; // Limpia el ID
-    /*productService
-      .delete(productIdToDelete.value)
-      .then(() => {
-        toast.add({
-          severity: 'success',
-          summary: 'Éxito',
-          detail: 'Producto eliminado correctamente',
-          life: 3000,
-        });
-        loadProducts(); // Recarga la lista de productos
-      })
-      .catch(() => {
-        toast.add({
-          severity: 'error',
-          summary: 'Error',
-          detail: 'No se pudo eliminar el producto',
-          life: 3000,
-        });
-      })
-      .finally(() => {
-        showDeleteDialog.value = false; // Cierra el diálogo
-        productIdToDelete.value = null; // Limpia el ID
-      });*/
+    catalogIdToDelete.value = null; // Limpia el ID
+    /*catalogservice
+        .delete(productIdToDelete.value)
+        .then(() => {
+          toast.add({
+            severity: 'success',
+            summary: 'Éxito',
+            detail: 'Producto eliminado correctamente',
+            life: 3000,
+          });
+          loadcatalogs(); // Recarga la lista de productos
+        })
+        .catch(() => {
+          toast.add({
+            severity: 'error',
+            summary: 'Error',
+            detail: 'No se pudo eliminar el producto',
+            life: 3000,
+          });
+        })
+        .finally(() => {
+          showDeleteDialog.value = false; // Cierra el diálogo
+          productIdToDelete.value = null; // Limpia el ID
+        });*/
   }
 };
 </script>

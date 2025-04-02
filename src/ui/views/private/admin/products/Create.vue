@@ -143,7 +143,7 @@
               </FloatLabel>
               <small
                 v-if="submitted && !formData.type"
-                class="p-error"
+                class="p-error text-red-500"
                 >El tipo es requerido</small
               >
             </div>
@@ -162,7 +162,6 @@
 
           <!-- 🔵 Columna 2: Subida de imágenes -->
           <div class="flex flex-col items-center">
-            <Toast />
             <FileUpload
               :multiple="true"
               accept="image/*"
@@ -203,29 +202,28 @@ import {
   InputNumber,
   Dropdown,
   Checkbox,
-  Toast,
   FileUpload,
   Breadcrumb,
 } from 'primevue';
 import Editor from 'primevue/editor';
 import { reactive, ref } from 'vue';
 import { useToast } from 'primevue/usetoast';
-import { CreateProductService } from '@/services/product-service';
 import { useRouter } from 'vue-router';
 import type { ImageURL, ProductSend } from '@/interfaces/products/product.interface';
 import { backendClient } from '@/api/backend-client';
+import { ProductService } from '@/services/product-service';
 
 //Constantes de Breadcrumb
 const home = ref({
   icon: 'pi pi-home',
   route: '/admin',
 });
-const items = ref([{ label: 'Lista', route: '/admin/products' }, { label: 'Create' }]);
+const items = ref([{ label: 'Productos', route: '/admin/products' }, { label: 'Crear' }]);
 
 const router = useRouter();
 const toast = useToast();
 const submitted = ref(false);
-const createService = new CreateProductService(backendClient);
+const createService = new ProductService(backendClient);
 
 const formData = reactive({
   name: '',
@@ -274,7 +272,7 @@ const prepareImage = (): ImageURL[] => {
 const prepareProduct = (): ProductSend => {
   const result: ProductSend = {
     name: formData.name,
-    resume: formData.description,
+    resume: formData.resume,
     description: formData.description,
     purchasePrice: formData.purchasePrice,
     salePrice: formData.salePrice,
@@ -313,9 +311,11 @@ const onSubmit = async () => {
 
   if (validateForm()) {
     try {
-      console.log(formData.imageURL);
-      console.log(prepareProduct());
       const response = await createService.create(prepareProduct());
+      /* Agrgar verificacion del success
+      if(response.success){
+
+      }*/
       console.log(response);
       toast.add({
         severity: 'success',

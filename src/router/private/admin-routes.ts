@@ -27,6 +27,17 @@ export default [
           icon: 'pi pi-box',
         },
       },
+      {
+        path: 'catalogs',
+        name: 'Admin-catalogs',
+        component: () => import('@/ui/views/private/admin/catalogs/Index.vue'),
+        meta: {
+          metaTitle: 'login.metaTitle',
+          metaDescription: 'login.metaDescription',
+          title: 'admin.catalogs.title',
+          icon: 'pi pi-book',
+        },
+      },
     ],
   },
 ];
