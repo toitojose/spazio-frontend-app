@@ -1,6 +1,6 @@
 import { backendClient } from '@/api/backend-client.ts';
-import type { GeneralFormData, UserCreationResult } from '@/interfaces/User.interface.ts';
 import type { UserValidationResult } from '@/interfaces/UserValidationResult.interface.ts';
+import type { GeneralFormData, UserCreationResult } from '@/interfaces/User.interface.ts';
 
 export class UserClient {
   async createUserWithRole(body: GeneralFormData, token: string): Promise<UserCreationResult> {

@@ -1,9 +1,13 @@
 <template>
-  <ProcessLayout :current-step="currentStep">
+  <ProcessLayout
+    :current-step="currentStep"
+    :show-navigation-buttons="navButtons"
+    @prevStep="handlePreviousStep"
+    @nextStep="handleNextStep">
     <div class="space-y-6">
       <div class="space-y-4">
         <!-- Título -->
-        <h2 class="mb-2 text-center text-2xl font-semibold"> Completa tu información personal </h2>
+        <h2 class="mb-2 text-center text-2xl font-semibold"> Valida tu información personal </h2>
 
         <!-- Bienvenida -->
         <p class="text-center text-gray-600">
@@ -40,6 +44,7 @@ import { Message } from 'primevue';
 import { ref, watch } from 'vue';
 import { useRenterProgressStore } from '@/store/renterProgressStore.ts';
 import GeneralForm from '@/components/GeneralForm.vue';
+import router from '@/router';
 const currentStep = 3;
 const user = ref({
   photoSrc: null,
@@ -52,6 +57,8 @@ const user = ref({
   landline: '',
   email: '',
 });
+const navButtons = ref(true);
+const nextRoute = ref<string | null>(null);
 
 const renterProgressStore = useRenterProgressStore();
 const updateCompletedStep = () => {
@@ -66,6 +73,20 @@ watch(() => [user.value.firstName, user.value.firstLastName], updateCompletedSte
 
 const onFormSubmit = (data: any): void => {
   console.log('Formulario enviado:', data);
+};
+const handlePreviousStep = () => {
+  router.push('/renter/select-scenario');
+};
+const handleNextStep = () => {
+  if (!nextRoute.value) {
+    alert('Ruta de siguiente paso no definida.');
+    return;
+  }
+  // TODO: necesito obtener de pinia que escenario selecciono,
+  //  si selecciono 'ya esta arrendando' entonces deberiamos pasar directo al step de conexion con el propietario 'renter/connect-owner'
+  //  si selecciono 'estoy buscando' entonces deberiamos pasar al step de informacion laboral 'renter/employment-information'
+
+  router.push(nextRoute.value);
 };
 </script>
 

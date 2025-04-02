@@ -1,10 +1,15 @@
 <template>
   <div class="flex flex-col space-y-12">
-    <div class="space-y-2">
+    <div
+      v-if="!showSuccessMessage"
+      class="space-y-2">
       <h4 class="mb-2 text-lg font-bold">Estoy arrendando o tengo un pre-acuerdo</h4>
       <p class="mb-4 text-sm"> Verifica si tu arrendador está registrado en SPAZIO y continúa con el proceso. </p>
     </div>
-    <div class="w-full">
+
+    <div
+      v-if="showOwnerSearchForm"
+      class="w-full">
       <GeneralForm
         form-type="renter"
         user-role="renter"
@@ -35,18 +40,30 @@
           <div
             v-for="property in properties"
             :key="property.id"
-            class="flex cursor-pointer items-center rounded-lg border p-4 shadow-sm transition hover:shadow-md">
+            class="flex cursor-pointer items-start rounded-lg border p-4 shadow-sm transition hover:shadow-md">
             <RadioButton
               :inputId="'property-' + property.id"
               :value="property"
-              class="mr-3" />
+              class="mr-4 mt-1" />
+
             <label
               :for="'property-' + property.id"
               class="flex flex-col">
-              <span class="text-md font-semibold">{{ property.mainStreet }}, {{ property.number }}</span>
-              <span class="text-xs text-gray-600"
-                >{{ property.propertyNumber }} - {{ formatPropertyDetails(property) }}</span
-              >
+              <span class="text-md font-semibold">
+                {{ property.address.mainStreet
+                }}{{ property.address.propertyNumber ? ', ' + property.address.propertyNumber : '' }}
+              </span>
+
+              <span class="text-sm text-gray-500">
+                {{ property.propertyType.name }}
+                <template v-if="property.subtype"> - {{ property.subtype.name }}</template>
+                &nbsp;|&nbsp;
+                {{ property.bedrooms || 0 }} hab
+                <template v-if="property.bathrooms">, {{ property.bathrooms }} baños</template>
+                <template v-if="property.halfBathrooms">, {{ property.halfBathrooms }} medios</template>
+              </span>
+
+              <span class="mt-1 text-xs text-gray-400"> Zona: {{ property.address.zone.name }} </span>
             </label>
           </div>
         </RadioButtonGroup>
@@ -99,7 +116,8 @@
       class="flex h-[calc(100vh-3rem)] w-full items-center space-x-6">
       <SimplifiedPropertyForm
         :context-type="propertyContextType"
-        :owner-id="propertyOwnerId" />
+        :owner-id="propertyOwnerId"
+        @propertyRegistered="handleReadyToProceed" />
       <Message severity="info">
         <h3 class="mb-4 text-sm font-semibold">¿Por qué solicitamos esta información?</h3>
 
@@ -110,6 +128,14 @@
         </ul>
       </Message>
     </div>
+
+    <Message
+      v-if="showSuccessMessage"
+      severity="success">
+      <h2 class="mb-4 font-semibold">¡Propiedad aplicada con éxito!</h2>
+      <p>Puedes continuar con el proceso de arriendo.</p>
+    </Message>
+
     <Dialog
       v-model:visible="showDialog"
       :style="{ width: '50rem' }"
@@ -153,12 +179,18 @@ import { UserService } from '@/services/user-service.ts';
 import { useToast } from 'primevue/usetoast';
 import { PropertyOwnerClient } from '@/api/PropertyOwnerClient.ts';
 import { useI18n } from 'vue-i18n';
+import { LeasingApplicationClient } from '@/api/LeasingApplicationClient.ts';
+import { LeaseApplicationService } from '@/services/lease-application-service.ts';
 
 const { t } = useI18n();
 const propertyOwnerClient = new PropertyOwnerClient();
 const propertyOwnerService = new PropertyOwnerService(propertyOwnerClient);
+const leasingApplicationClient = new LeasingApplicationClient();
+const leasingApplicationService = new LeaseApplicationService(leasingApplicationClient);
 const userClient = new UserClient();
 const userService = new UserService(userClient);
+const showOwnerSearchForm = ref(true);
+const showSuccessMessage = ref(false);
 const propertyOwnerIsRegistered = ref(false);
 let propertyOwnerData = ref<GeneralFormData | null>(null);
 const propertyOwnerId = ref<number | null>(null);
@@ -169,6 +201,9 @@ const hasSearched = ref(false);
 const showDialog = ref(false);
 const showNoPropertyDialog = ref(false);
 const ownerDialogHeader = ref('No encuentro al propietario');
+const emit = defineEmits<{
+  (e: 'readyToProceed', value: boolean): void;
+}>();
 const toast = useToast();
 
 const showPropertyForm = ref(false);
@@ -196,6 +231,7 @@ const handleOwnerSearch = async (formData: any) => {
 
     if (response.success && response.data) {
       const data = response.data;
+      propertyOwnerId.value = data.ownerId;
       switch (data.status) {
         case 'PROPERTY_OWNER_NOT_FOUND':
           showDialog.value = true;
@@ -252,7 +288,6 @@ const handleOwnerSearch = async (formData: any) => {
   propertyOwnerIsRegistered.value = false;
 };
 
-// Simulación de datos recibidos después de buscar al propietario
 const proceedToPropertySelection = (receivedProperties: PropertyData[]) => {
   properties.value = receivedProperties;
   hasSearched.value = true;
@@ -279,13 +314,49 @@ const proceedToPropertySelection = (receivedProperties: PropertyData[]) => {
     });
   }
 };
-const formatPropertyDetails = (property: PropertyData) => {
-  return `${property.bedrooms ?? 0} hab. | ${property.bathrooms ?? 0} baños | ${property.propertyArea ?? 0} m²`;
-};
 
-// Confirmar la propiedad seleccionada
-const confirmPropertySelection = () => {
-  console.log('🏡 Propiedad seleccionada:', selectedProperty.value);
+const confirmPropertySelection = async () => {
+  if (!selectedProperty.value || !propertyOwnerId.value) {
+    toast.add({
+      severity: 'warn',
+      summary: 'Datos incompletos',
+      detail: 'Falta seleccionar una propiedad o el propietario no está definido.',
+      life: 3000,
+    });
+    return;
+  }
+
+  try {
+    const result = await leasingApplicationService.createLeaseApplication(
+      propertyOwnerId.value,
+      selectedProperty.value.id,
+    );
+
+    if (result.success) {
+      toast.add({
+        severity: 'success',
+        summary: 'Solicitud enviada',
+        detail: result.message,
+        life: 3000,
+      });
+
+      handleReadyToProceed();
+    } else {
+      toast.add({
+        severity: 'error',
+        summary: 'Error al aplicar',
+        detail: result.message || 'Intenta más tarde.',
+        life: 4000,
+      });
+    }
+  } catch (err: any) {
+    toast.add({
+      severity: 'error',
+      summary: 'Error inesperado',
+      detail: err.message || 'Ocurrió un error al enviar la solicitud.',
+      life: 4000,
+    });
+  }
 };
 
 const gridColumns = computed(() => {
@@ -315,6 +386,7 @@ const continueWithPreRegistration = async () => {
       alert('No hay datos de propietario para registrar');
       return;
     }
+    showPropertyForm;
     if (propertyOwnerData.value) {
       const response = await userService.registerUser(propertyOwnerData.value);
 
@@ -340,6 +412,15 @@ const continueWithPreRegistration = async () => {
 const createNewPropertyForOwner = () => {
   showNoPropertyDialog.value = false;
   showPropertyForm.value = true;
+};
+
+const handleReadyToProceed = () => {
+  showPropertyForm.value = false;
+  hasSearched.value = false;
+  showOwnerSearchForm.value = false;
+  showSuccessMessage.value = true;
+
+  emit('readyToProceed', true);
 };
 </script>
 <style scoped></style>

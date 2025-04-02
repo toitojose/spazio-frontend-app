@@ -1,7 +1,7 @@
 <template>
   <ProcessLayout
     :current-step="currentStep"
-    :show-navigation-buttons="false"
+    :show-navigation-buttons="navButtons"
     @prevStep="handlePreviousStep"
     @nextStep="handleNextStep">
     <div class="space-y-6">
@@ -41,33 +41,11 @@
       v-if="selectedScenario && selectedScenario.name"
       id="scenario-content"
       class="mt-6">
-      <RentingWithContract v-if="selectedScenario?.name === RenterStatusEnum.RENTING_WITH_CONTRACT" />
+      <RentingWithContract
+        v-if="selectedScenario?.name === RenterStatusEnum.RENTING_WITH_CONTRACT"
+        @readyToProceed="handleReadyToProceed" />
 
-      <div v-else-if="selectedScenario?.name === RenterStatusEnum.AGREEMENT_PENDING_CONTRACT">
-        <h4 class="mb-2 text-lg font-bold">Tengo un acuerdo</h4>
-        <p class="mb-4 text-sm"> Registra los datos del propietario para formalizar el proceso de arrendamiento. </p>
-        <form>
-          <!-- Formulario ejemplo -->
-          <div class="mb-4">
-            <label class="block text-sm font-medium">Nombre del propietario</label>
-            <input
-              type="text"
-              class="w-full rounded border p-2"
-              placeholder="Ingrese el nombre del propietario" />
-          </div>
-          <div class="mb-4">
-            <label class="block text-sm font-medium">Teléfono del propietario</label>
-            <input
-              type="tel"
-              class="w-full rounded border p-2"
-              placeholder="Ingrese el teléfono" />
-          </div>
-        </form>
-      </div>
-
-      <div
-        v-else-if="selectedScenario?.name === RenterStatusEnum.EXPLORING_OPTIONS"
-        class="r">
+      <div v-else-if="selectedScenario?.name === RenterStatusEnum.EXPLORING_OPTIONS">
         <h2 class="text-2xl font-semibold text-primary">Tu nuevo hogar está más cerca de lo que crees.</h2>
         <p class="mt-2 text-gray-700">
           Antes de comenzar a explorar opciones, necesitamos algunos datos sobre ti para encontrar la mejor oferta.
@@ -88,9 +66,11 @@ import ProcessLayout from '@/layout/renter/ProcessLayout.vue';
 import router from '@/router';
 import { useRenterProgressStore } from '@/store/renterProgressStore.ts';
 import { RenterStatusService } from '@/services/renter-status-service.ts';
-import { backendClient } from '@/api/backend-client.ts';
 import { RenterStatusEnum } from '@/enums/renter-status.enum';
 import RentingWithContract from '@/components/renterScenarios/RentingWithContract.vue';
+import type { UpdateRenterStatusResult } from '@/interfaces/renter/Renter.interface.ts';
+import { useToast } from 'primevue/usetoast';
+import { RenterClient } from '@/api/RenterClient.ts';
 
 interface Scenario {
   icon: string;
@@ -99,10 +79,12 @@ interface Scenario {
   name: string;
   onSelected: string;
 }
-
-const renterStatusService = new RenterStatusService(backendClient);
+const renterClient = new RenterClient();
+const renterStatusService = new RenterStatusService(renterClient);
 const currentStep = 1;
 const selectedScenario = ref<Scenario | null>(null);
+const navButtons = ref(false);
+const nextRoute = ref<string | null>(null);
 const scenarios = [
   {
     icon: 'pi pi-home',
@@ -120,6 +102,7 @@ const scenarios = [
   },
 ];
 const renterProgressStore = useRenterProgressStore();
+const toast = useToast();
 
 onMounted(() => {
   // Obtener el último estado del usuario y preseleccionarlo sin escribir en Pinia
@@ -129,30 +112,18 @@ onMounted(() => {
     selectedScenario.value = scenarios.find((s) => s.name === storedScenario) || null;
   }
 });
-
-const validateFieldsBeforeNextStep = () => {
-  // Marcar el paso como completado si los campos son válidos
-  renterProgressStore.markStepCompleted(currentStep, true);
-  return false;
-};
-
 const handleNextStep = () => {
-  if (!validateFieldsBeforeNextStep()) {
-    alert('Por favor completa todos los campos requeridos antes de continuar.');
-    return;
-  }
-  if (!renterProgressStore.isStepCompleted(currentStep)) {
-    alert('Por favor selecciona una opción');
+  if (!nextRoute.value) {
+    alert('Ruta de siguiente paso no definida.');
     return;
   }
 
-  router.push('/renter/identity-verification');
+  router.push(nextRoute.value);
 };
 
 const handlePreviousStep = () => {
   router.push('/renter/want-to-rent');
 };
-
 const handleScenarioSelection = async (scenario: Scenario) => {
   if (!scenario) return;
   if (renterProgressStore.selectedScenario === scenario.name) return;
@@ -162,10 +133,34 @@ const handleScenarioSelection = async (scenario: Scenario) => {
     if (response.success && response.data) {
       renterProgressStore.setScenario(scenario.name, scenario.onSelected);
       renterProgressStore.updateStepSummary(currentStep, scenario.name);
+
+      if (scenario.name === RenterStatusEnum.EXPLORING_OPTIONS) {
+        renterProgressStore.markStepCompleted(currentStep, true);
+        nextRoute.value = '/renter/identity-verification';
+        navButtons.value = true;
+      } else {
+        navButtons.value = false;
+      }
     }
-  } catch (error) {
-    alert('No se pudo actualizar tu estado en este momento. Por favor, intenta más tarde.');
+  } catch (error: any) {
+    const result: UpdateRenterStatusResult = error.response?.data || {
+      success: false,
+      message: 'Error desconocido',
+      error: error.message,
+    };
+
+    toast.add({
+      severity: 'error',
+      summary: result.message,
+      detail: result.error,
+      life: 3000,
+    });
   }
+};
+const handleReadyToProceed = () => {
+  renterProgressStore.markStepCompleted(currentStep, true);
+  nextRoute.value = '/renter/general-information';
+  navButtons.value = true;
 };
 </script>
 <style>

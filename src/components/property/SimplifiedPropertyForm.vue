@@ -40,6 +40,7 @@
             placeholder="Seleccione una zona"
             option-label="label"
             option-value="value"
+            filter
             class="w-full" />
         </div>
       </div>
@@ -70,7 +71,7 @@
           <div class="w-full">
             <InputText
               id="number"
-              v-model="form.number"
+              v-model="form.propertyNumber"
               size="small"
               placeholder="Ingrese el número"
               class="w-full" />
@@ -170,6 +171,21 @@
         </div>
         <div class="flex items-start gap-4">
           <label
+            for="halfBathrooms"
+            class="mt-2 w-2/5 text-right text-xs font-medium">
+            Medios Baños
+          </label>
+          <div class="w-full">
+            <InputText
+              id="halfBathrooms"
+              v-model="form.halfBathrooms"
+              size="small"
+              placeholder="Ej. 1"
+              class="w-full" />
+          </div>
+        </div>
+        <div class="flex items-start gap-4">
+          <label
             for="parkingSpaces"
             class="mt-2 w-2/5 text-right text-xs font-medium">
             Parqueaderos
@@ -203,7 +219,7 @@
       </div>
 
       <!-- Botón de envío -->
-      <div class="flex justify-end">
+      <div class="flo Bodega-Galpex justify-end">
         <Button
           type="submit"
           label="Guardar"
@@ -216,45 +232,58 @@
 </template>
 
 <script setup lang="ts">
-import { computed, ref } from 'vue';
+import { computed, nextTick, onMounted, ref } from 'vue';
 import { InputText, Select, Button } from 'primevue';
 import { Form } from '@primevue/forms';
 import { useToast } from 'primevue/usetoast';
 import { z } from 'zod';
 import { zodResolver } from '@primevue/forms/resolvers/zod';
+import { PropertiesClient } from '@/api/PropertiesClient.ts';
+import { PropertyService } from '@/services/property-service.ts';
+import type { PropertySubtype, PropertyType, Zone } from '@/interfaces/real-estate/basic.interface.ts';
+import type { CreateSimplifiedPropertyDto } from '@/interfaces/real-estate/property-data.interface.ts';
 
 const props = defineProps<{ contextType: 'NEW_OWNER' | 'NEW_PROPERTY'; ownerId: number | null }>();
 const emit = defineEmits(['propertyRegistered']);
 const toast = useToast();
-/*const propertyOwnerClient = new PropertyOwnerClient();
-const propertyOwnerService = new PropertyOwnerService(propertyOwnerClient);*/
+// Para el formulario (dropdowns)
+const propertyTypes = ref<{ label: string; value: number }[]>([]);
+const zones = ref<{ label: string; value: number }[]>([]);
 
-const realEstateClient = new RealEstateClient();
-/* -----------------------------------------------------
- * Data inicial (estática por ahora)
- * --------------------------------------------------- */
+// Para lógica interna (subtipos y filtros dinámicos)
+const allPropertyTypes = ref<PropertyType[]>([]);
+const allPropertySubtypes = ref<PropertySubtype[]>([]);
+const allZones = ref<Zone[]>([]);
+const propertyService = new PropertyService(new PropertiesClient());
+async function initForm() {
+  try {
+    const data = await propertyService.getInitialPropertyData();
 
-// Zonas (simuladas por ahora)
-const zones = ref([
-  { label: 'Cumbayá', value: 1 },
-  { label: 'La Floresta', value: 2 },
-  { label: 'Quitumbe', value: 3 },
-]);
+    // Guardar data completa
+    allPropertyTypes.value = data.types;
+    allPropertySubtypes.value = data.subtypes;
+    allZones.value = data.zones;
 
-// Tipos y subtipos de inmuebles (simulados)
-const propertyTypes = ref([
-  { label: 'Casa', value: 1 },
-  { label: 'Departamento', value: 2 },
-  { label: 'Parqueadero', value: 3 },
-  { label: 'Bodega', value: 4 },
-]);
+    // Preparar para los selects
+    propertyTypes.value = data.types.map((t) => ({ label: t.name, value: t.id }));
+    zones.value = data.zones.map((z) => ({ label: z.name, value: z.id }));
+  } catch (err: any) {
+    toast.add({
+      severity: 'error',
+      summary: 'Error al cargar datos',
+      detail: err?.message || 'No se pudo obtener información inicial del servidor.',
+      life: 5000,
+    });
 
-const propertySubtypes = ref([
-  { label: 'Casa independiente', value: 101, typeId: 1 },
-  { label: 'Casa en conjunto', value: 102, typeId: 1 },
-  { label: 'Departamento dúplex', value: 201, typeId: 2 },
-  { label: 'Suite', value: 202, typeId: 2 },
-]);
+    console.error('❌ Error al obtener datos iniciales:', err?.error || err);
+  }
+}
+
+onMounted(() => {
+  nextTick(() => {
+    initForm();
+  });
+});
 
 /* -----------------------------------------------------
  * Modelo del formulario
@@ -262,12 +291,13 @@ const propertySubtypes = ref([
 const form = ref({
   zoneId: null,
   mainStreet: '',
-  number: '',
+  propertyNumber: '',
   secondaryStreet: '',
   propertyTypeId: null,
   propertySubtypeId: null,
   bedrooms: '',
   bathrooms: '',
+  halfBathrooms: '',
   parkingSpaces: '',
   monthlyRent: '',
 });
@@ -284,6 +314,7 @@ const schema = z.object({
   propertySubtypeId: z.number().optional(),
   bedrooms: z.string().optional(),
   bathrooms: z.string().optional(),
+  halfBathrooms: z.string().optional(),
   parkingSpaces: z.string().optional(),
   monthlyRent: z.string().min(1, 'El valor de arriendo es obligatorio'),
 });
@@ -294,7 +325,9 @@ const resolver = zodResolver(schema);
  * Subtipos filtrados por tipo
  * --------------------------------------------------- */
 const filteredSubtypes = computed(() => {
-  return propertySubtypes.value.filter((s) => s.typeId === form.value.propertyTypeId);
+  return allPropertySubtypes.value
+    .filter((subtype) => subtype.propertyTypeId === form.value.propertyTypeId)
+    .map((subtype) => ({ label: subtype.name, value: subtype.id }));
 });
 
 /* -----------------------------------------------------
@@ -302,18 +335,35 @@ const filteredSubtypes = computed(() => {
  * --------------------------------------------------- */
 async function onFormSubmit() {
   try {
-    console.log('Datos del formulario:', form.value);
+    const payload: CreateSimplifiedPropertyDto = {
+      zoneId: form.value.zoneId,
+      mainStreet: form.value.mainStreet,
+      propertyNumber: form.value.propertyNumber,
+      secondaryStreet: form.value.secondaryStreet,
+      propertyTypeId: form.value.propertyTypeId,
+      propertySubtypeId: form.value.propertySubtypeId ?? null,
+      bedrooms: form.value.bedrooms ? Number(form.value.bedrooms) : null,
+      bathrooms: form.value.bathrooms ? Number(form.value.bathrooms) : null,
+      halfBathrooms: form.value.halfBathrooms ? Number(form.value.halfBathrooms) : null,
+      parkingSpaces: form.value.parkingSpaces ? Number(form.value.parkingSpaces) : null,
+      monthlyRent: form.value.monthlyRent ? Number(form.value.monthlyRent) : null,
+      ownerId: props.ownerId!,
+    };
 
-    // Aquí se construirá el payload final para enviar al backend
+    const result = await propertyService.createPropertyFromRenter(payload);
 
-    toast.add({
-      severity: 'success',
-      summary: 'Propiedad registrada',
-      detail: 'Se ha enviado la información básica.',
-      life: 3000,
-    });
+    if (result.success && result.data) {
+      toast.add({
+        severity: 'success',
+        summary: 'Propiedad registrada',
+        detail: result.message,
+        life: 3000,
+      });
 
-    emit('propertyRegistered', form.value);
+      emit('propertyRegistered', result.data);
+    } else {
+      throw result.error || { message: result.message || 'Error inesperado.' };
+    }
   } catch (error: any) {
     toast.add({
       severity: 'error',
