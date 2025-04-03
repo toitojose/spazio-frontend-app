@@ -114,7 +114,7 @@ import { errorHandlerService } from '@/services/error-handler-service.ts';
 import { useUserStore } from '@/store/user.ts';
 import type { AxiosError } from 'axios';
 import type { User } from '@/interfaces/user.interface.ts';
-import { useRouter } from 'vue-router'
+import { useRouter } from 'vue-router';
 
 const emit = defineEmits<{
   (e: 'authSuccess', data: { user: User; token: string }): void;
@@ -137,7 +137,7 @@ const handleLogin = async () => {
   try {
     const sanitizedEmail = sanitizeMail(email.value);
     const response = await loginService.login(sanitizedEmail, password.value);
-    console.log(response)
+    console.log(response);
     if (response.data) {
       const { user, token } = response.data;
       // Guardar usuario en Pinia
@@ -192,7 +192,7 @@ const isAdmin = (result: any) => {
     }
   }
   router.push('/');
-  return
+  return;
 };
 
 const cominSoon = () => {

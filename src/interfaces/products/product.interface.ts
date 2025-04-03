@@ -50,3 +50,12 @@ export interface Product {
   updated_at: string;
   deleted_at?: string | null;
 }
+
+export interface ProductCart {
+  id: number;
+  name: string;
+  description: string;
+  stock: number;
+  price: number;
+  quantity: number;
+}

@@ -12,7 +12,7 @@
           </p>
         </header>
         <main>
-          <AuthForms :formType="authFormType"/>
+          <AuthForms :formType="authFormType" />
         </main>
         <footer class="mt-6 text-center text-sm text-gray-500">
           <small>&copy; {{ year }} SPAZIO. All rights reserved.</small>
@@ -27,7 +27,7 @@ import { ref } from 'vue';
 import { useI18n } from 'vue-i18n';
 import AuthForms from '@/ui/views/public/auth/AuthForms.vue';
 import { useUserStore } from '@/store/user.ts';
-import { useRouter } from 'vue-router'
+import { useRouter } from 'vue-router';
 
 const userStore = useUserStore();
 const router = useRouter();
@@ -43,10 +43,10 @@ defineProps({
   },
 });
 
-if(userStore.isAuthenticated){
-  if(userStore.isAdmin()){
+if (userStore.isAuthenticated) {
+  if (userStore.isAdmin()) {
     router.push('/admin');
-  }else{
+  } else {
     router.push('/');
   }
 }
