@@ -8,6 +8,7 @@ import AgentRoutes from '@/router/private/agent-routes.ts';
 import PropertyOwnerRoutes from '@/router/private/property-owner-routes.ts';
 import AdminRoutes from '@/router/private/admin-routes';
 import AdminRoutesOptions from '@/router/private/admin-routes-option';
+import CartRoutes from '@/router/private/cart-routes.ts';
 import { useUserStore } from '@/store/user';
 
 // Consolidar rutas
@@ -16,6 +17,7 @@ const routes = [
   ...PublicRoutes,
   ...BackofficeRoutes,
   ...RenterRoutes,
+  ...CartRoutes,
   ...AgentRoutes,
   ...PropertyOwnerRoutes,
   ...AdminRoutes,

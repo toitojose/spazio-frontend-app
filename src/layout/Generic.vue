@@ -67,9 +67,11 @@ import { useUserStore } from '@/store/user.ts';
 import { createRoleRouteMap, getMenuItemsByRoles } from '@/router/private/menu-items.ts';
 import { useI18n } from 'vue-i18n';
 import type { RolesEnum } from '@/enums/roles.enum.ts';
+import { useRouter } from 'vue-router';
 
 const logo = ref('sp-spazio-iso');
 const { t } = useI18n();
+const router = useRouter();
 
 const updateClass = () => {
   if (window.innerWidth >= 1024) {
@@ -121,7 +123,7 @@ const userStore = useUserStore();
 const isAuthenticated = computed(() => userStore.isAuthenticated);
 const getSecondaryItems = (): PublicMenuItemInterface[] => {
   const items: PublicMenuItemInterface[] = [
-    { label: 'Carrito', icon: 'pi pi-shopping-cart', command: () => alert('Carrito de canje') },
+    { label: 'Carrito', icon: 'pi pi-shopping-cart', command: () => router.push('/cart/cart-first-step') },
     { label: 'Tus productos', icon: 'pi pi-heart', command: () => alert('Tus productos') },
     { label: 'Categorias', icon: 'pi pi-list', command: () => alert('Categorias') },
   ];
