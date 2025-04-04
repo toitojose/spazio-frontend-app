@@ -1,37 +1,33 @@
 <template>
-  <div class="space-y-4 p-6">
-    <h1 class="text-center text-3xl font-bold">Carrito de compras</h1>
+  <CartProcessLayout :current-step="0">
+    <div class="grid grid-cols-1 gap-4 md:grid-cols-3">
+      <div class="mb-6 md:col-span-2">
+        <h2 class="text-lg font-medium">Productos seleccionados.</h2>
+        <DataTable
+          :value="cartItems"
+          class="mt-2"
+          responsiveLayout="scroll">
+          <Column header="Imagen">
+            <template #body="{ data }">
+              <img
+                :src="data.image"
+                alt="Imagen producto"
+                width="50" />
+            </template>
+          </Column>
+          <Column
+            field="name"
+            header="Nombre" />
+          <Column
+            field="description"
+            header="Descripción" />
+          <Column
+            field="quantity"
+            header="Cantidad" />
+        </DataTable>
+      </div>
 
-    <!-- Productos seleccionados -->
-    <div>
-      <h2 class="text-lg font-medium">Productos seleccionados.</h2>
-      <DataTable
-        :value="cartItems"
-        class="mt-2"
-        responsiveLayout="scroll">
-        <Column header="Imagen">
-          <template #body="{ data }">
-            <img
-              :src="data.image"
-              alt="Imagen producto"
-              width="50" />
-          </template>
-        </Column>
-        <Column
-          field="name"
-          header="Nombre" />
-        <Column
-          field="description"
-          header="Descripción" />
-        <Column
-          field="quantity"
-          header="Cantidad" />
-      </DataTable>
-    </div>
-
-    <div class="grid grid-cols-1 items-start gap-4 md:grid-cols-3">
-      <!-- Botones de dirección -->
-      <div class="col-span-1 flex flex-col space-y-2 md:col-span-1">
+      <div class="flex flex-col space-y-2 md:col-span-1">
         <PButton
           label="Gestión de dirección"
           class="w-full" />
@@ -44,25 +40,26 @@
           class="w-full"
           severity="success" />
       </div>
-
-      <!-- Botones de acción -->
-      <div class="col-span-2 mt-4 flex flex-wrap justify-center gap-4 md:mt-0 md:justify-end">
+      <div class="flex flex-col justify-between gap-5 md:col-span-3 md:flex-row">
         <PButton
           label="Ver más productos"
           icon="pi pi-arrow-left"
-          outlined />
+          outlined
+          class="md:w-1/3" />
         <PButton
           label="Vaciar el carrito"
           icon="pi pi-trash"
           severity="danger"
-          outlined />
+          outlined
+          class="md:w-1/3" />
         <PButton
           label="Canjear productos"
           icon="pi pi-check"
-          severity="success" />
+          severity="success"
+          class="md:w-1/3" />
       </div>
     </div>
-  </div>
+  </CartProcessLayout>
 </template>
 
 <script setup lang="ts">
@@ -70,6 +67,7 @@ import { ref } from 'vue';
 import DataTable from 'primevue/datatable';
 import Column from 'primevue/column';
 import { Button as PButton } from 'primevue';
+import CartProcessLayout from '@/layout/cart/CartProcessLayout.vue';
 
 const cartItems = ref([
   {

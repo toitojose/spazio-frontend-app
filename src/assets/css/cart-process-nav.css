@@ -1,0 +1,53 @@
+#process{
+    @apply min-h-[calc(100vh-3rem)] flex w-full flex-col pt-12;
+}
+#process .process-content{
+    @apply flex justify-evenly flex-col p-8 w-full;
+}
+#process aside{
+    @apply border-b bg-gray-50 p-4 w-full flex justify-center items-center text-primary;
+}
+#process ul{
+    @apply flex justify-center flex-row w-full;
+}
+#process ul li a{
+    @apply relative md:py-4 leading-none flex justify-between md:px-8 items-center transition-all duration-300 ease-in-out transform;
+}
+#process ul li a:hover,
+#process ul li a.focus{
+    @apply bg-primary-50;
+}
+#process ul li a .text-content{
+    @apply ml-4 md:flex flex-col justify-center space-y-1 hidden;
+}
+#process ul li.active a .text-content{
+    @apply flex;
+}
+#process ul li a span.index{
+    @apply px-2 py-1 rounded-full w-8 h-8 flex items-center justify-center text-lg border-accent border text-accent bg-white;
+}
+#process ul li.active a span.index,
+#process ul li.completed a span.index{
+    @apply bg-accent text-white;
+}
+#process ul li a span.step{
+    @apply font-semibold text-sm ;
+}
+#process ul li a span.summary{
+    @apply text-xs hidden md:block;
+}
+#process ul li.active a{
+    @apply md:bg-surface-100 z-10;
+}
+#process ul li a::after{
+    @apply content-[''] absolute left-full top-1/2 border-t border-accent w-6 h-0;
+}
+#process ul li:not(:first-child) a::after{
+    @apply top-0 h-full;
+}
+#process ul li:last-child a::after{
+    @apply hidden;
+}
+#process ul li i.pi{
+    @apply hidden md:block;
+}
