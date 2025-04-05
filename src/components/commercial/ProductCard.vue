@@ -27,7 +27,8 @@
         icon="pi pi-shopping-cart"
         size="small"
         severity="secondary"
-        class="w-full uppercase" />
+        class="w-full uppercase"
+        @click="handleBuy" />
     </div>
 
     <!-- Variante de carrito -->
@@ -35,21 +36,21 @@
       v-if="variant === 'cart'"
       class="mt-4 flex w-full items-center justify-between">
       <span class="text-sm text-primary">{{ shortDescription }}</span>
+      <select
+        v-model="quantity"
+        class="rounded border border-primary px-2 py-1 text-sm">
+        <option
+          v-for="n in 10"
+          :key="n"
+          :value="n"
+          >{{ n }}</option
+        >
+      </select>
       <div class="flex items-center gap-2">
         <Button
           icon="pi pi-trash"
           class="p-button-danger p-button-rounded"
-          @click="onDelete" />
-        <select
-          v-model="quantity"
-          class="rounded border border-primary px-2 py-1 text-sm">
-          <option
-            v-for="n in 10"
-            :key="n"
-            :value="n"
-            >{{ n }}</option
-          >
-        </select>
+          @click="onDelete(props.id)" />
       </div>
     </div>
   </div>
@@ -58,6 +59,8 @@
 <script setup lang="ts">
 import { computed, ref } from 'vue';
 import Button from 'primevue/button';
+import { useCartStore } from '@/store/cart.ts';
+import { watch } from 'vue';
 
 const props = defineProps<{
   image: string; // URL de la imagen del producto
@@ -67,20 +70,41 @@ const props = defineProps<{
   variant: 'buy' | 'cart'; // Variante del diseño: comprar o carrito
   shortDescription?: string; // Descripción corta (solo para variante carrito)
   quantity?: number; // Cantidad seleccionada (solo para carrito)
-  onDelete?: () => void; // Acción para eliminar producto del carrito
 }>();
+
+const cartStore = useCartStore();
+const cartItems = ref();
+const quantity = ref(props.quantity ?? 1);
+
+watch(quantity, (newVal) => {
+  cartStore.updateProduct({
+    id: props.id,
+    quantity: newVal,
+  });
+});
+
+function handleBuy() {
+  cartStore.setProduct({
+    id: Math.round(Math.random() * 1000),
+    name: props.title,
+    price: props.price,
+  });
+}
+
+const onDelete = (id: number) => {
+  cartStore.removeProduct(id);
+  cartItems.value = cartStore.allProducts;
+};
 
 // Formatear precio
 const formattedPrice = computed(() => {
   return props.price.toLocaleString('es-ES', { useGrouping: true });
 });
-
-const quantity = ref(1);
 </script>
 
 <style scoped>
 .product-card {
-  @apply flex flex-col items-stretch rounded-lg transition-transform duration-200;
+  @apply flex flex-col items-stretch rounded-lg bg-slate-200 p-2 transition-transform duration-200;
 }
 .product-image img {
   @apply h-full w-full object-cover;

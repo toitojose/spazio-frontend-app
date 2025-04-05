@@ -5,29 +5,16 @@
         <li
           v-for="(step, index) in steps"
           :key="index"
-          :class="{
-            active: currentStep === index,
-            completed: isStepCompleted(index),
-          }">
-          <router-link :to="step.route">
+          :class="{ active: currentStep === index }">
+          <router-link
+            :to="canNavigate(index) ? step.route : ''"
+            @click.prevent="!canNavigate(index) && $event.stopPropagation()">
             <div class="mx-1 flex md:mr-2 md:items-center">
               <span class="index">{{ index + 1 }}</span>
-
               <div class="text-content">
-                <span class="step">
-                  {{ step.label }}
-                </span>
-                <span
-                  v-if="getStepSummary(index)"
-                  class="summary">
-                  {{ getStepSummary(index) }}
-                </span>
+                <span class="step">{{ step.label }}</span>
               </div>
             </div>
-            <i
-              v-if="currentStep === index"
-              :class="['pi', 'angle', piAngle]"
-              style="font-size: 1.4rem" />
           </router-link>
         </li>
       </ul>
@@ -56,20 +43,19 @@
 </template>
 
 <script setup lang="ts">
-import { useCartProgressStore } from '@/store/cartProgressStore.ts';
-import { computed, onMounted, onUnmounted, ref } from 'vue';
+import { ref, onMounted, onUnmounted } from 'vue';
 import { Button } from 'primevue';
 
 // Props
-defineProps<{ currentStep: number; showNavigationButtons?: boolean }>();
+const props = defineProps<{ currentStep: number; showNavigationButtons?: boolean }>();
 
 const isMobile = ref(false);
-const piAngle = computed(() => 'pi-angle-down');
 
-const updateIsMobile = () => {
+function updateIsMobile() {
   const width = window.visualViewport?.width || window.innerWidth;
   isMobile.value = width < 768;
-};
+}
+
 onMounted(() => {
   updateIsMobile();
   window.addEventListener('resize', updateIsMobile);
@@ -78,17 +64,22 @@ onUnmounted(() => {
   window.removeEventListener('resize', updateIsMobile);
 });
 
-// Store
-const cartProgressStore = useCartProgressStore();
-
+// Pasos
 const steps = [
   { label: 'Carrito de compras', route: '/cart/cart-first-step' },
   { label: 'Confirmación de dirección', route: '/cart/cart-second-step' },
   { label: 'Felicitación por canje', route: '/cart/cart-third-step' },
 ];
 
-const getStepSummary = (index: number) => computed(() => cartProgressStore.getStepSummary(index)).value;
-const isStepCompleted = (index: number) => !!getStepSummary(index);
+function canNavigate(index: number) {
+  if (props.currentStep === 0 || props.currentStep === 1) {
+    // Paso 1 => puede ver 1 o 2 y Paso 2 => puede ver 2 o 1
+    return index <= 1;
+  } else {
+    // Paso 3 => solo el propio paso
+    return index === 2;
+  }
+}
 </script>
 
 <style scoped>

@@ -58,4 +58,5 @@ export interface ProductCart {
   stock: number;
   price: number;
   quantity: number;
+  image_url: string;
 }

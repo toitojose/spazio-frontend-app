@@ -1,7 +1,7 @@
 import { defineStore } from 'pinia';
 import type { ProductCart } from '@/interfaces/products/product.interface';
 
-export const useUserStore = defineStore('cart', {
+export const useCartStore = defineStore('cart', {
   state: () => ({
     cart: [] as ProductCart[],
   }),
@@ -25,10 +25,15 @@ export const useUserStore = defineStore('cart', {
         this.cart.push({ ...product, quantity: product.quantity ?? 1 } as ProductCart);
       }
     },
+    removeProduct(productId: number) {
+      this.cart = this.cart.filter((item) => item.id !== productId);
+    },
     clearCart() {
       this.cart = [];
     },
   },
-  getters: {},
+  getters: {
+    allProducts: (state) => state.cart,
+  },
   persist: true,
 });

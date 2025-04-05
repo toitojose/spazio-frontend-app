@@ -39,9 +39,7 @@
 #process ul li.active a{
     @apply md:bg-surface-100 z-10;
 }
-#process ul li a::after{
-    @apply content-[''] absolute left-full top-1/2 border-t border-accent w-6 h-0;
-}
+
 #process ul li:not(:first-child) a::after{
     @apply top-0 h-full;
 }
