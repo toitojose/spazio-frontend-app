@@ -20,7 +20,9 @@
         <GeneralForm
           form-type="renter"
           user-role="renter"
-          @submit="onFormSubmit" />
+          action-type="update"
+          :initial-data="user"
+          @formUpdated="onFormSubmit" />
 
         <Message
           severity="info"
@@ -41,38 +43,59 @@
 <script setup lang="ts">
 import ProcessLayout from '@/layout/renter/ProcessLayout.vue';
 import { Message } from 'primevue';
-import { ref, watch } from 'vue';
+import { computed, ref, watch } from 'vue';
 import { useRenterProgressStore } from '@/store/renterProgressStore.ts';
 import GeneralForm from '@/components/GeneralForm.vue';
 import router from '@/router';
-const currentStep = 3;
-const user = ref({
-  photoSrc: null,
-  dni: '',
-  firstName: '',
-  secondName: '',
-  firstLastName: '',
-  secondLastName: '',
-  phone: '',
-  landline: '',
-  email: '',
-});
+import { useRoute } from 'vue-router';
+import { prepareInitialFormData, prepareValidateData } from '@/utils/prepareValidateData.ts';
+import { RolesEnum } from '@/enums/roles.enum.ts';
+import { useUserStore } from '@/store/user.ts';
+import { UserClient } from '@/api/UserClient.ts';
+import { UserService } from '@/services/user-service.ts';
+import { useToast } from 'primevue/usetoast';
+
+const route = useRoute();
+const userStore = useUserStore();
+const currentStep = computed(() => renterProgressStore.getVisibleStepIndex(route.path));
+const user = computed(() => prepareInitialFormData(userStore.user, RolesEnum.RENTER));
+const userClient = new UserClient();
+const userService = new UserService(userClient);
 const navButtons = ref(true);
 const nextRoute = ref<string | null>(null);
+const toast = useToast();
 
 const renterProgressStore = useRenterProgressStore();
 const updateCompletedStep = () => {
   if (user.value.firstName && user.value.firstLastName) {
     const summary = `${user.value.firstName} ${user.value.firstLastName}`;
-    renterProgressStore.markStepCompleted(currentStep, true, summary);
+    renterProgressStore.updateStepSummary(currentStep.value, summary);
+    renterProgressStore.markStepCompleted(currentStep.value, true);
   }
 };
 
 // Escuchar cambios en los valores del primer nombre y primer apellido
 watch(() => [user.value.firstName, user.value.firstLastName], updateCompletedStep);
 
-const onFormSubmit = (data: any): void => {
-  console.log('Formulario enviado:', data);
+const onFormSubmit = async (data: any) => {
+  try {
+    const cleanedData = prepareValidateData(data, RolesEnum.RENTER);
+    if (!cleanedData) {
+      alert('Error al limpiar los datos.');
+      return;
+    }
+    const response = await userService.updateUser(cleanedData);
+    if (response.success && response.data) {
+      // Actualizar el store
+      userStore.setUser(cleanedData);
+      renterProgressStore.markStepCompleted(currentStep.value, true);
+      renterProgressStore.updateStepSummary(currentStep.value, `${cleanedData.firstName} ${cleanedData.lastName}`);
+
+      navButtons.value = true;
+    }
+  } catch (error) {
+    toast.add({ severity: 'error', summary: 'Error al actualizar tu información', detail: error, life: 3000 });
+  }
 };
 const handlePreviousStep = () => {
   router.push('/renter/select-scenario');

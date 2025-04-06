@@ -1,6 +1,7 @@
 <template>
   <ProcessLayout
     :current-step="currentStep"
+    :show-navigation-buttons="false"
     @prevStep="handlePreviousStep"
     @nextStep="handleNextStep">
     <div class="space-y-6">
@@ -124,8 +125,10 @@ import { debounce } from 'lodash';
 import { backendClient } from '@/api/backend-client.ts';
 import { useUserStore } from '@/store/user.ts';
 import { IdentityVerificationService } from '@/services/identity-verification-service.ts';
+import { useRoute } from 'vue-router';
 
-const currentStep = 2;
+const route = useRoute();
+const currentStep = computed(() => renterProgressStore.getVisibleStepIndex(route.path));
 const userStore = useUserStore();
 const userId = computed(() => userStore.userId || null);
 

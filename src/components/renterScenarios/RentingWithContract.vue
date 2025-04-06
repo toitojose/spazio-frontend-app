@@ -132,8 +132,8 @@
     <Message
       v-if="showSuccessMessage"
       severity="success">
-      <h2 class="mb-4 font-semibold">¡Propiedad aplicada con éxito!</h2>
-      <p>Puedes continuar con el proceso de arriendo.</p>
+      <h2 class="mb-4 font-semibold">Tu solicitud fue registrada</h2>
+      <p>Hemos guardado la información del arriendo.</p>
     </Message>
 
     <Dialog

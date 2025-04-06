@@ -50,7 +50,7 @@
 
 <script setup lang="ts">
 import ProcessLayout from '@/layout/renter/ProcessLayout.vue';
-import { useRouter } from 'vue-router';
+import { useRoute, useRouter } from 'vue-router';
 import { useRenterProgressStore } from '@/store/renterProgressStore.ts';
 import { useUserStore } from '@/store/user.ts';
 import { computed, inject, ref } from 'vue';
@@ -82,7 +82,8 @@ const benefits = [
     description: 'Tu información estará lista para futuros arrendamientos, simplificando el proceso.',
   },
 ];
-const currentStep = 0;
+const route = useRoute();
+const currentStep = computed(() => renterProgressStore.getVisibleStepIndex(route.path));
 const isWaitingForAuth = ref(false);
 const openAuthDialog = inject<(formType: 'login') => void>('openAuthDialog') || null;
 

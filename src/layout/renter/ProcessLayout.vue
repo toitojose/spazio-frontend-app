@@ -3,30 +3,26 @@
     <aside>
       <ul>
         <li
-          v-for="(step, index) in steps"
-          :key="index"
-          class=""
+          v-for="(step, i) in visibleSteps"
+          :key="i"
           :class="{
-            active: currentStep === index,
-            completed: isStepCompleted(index),
+            active: currentStep === i,
+            completed: step.isCompleted,
           }">
           <router-link :to="step.route">
             <div class="mx-1 flex md:mr-2 md:items-center">
-              <span class="index">{{ index + 1 }}</span>
-
+              <span class="index">{{ i + 1 }}</span>
               <div class="text-content">
-                <span class="step">
-                  {{ step.label }}
-                </span>
+                <span class="step">{{ step.label }}</span>
                 <span
-                  v-if="getStepSummary(index)"
+                  v-if="step.summary"
                   class="summary">
-                  {{ index === 1 ? t('renter.scenarios.' + getStepSummary(index)) : getStepSummary(index) }}
+                  {{ i === 1 ? t('renter.scenarios.' + step.summary) : step.summary }}
                 </span>
               </div>
             </div>
             <i
-              v-if="currentStep === index"
+              v-if="currentStep === i"
               :class="['pi', 'angle', piAngle]"
               style="font-size: 1.4rem"></i>
           </router-link>
@@ -37,7 +33,7 @@
     <section class="process-content">
       <slot></slot>
       <div
-        v-if="currentStep !== 0 && showNavigationButtons"
+        v-if="currentStep !== 0 && showNavigationButtons && isStepCompleted(currentStep)"
         class="mt-6 flex justify-between">
         <Button
           size="small"
@@ -86,19 +82,9 @@ onUnmounted(() => {
 const renterProgressStore = useRenterProgressStore();
 
 // Información estática de los pasos
-const steps = [
-  { label: 'Empieza aquí', route: '/renter/want-to-rent' },
-  { label: 'Estado actual', route: '/renter/select-scenario' },
-  { label: 'Verificación de identidad', route: '/renter/identity-verification' },
-  { label: 'Información general', route: '/renter/general-information' },
-  { label: 'Informacion laboral', route: '/renter/employment-information' },
-  { label: 'Conexión con el Propietario', route: '/renter/connect-owner' },
-];
+const visibleSteps = computed(() => renterProgressStore.getVisibleSteps);
 
-// Obtener el resumen dinámico de cada paso
 const getStepSummary = (index: number) => computed(() => renterProgressStore.getStepSummary(index)).value;
-
-// Verificar si un paso está completado (tiene un resumen)
 const isStepCompleted = (index: number): boolean => !!getStepSummary(index);
 </script>
 

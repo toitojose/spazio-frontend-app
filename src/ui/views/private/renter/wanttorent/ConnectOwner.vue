@@ -1,5 +1,7 @@
 <template>
-  <ProcessLayout :current-step="5">
+  <ProcessLayout
+    :current-step="currentStep"
+    :show-navigation-buttons="false">
     <component :is="currentScenarioComponent" />
     <!-- Acciones posteriores -->
     <div class="flex flex-col space-y-3">
@@ -21,7 +23,12 @@
 import { computed, defineAsyncComponent, ref } from 'vue';
 import { Button } from 'primevue';
 import ProcessLayout from '@/layout/renter/ProcessLayout.vue';
+import { useRoute } from 'vue-router';
+import { useRenterProgressStore } from '@/store/renterProgressStore.ts';
 
+const renterProgressStore = useRenterProgressStore();
+const route = useRoute();
+const currentStep = computed(() => renterProgressStore.getVisibleStepIndex(route.path));
 // Importación dinámica de los componentes de escenarios
 const searching = defineAsyncComponent(() => import('@/components/connectOwner/Searching.vue'));
 const renting = defineAsyncComponent(() => import('@/components/connectOwner/Renting.vue'));
