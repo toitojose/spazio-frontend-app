@@ -50,12 +50,11 @@
 </template>
 
 <script setup lang="ts">
-import { ref } from 'vue';
+import { ref, onMounted } from 'vue';
 import ProductCard from '@/components/commercial/ProductCard.vue';
 import { Button as PButton } from 'primevue';
 import CartProcessLayout from '@/layout/cart/CartProcessLayout.vue';
 import { useRouter } from 'vue-router';
-import { onMounted } from 'vue';
 import { useCartStore } from '@/store/cart';
 
 const cartStore = useCartStore();
