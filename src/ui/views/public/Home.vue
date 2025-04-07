@@ -3,6 +3,13 @@
     <!-- Banner promocional -->
     <Banner />
 
+    <!-- Panel deslizante -->
+    <CartPanel
+      :visible="showCart"
+      @close="showCart = false"
+      @goToCart="goToFullCart"
+      @goToCheckout="goToCheckOut" />
+
     <!-- Garantías y servicios -->
     <div class="mx-4 my-4 grid grid-cols-1 gap-6 md:mx-20 md:grid-cols-2 lg:grid-cols-4">
       <FeatureCard
@@ -33,20 +40,59 @@
       <div class="grid grid-cols-2 gap-4 md:grid-cols-4 md:gap-8">
         <ProductCard
           v-for="product in products"
+          :key="product.name"
           :image="product.image"
           :title="product.name"
           :price="product.price"
           :sales="product.sales"
-          variant="buy" />
+          variant="buy"
+          @buy="openCart" />
       </div>
     </div>
   </div>
 </template>
 
 <script setup lang="ts">
+import { ref, onMounted } from 'vue';
 import Banner from '@/components/commercial/Banner.vue';
 import FeatureCard from '@/components/commercial/FeatureCard.vue';
 import ProductCard from '@/components/commercial/ProductCard.vue';
+import CartPanel from '@/components/commercial/CartPanel.vue';
+import { useRouter } from 'vue-router';
+import { useCartStore } from '@/store/cart';
+
+// Estado local
+const showCart = ref(false);
+const cartItems = ref([]);
+
+// Store y router
+const cartStore = useCartStore();
+const router = useRouter();
+
+onMounted(() => {
+  loadCart();
+});
+
+// Sincroniza el store con la vista
+function loadCart() {
+  cartItems.value = cartStore.allProducts;
+}
+
+function openCart() {
+  // Sincroniza cartItems y muestra panel
+  loadCart();
+  showCart.value = true;
+}
+
+function goToFullCart() {
+  router.push('/cart/cart-first-step');
+  showCart.value = false;
+}
+
+function goToCheckOut() {
+  router.push('/cart/cart-second-step');
+  showCart.value = false;
+}
 
 // Datos de prueba para el catálogo
 const products = [

@@ -60,7 +60,6 @@
 import { computed, ref } from 'vue';
 import Button from 'primevue/button';
 import { useCartStore } from '@/store/cart.ts';
-import { watch } from 'vue';
 
 const props = defineProps<{
   image: string; // URL de la imagen del producto
@@ -75,13 +74,7 @@ const props = defineProps<{
 const cartStore = useCartStore();
 const cartItems = ref();
 const quantity = ref(props.quantity ?? 1);
-
-watch(quantity, (newVal) => {
-  cartStore.updateProduct({
-    id: props.id,
-    quantity: newVal,
-  });
-});
+const emit = defineEmits(['buy']);
 
 function handleBuy() {
   cartStore.setProduct({
@@ -89,6 +82,7 @@ function handleBuy() {
     name: props.title,
     price: props.price,
   });
+  emit('buy');
 }
 
 const onDelete = (id: number) => {
