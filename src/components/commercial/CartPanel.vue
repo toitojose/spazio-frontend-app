@@ -2,14 +2,9 @@
   <transition name="slide-cart">
     <div
       v-if="visible"
-      class="fixed right-0 top-0 z-50 flex h-full w-72 flex-col bg-white shadow-lg">
-      <div class="flex items-center justify-between border-b p-4">
+      class="fixed right-0 top-0 z-30 flex h-full w-72 flex-col bg-white shadow-lg">
+      <div class="flex items-center justify-between border-b p-4 pt-14">
         <h2 class="text-lg font-bold">Tu carrito</h2>
-        <button
-          class="text-xl"
-          @click="$emit('close')"
-          >✕</button
-        >
       </div>
 
       <div class="flex-1 space-y-4 overflow-auto p-4">

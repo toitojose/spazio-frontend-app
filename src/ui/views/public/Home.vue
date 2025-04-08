@@ -1,54 +1,60 @@
 <template>
-  <div class="min-h-16 pb-8">
-    <!-- Banner promocional -->
-    <Banner />
+  <div class="flex">
+    <div :class="showCart ? 'mr-[300px]' : ''">
+      <div class="min-h-16 pb-8">
+        <!-- Banner promocional -->
+        <Banner />
 
-    <!-- Panel deslizante -->
-    <CartPanel
-      :visible="showCart"
-      @close="showCart = false"
-      @goToCart="goToFullCart"
-      @goToCheckout="goToCheckOut" />
+        <!-- Garantías y servicios -->
+        <div class="mx-4 my-4 grid grid-cols-1 gap-6 md:mx-20 md:grid-cols-2 lg:grid-cols-4">
+          <FeatureCard
+            icon="pi pi-flag"
+            title="¿Listo para comenzar?"
+            subtitle="Conoce cómo funciona SPAZIO"
+            variant="info-secondary" />
+          <FeatureCard
+            icon="pi pi-gift"
+            title="¿Qué es SPAZIO?"
+            subtitle="Transforma tus pagos de arriendo en premios"
+            variant="info-accent" />
+          <FeatureCard
+            icon="pi pi-check-circle"
+            title="Garantía SPAZIO"
+            subtitle="Canje seguro y confiable"
+            variant="success" />
+          <FeatureCard
+            icon="pi pi-truck"
+            title="Entrega a tiempo"
+            subtitle="Directo a tu puerta"
+            variant="success" />
+        </div>
 
-    <!-- Garantías y servicios -->
-    <div class="mx-4 my-4 grid grid-cols-1 gap-6 md:mx-20 md:grid-cols-2 lg:grid-cols-4">
-      <FeatureCard
-        icon="pi pi-flag"
-        title="¿Listo para comenzar?"
-        subtitle="Conoce cómo funciona SPAZIO"
-        variant="info-secondary" />
-      <FeatureCard
-        icon="pi pi-gift"
-        title="¿Qué es SPAZIO?"
-        subtitle="Transforma tus pagos de arriendo en premios"
-        variant="info-accent" />
-      <FeatureCard
-        icon="pi pi-check-circle"
-        title="Garantía SPAZIO"
-        subtitle="Canje seguro y confiable"
-        variant="success" />
-      <FeatureCard
-        icon="pi pi-truck"
-        title="Entrega a tiempo"
-        subtitle="Directo a tu puerta"
-        variant="success" />
-    </div>
-
-    <!-- Catálogo de productos -->
-    <div class="mx-4 md:mx-20">
-      <h2 class="mb-6 text-2xl font-bold">Premios al Vuelo</h2>
-      <div class="grid grid-cols-2 gap-4 md:grid-cols-4 md:gap-8">
-        <ProductCard
-          v-for="product in products"
-          :key="product.name"
-          :image="product.image"
-          :title="product.name"
-          :price="product.price"
-          :sales="product.sales"
-          variant="buy"
-          @buy="openCart" />
+        <!-- Catálogo de productos -->
+        <div class="mx-4 md:mx-20">
+          <h2 class="mb-6 text-2xl font-bold">Premios al Vuelo</h2>
+          <div class="grid grid-cols-2 gap-4 md:grid-cols-4 md:gap-8">
+            <ProductCard
+              v-for="product in products"
+              :key="product.name"
+              :image="product.image"
+              :title="product.name"
+              :price="product.price"
+              :sales="product.sales"
+              variant="buy"
+              @buy="openCart" />
+          </div>
+        </div>
       </div>
     </div>
+
+    <aside
+      v-if="showCart"
+      class="h-screen w-max bg-white">
+      <CartPanel
+        :visible="showCart"
+        @goToCart="goToFullCart"
+        @goToCheckout="goToCheckOut" />
+    </aside>
   </div>
 </template>
 
