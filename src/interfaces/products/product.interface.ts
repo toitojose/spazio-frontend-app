@@ -1,3 +1,5 @@
+import type { TypeProduct } from './types.interface';
+
 export interface ProductResult {
   result: boolean;
   message: string;
@@ -49,6 +51,7 @@ export interface Product {
   created_at: string;
   updated_at: string;
   deleted_at?: string | null;
+  productType: TypeProduct;
 }
 
 export interface ProductCart {
