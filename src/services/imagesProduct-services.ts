@@ -8,9 +8,11 @@ export class ImageService {
     this.authBackendClient = authBackendClient;
   }
 
-  async getTypes(): Promise<ImageResult> {
+  async getImages(productId: number): Promise<ImageResult> {
     try {
-      const response = await this.authBackendClient.get<ImageResult>(`http://localhost:7000/products`);
+      const response = await this.authBackendClient.get<ImageResult>(
+        `http://localhost:7000/products/${productId}/photos`,
+      );
       return response.data;
     } catch (error: unknown) {
       if (error instanceof Error && 'response' in error) {
