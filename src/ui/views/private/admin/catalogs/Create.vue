@@ -80,16 +80,16 @@
               <FloatLabel variant="on">
                 <Dropdown
                   id="category"
-                  v-model="formData.category"
+                  v-model="formData.category_level"
                   :options="categoryOptions"
                   optionLabel="label"
                   optionValue="value"
                   placeholder="Seleccione una categoría"
-                  :class="{ 'p-invalid': submitted && !formData.category }"
+                  :class="{ 'p-invalid': submitted && !formData.category_level }"
                   class="w-full" />
               </FloatLabel>
               <small
-                v-if="submitted && !formData.category"
+                v-if="submitted && !formData.category_level"
                 class="p-error text-red-500"
                 >La categoría es requerida</small
               >
@@ -100,7 +100,7 @@
               <div class="flex items-center gap-2">
                 <Checkbox
                   id="access"
-                  v-model="formData.isPublic"
+                  v-model="formData.is_public"
                   :binary="true" />
                 <label for="access">¿Es publico?</label>
               </div>
@@ -144,8 +144,8 @@ const createCatalog = new CatalogService(backendClient);
 const formData = reactive({
   name: '',
   description: '',
-  isPublic: true,
-  category: '',
+  is_public: true,
+  category_level: '',
 });
 
 const categoryOptions = [
@@ -162,8 +162,8 @@ const prepareCatalog = (): CatalogSend => {
   const result: CatalogSend = {
     name: formData.name,
     description: formData.description,
-    isPublic: formData.isPublic,
-    category: formData.category,
+    is_public: formData.is_public,
+    category_level: formData.category_level,
   };
   return result;
 };

@@ -79,17 +79,17 @@
             <div class="flex w-full flex-col gap-1">
               <FloatLabel variant="on">
                 <Dropdown
-                  id="category"
-                  v-model="formData.category"
+                  id="category_level"
+                  v-model="formData.category_level"
                   :options="categoryOptions"
                   optionLabel="label"
                   optionValue="value"
                   placeholder="Seleccione una categoría"
-                  :class="{ 'p-invalid': submitted && !formData.category }"
+                  :class="{ 'p-invalid': submitted && !formData.category_level }"
                   class="w-full" />
               </FloatLabel>
               <small
-                v-if="submitted && !formData.category"
+                v-if="submitted && !formData.category_level"
                 class="p-error text-red-500"
                 >La categoría es requerida</small
               >
@@ -99,10 +99,10 @@
             <div class="flex w-full flex-col gap-1">
               <div class="flex items-center gap-2">
                 <Checkbox
-                  id="access"
-                  v-model="formData.isPublic"
+                  id="is_public"
+                  v-model="formData.is_public"
                   :binary="true" />
-                <label for="access">¿Es publico?</label>
+                <label for="is_public">¿Es publico?</label>
               </div>
             </div>
           </div>
@@ -126,7 +126,7 @@ import { reactive, ref, onMounted, watch } from 'vue';
 import { useToast } from 'primevue/usetoast';
 import { useRouter, useRoute } from 'vue-router';
 import { backendClient } from '@/api/backend-client';
-import type { Catalog, CatalogSendUpdate } from '@/interfaces/catalogs/catalogs.interface';
+import type { Catalog, CatalogResult, CatalogSendUpdate } from '@/interfaces/catalogs/catalogs.interface';
 import { CatalogService } from '@/services/catalogs-services';
 
 const router = useRouter();
@@ -136,30 +136,30 @@ const catalogService = new CatalogService(backendClient);
 const route = useRoute();
 const catalogId = ref(route.params.id);
 
+const formData = reactive({
+  name: '',
+  description: '',
+  is_public: true,
+  category_level: '',
+});
+
 onMounted(() => {
   loadCatalog();
 });
 
-const formData = reactive({
-  name: '',
-  description: '',
-  isPublic: true,
-  category: '',
-});
-
 const loadCatalog = async () => {
   try {
-    const response = await catalogService.catalogsById(Number(catalogId.value));
-    const catalogResponse: Catalog | undefined = response.data;
+    const response: CatalogResult = await catalogService.catalogsById(Number(catalogId.value));
+    const catalogResponse: Catalog | undefined = Array.isArray(response.data) ? response.data[0] : response.data;
+
     formData.name = catalogResponse?.name ? catalogResponse.name : '';
     formData.description = catalogResponse?.description ? catalogResponse.description : '';
-
-    console.log('********** ', response);
+    formData.is_public = catalogResponse?.is_public ?? true;
 
     // 🟢 Setear el campo type con el valor obtenido de la base de datos
-    if (catalogResponse?.category) {
-      const foundCategory = categoryOptions.find((option) => option.value === catalogResponse.category);
-      formData.category = foundCategory ? foundCategory.value : ''; // Asignar el valor si existe, sino un string vacío
+    if (catalogResponse?.category_level) {
+      const foundOption = categoryOptions.find((option) => option.value === catalogResponse.category_level);
+      formData.category_level = foundOption ? foundOption.value : '';
     }
   } catch (error) {
     console.error('Error loading products:', error);
@@ -187,7 +187,7 @@ const categoryOptions = [
 ];
 
 const validateForm = () => {
-  return formData.name && formData.description && formData.category;
+  return formData.name && formData.description && formData.category_level;
 };
 
 const prepareCatalog = (): CatalogSendUpdate => {
@@ -195,8 +195,8 @@ const prepareCatalog = (): CatalogSendUpdate => {
     id: Number(catalogId.value),
     name: formData.name,
     description: formData.description,
-    isPublic: formData.isPublic,
-    category: formData.category,
+    is_public: formData.is_public,
+    category_level: formData.category_level,
   };
   return result;
 };

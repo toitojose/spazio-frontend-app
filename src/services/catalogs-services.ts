@@ -1,4 +1,5 @@
 import type {
+  Catalog,
   CatalogDeleteResult,
   CatalogResult,
   CatalogSend,
@@ -6,6 +7,9 @@ import type {
 } from '@/interfaces/catalogs/catalogs.interface';
 
 import type { AxiosInstance } from 'axios';
+import { useUserStore } from '@/store/user.ts';
+
+const userStore = useUserStore();
 
 export class CatalogService {
   private authBackendClient: AxiosInstance;
@@ -16,9 +20,16 @@ export class CatalogService {
 
   async catalogs(): Promise<CatalogResult> {
     try {
-      const response = await this.authBackendClient.get<CatalogResult>(`http://localhost:7000/admin/catalog`);
-      console.log('Catalogs response *******:', response); // Log para verificar la respuesta
-      return response.data;
+      const response = await this.authBackendClient.get<Catalog[]>(`http://localhost:7000/admin/catalog`, {
+        headers: {
+          Authorization: `Bearer ${userStore.token}`,
+        },
+      });
+      return {
+        result: true,
+        message: 'Success',
+        data: response.data,
+      };
     } catch (error: unknown) {
       if (error instanceof Error && 'response' in error) {
         const axiosError = error as any; // Cast a 'any' o un tipo más específico si usas Axios
@@ -48,8 +59,16 @@ export class CatalogService {
 
   async catalogsById(id: number): Promise<CatalogResult> {
     try {
-      const response = await this.authBackendClient.get<CatalogResult>(`http://localhost:7000/products/${id}`);
-      return response.data;
+      const response = await this.authBackendClient.get<Catalog[]>(`http://localhost:7000/admin/catalog/${id}`, {
+        headers: {
+          Authorization: `Bearer ${userStore.token}`,
+        },
+      });
+      return {
+        result: true,
+        message: 'Success',
+        data: response.data,
+      };
     } catch (error: unknown) {
       if (error instanceof Error && 'response' in error) {
         const axiosError = error as any; // Cast a 'any' o un tipo más específico si usas Axios
@@ -79,8 +98,16 @@ export class CatalogService {
 
   async update(data: CatalogSendUpdate): Promise<CatalogResult> {
     try {
-      const response = await this.authBackendClient.put<CatalogResult>(`http://localhost:7000/admin/product`, data);
-      return response.data;
+      const response = await this.authBackendClient.put<Catalog>(`http://localhost:7000/admin/catalog`, data, {
+        headers: {
+          Authorization: `Bearer ${userStore.token}`,
+        },
+      });
+      return {
+        result: true,
+        message: 'Success',
+        data: [response.data],
+      };
     } catch (error: unknown) {
       console.error('Error al actualizar producto:', error);
       return {
@@ -94,8 +121,16 @@ export class CatalogService {
 
   async create(data: CatalogSend): Promise<CatalogResult> {
     try {
-      const response = await this.authBackendClient.post<CatalogResult>('http://localhost:7000/admin/product', data);
-      return response.data;
+      const response = await this.authBackendClient.post<Catalog>('http://localhost:7000/admin/catalog', data, {
+        headers: {
+          Authorization: `Bearer ${userStore.token}`,
+        },
+      });
+      return {
+        result: true,
+        message: 'Success',
+        data: [response.data],
+      };
     } catch (error: unknown) {
       console.error('Error al crear producto:', error);
       return {
@@ -111,6 +146,11 @@ export class CatalogService {
     try {
       const response = await this.authBackendClient.delete<{ message: string }>(
         `http://localhost:7000/admin/catalog/${catalogId}`,
+        {
+          headers: {
+            Authorization: `Bearer ${userStore.token}`,
+          },
+        },
       );
 
       return {

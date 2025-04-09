@@ -12,7 +12,6 @@ export interface ProductDeleteResult {
   message: string;
   error?: { statusCode: number; key: string } | null;
 }
-
 export interface ImageURL {
   id: number;
   url: string;

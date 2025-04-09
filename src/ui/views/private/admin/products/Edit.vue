@@ -131,7 +131,7 @@
             <!-- Tipo -->
             <div class="flex w-full flex-col gap-1">
               <FloatLabel variant="on">
-                <Dropdown
+                <Select
                   id="type"
                   v-model="formData.type"
                   :options="typeOptions"
@@ -201,7 +201,6 @@ import {
   Button as PButton,
   FloatLabel,
   InputNumber,
-  Dropdown,
   Checkbox,
   Toast,
   FileUpload,

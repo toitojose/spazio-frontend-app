@@ -162,8 +162,8 @@ const filters = ref({
 const loadProducts = async () => {
   try {
     const response = await productService.products();
-    products.value = response.data ?? [];
-    console.log('Products loaded: *********', products.value);
+    products.value = response ?? [];
+    console.log('Products loaded: *********', response);
   } catch (error) {
     console.error('Error loading products:', error);
   }
@@ -189,6 +189,7 @@ const getRatio = (product: Product) => {
 };
 
 const onEdit = (id: Product) => {
+  console.log('Edit product:', id);
   router.push(`/admin/products/edit/${id}`);
   return;
 };

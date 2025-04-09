@@ -131,7 +131,7 @@
             <!-- Tipo -->
             <div class="flex w-full flex-col gap-1">
               <FloatLabel variant="on">
-                <Dropdown
+                <Select
                   id="type"
                   v-model="formData.type"
                   :options="typeOptions"
@@ -200,18 +200,19 @@ import {
   Button as PButton,
   FloatLabel,
   InputNumber,
-  Dropdown,
   Checkbox,
   FileUpload,
   Breadcrumb,
+  Select,
 } from 'primevue';
 import Editor from 'primevue/editor';
-import { reactive, ref } from 'vue';
+import { onMounted, reactive, ref } from 'vue';
 import { useToast } from 'primevue/usetoast';
 import { useRouter } from 'vue-router';
 import type { ImageURL, ProductSend } from '@/interfaces/products/product.interface';
 import { backendClient } from '@/api/backend-client';
 import { ProductService } from '@/services/product-service';
+import { TypeService } from '@/services/type-service';
 
 //Constantes de Breadcrumb
 const home = ref({
@@ -224,6 +225,9 @@ const router = useRouter();
 const toast = useToast();
 const submitted = ref(false);
 const createService = new ProductService(backendClient);
+const typeService = new TypeService(backendClient);
+
+const typeOptions = ref<{ label: string; value: string }[]>([]);
 
 const formData = reactive({
   name: '',
@@ -238,12 +242,15 @@ const formData = reactive({
   imageURL: [] as ImageURL[],
 });
 
-const typeOptions = [
-  { label: 'General', value: 'General' },
-  { label: 'Electrónico', value: 'Electrónico' },
-  { label: 'Ropa', value: 'Ropa' },
-  { label: 'Hogar', value: 'Hogar' },
-];
+onMounted(async () => {
+  const response = await typeService.getTypes();
+  if (response) {
+    typeOptions.value = response.map((t) => ({
+      label: t.name, // o la propiedad correspondiente
+      value: t.name,
+    }));
+  }
+});
 
 const isValidUrl = (url: string) => {
   try {
@@ -312,21 +319,20 @@ const onSubmit = async () => {
   if (validateForm()) {
     try {
       const response = await createService.create(prepareProduct());
-      /* Agrgar verificacion del success
-      if(response.success){
-
-      }*/
-      console.log(response);
-      toast.add({
-        severity: 'success',
-        summary: 'Éxito',
-        detail: 'Producto guardado correctamente',
-        life: 3000,
-      });
-      setTimeout(() => {
-        router.push('/admin/products');
-        submitted.value = false;
-      }, 1000);
+      // Agrgar verificacion del success
+      if (response.message === 'success') {
+        console.log(response);
+        toast.add({
+          severity: 'success',
+          summary: 'Éxito',
+          detail: 'Producto guardado correctamente',
+          life: 3000,
+        });
+        setTimeout(() => {
+          router.push('/admin/products');
+          submitted.value = false;
+        }, 1000);
+      }
     } catch (error) {
       toast.add({
         severity: 'error',

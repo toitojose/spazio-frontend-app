@@ -38,6 +38,6 @@ export interface CatalogSendUpdate {
   id: number;
   name: string;
   description: string;
-  isPublic: boolean;
-  category: string;
+  is_public: boolean;
+  category_level: string;
 }

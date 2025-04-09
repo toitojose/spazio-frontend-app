@@ -75,16 +75,19 @@
         field="is_public"
         header="Acceso"
         sortable>
-        <template #body="{ data }">Acceso</template>
-        <!-- Temporal -->
+        <template #body="{ data }">
+          <span v-if="data.is_public">Público</span>
+          <span v-else>Privado</span>
+        </template>
       </Column>
 
       <Column
         field="category_level"
         header="Categoría"
         sortable>
-        <template #body="{ data }">Categoría</template>
-        <!-- Temporal -->
+        <template #body="{ data }">
+          {{ data.category_level }}
+        </template>
       </Column>
 
       <Column
@@ -123,7 +126,7 @@ import Column from 'primevue/column';
 import Toast from 'primevue/toast';
 import { useRouter } from 'vue-router';
 import { CatalogService } from '@/services/catalogs-services';
-import type { Catalog, CatalogResult } from '@/interfaces/catalogs/catalogs.interface';
+import type { Catalog } from '@/interfaces/catalogs/catalogs.interface';
 import { backendClient } from '@/api/backend-client';
 
 const catalogService = new CatalogService(backendClient);
@@ -142,8 +145,7 @@ const filters = ref({
 const loadCatalogs = async () => {
   try {
     const response = await catalogService.catalogs();
-    catalogs.value = response ?? [];
-    console.log('Catalogos cargados:', response);
+    catalogs.value = response.data ?? [];
   } catch (error) {
     console.error('Error loading catalogs:', error);
   }
@@ -156,10 +158,6 @@ const onCreate = () => {
 onMounted(() => {
   loadCatalogs();
 });
-
-const formatCurrency = (value: number) => {
-  return value.toLocaleString('en-US', { style: 'currency', currency: 'USD' });
-};
 
 const onEdit = (id: number) => {
   router.push(`/admin/catalogs/edit/${id}`);
