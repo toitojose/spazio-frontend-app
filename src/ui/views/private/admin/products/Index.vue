@@ -162,8 +162,7 @@ const filters = ref({
 const loadProducts = async () => {
   try {
     const response = await productService.products();
-    products.value = response ?? [];
-    console.log('Products loaded: *********', response);
+    products.value = response.data ?? [];
   } catch (error) {
     console.error('Error loading products:', error);
   }

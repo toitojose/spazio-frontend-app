@@ -131,7 +131,7 @@
             <!-- Tipo -->
             <div class="flex w-full flex-col gap-1">
               <FloatLabel variant="on">
-                <Select
+                <Dropdown
                   id="type"
                   v-model="formData.type"
                   :options="typeOptions"
@@ -221,10 +221,6 @@ const productService = new ProductService(backendClient);
 const route = useRoute();
 const productId = ref(route.params.id);
 
-onMounted(() => {
-  loadProduct();
-});
-
 const formData = reactive({
   name: '',
   resume: '',
@@ -238,20 +234,22 @@ const formData = reactive({
   imageURL: [] as ImageURL[],
 });
 
+onMounted(() => {
+  loadProduct();
+});
+
 const loadProduct = async () => {
   try {
+    console.log('++++++++ ', productId.value);
     const response = await productService.productsById(Number(productId.value));
     /*Verificar el success de la respuesta */
-    const productResponse: Product | undefined = response.data;
+    const productResponse: Product | undefined = Array.isArray(response.data) ? response.data[0] : response.data;
     formData.name = productResponse?.name ? productResponse.name : '';
-    formData.resume = productResponse?.resume ? productResponse.resume : '';
     formData.description = productResponse?.description ? productResponse.description : '';
-    formData.purchasePrice = productResponse?.purchasePrice ? productResponse.purchasePrice : 0;
-    formData.salePrice = productResponse?.salePrice ? productResponse.salePrice : 0;
-    formData.orders = productResponse?.orders ? productResponse.orders : 0;
+    formData.purchasePrice = productResponse?.purchase_price ? productResponse.purchase_price : 0;
+    formData.salePrice = productResponse?.sale_price ? productResponse.sale_price : 0;
     formData.ratio = productResponse?.ratio ? productResponse.ratio : 0;
-    formData.imageURL = productResponse?.imageURL ? productResponse.imageURL : [];
-    console.log('********** ', response);
+    console.log('********** ', response.data);
 
     // 🟢 Setear el campo type con el valor obtenido de la base de datos
     if (productResponse?.type) {
