@@ -67,15 +67,15 @@ const toast = useToast();
 
 const renterProgressStore = useRenterProgressStore();
 const updateCompletedStep = () => {
-  if (user.value.firstName && user.value.firstLastName) {
-    const summary = `${user.value.firstName} ${user.value.firstLastName}`;
+  if (user.value.firstName && user.value.lastName) {
+    const summary = `${user.value.firstName} ${user.value.lastName}`;
     renterProgressStore.updateStepSummary(currentStep.value, summary);
     renterProgressStore.markStepCompleted(currentStep.value, true);
   }
 };
 
 // Escuchar cambios en los valores del primer nombre y primer apellido
-watch(() => [user.value.firstName, user.value.firstLastName], updateCompletedStep);
+watch(() => [user.value.firstName, user.value.lastName], updateCompletedStep);
 
 const onFormSubmit = async (data: any) => {
   try {
