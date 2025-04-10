@@ -46,6 +46,7 @@ export class ImageService {
 
   async uploadImages(productId: number, files: File[]): Promise<ImageResult> {
     const uploadedImages: any[] = [];
+    console.log('Entra por aca'), files;
 
     try {
       for (const file of files) {
@@ -55,11 +56,16 @@ export class ImageService {
         const formData = new FormData();
         formData.append('file', file); // 👈 nombre exacto que espera el backend
 
-        const response = await this.authBackendClient.post(`http://localhost:7000/upload/${productId}`, formData, {
-          headers: {
-            Authorization: `Bearer ${userStore.token}`,
+        const response = await this.authBackendClient.post(
+          `http://localhost:7000/products/${productId}/upload-photo`,
+          formData,
+          {
+            headers: {
+              'Content-Type': 'multipart/form-data',
+              Authorization: `Bearer ${userStore.token}`,
+            },
           },
-        });
+        );
 
         uploadedImages.push(response.data);
       }

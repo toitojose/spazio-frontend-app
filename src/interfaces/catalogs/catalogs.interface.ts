@@ -29,15 +29,17 @@ export interface CatalogSend {
   description: string;
   category_level: string;
   is_public: boolean;
-  status: 'ACTIVE' | 'INACTIVE' | 'DRAFT';
   start_date: string;
   end_date: string;
 }
 
 export interface CatalogSendUpdate {
-  id: number;
   name: string;
   description: string;
-  is_public: boolean;
-  category_level: string;
+  categoryLevel: number;
+  isPublic: boolean;
+  startDate: string;
+  endDate: string;
+  products: number[];
+  status: 'ACTIVE' | 'INACTIVE' | 'DRAFT';
 }
