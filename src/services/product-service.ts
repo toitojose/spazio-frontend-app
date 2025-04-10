@@ -3,6 +3,7 @@ import type {
   ProductSend,
   ProductDeleteResult,
   ProductSendUpdate,
+  Product,
 } from '@/interfaces/products/product.interface';
 import type { AxiosInstance } from 'axios';
 import { useUserStore } from '@/store/user.ts';
@@ -17,12 +18,16 @@ export class ProductService {
 
   async products(): Promise<ProductResult> {
     try {
-      const response = await this.authBackendClient.get<ProductResult>(`http://localhost:7000/products`, {
+      const response = await this.authBackendClient.get<Product[]>(`http://localhost:7000/products`, {
         headers: {
           Authorization: `Bearer ${userStore.token}`,
         },
       });
-      return response.data;
+      return {
+        result: true,
+        message: 'Success',
+        data: response.data,
+      };
     } catch (error: unknown) {
       if (error instanceof Error && 'response' in error) {
         const axiosError = error as any; // Cast a 'any' o un tipo más específico si usas Axios
@@ -52,12 +57,16 @@ export class ProductService {
 
   async productsById(id: number): Promise<ProductResult> {
     try {
-      const response = await this.authBackendClient.get<ProductResult>(`http://localhost:7000/products/${id}`, {
+      const response = await this.authBackendClient.get<Product[]>(`http://localhost:7000/products/detail/${id}`, {
         headers: {
           Authorization: `Bearer ${userStore.token}`,
         },
       });
-      return response.data;
+      return {
+        result: true,
+        message: 'Success',
+        data: response.data,
+      };
     } catch (error: unknown) {
       if (error instanceof Error && 'response' in error) {
         const axiosError = error as any; // Cast a 'any' o un tipo más específico si usas Axios
@@ -87,12 +96,16 @@ export class ProductService {
 
   async create(data: ProductSend): Promise<ProductResult> {
     try {
-      const response = await this.authBackendClient.post<ProductResult>('http://localhost:7000/admin/product', data, {
+      const response = await this.authBackendClient.post<Product>('http://localhost:7000/admin/product', data, {
         headers: {
           Authorization: `Bearer ${userStore.token}`,
         },
       });
-      return response.data;
+      return {
+        result: true,
+        message: 'Success',
+        data: [response.data],
+      };
     } catch (error: unknown) {
       console.error('Error al crear producto:', error);
       return {
@@ -106,12 +119,16 @@ export class ProductService {
 
   async update(data: ProductSendUpdate): Promise<ProductResult> {
     try {
-      const response = await this.authBackendClient.put<ProductResult>(`http://localhost:7000/admin/product`, data, {
+      const response = await this.authBackendClient.put<Product>(`http://localhost:7000/admin/product`, data, {
         headers: {
           Authorization: `Bearer ${userStore.token}`,
         },
       });
-      return response.data;
+      return {
+        result: true,
+        message: 'Success',
+        data: [response.data],
+      };
     } catch (error: unknown) {
       console.error('Error al actualizar producto:', error);
       return {
@@ -126,11 +143,12 @@ export class ProductService {
   async delete(productId: number): Promise<ProductDeleteResult> {
     try {
       const response = await this.authBackendClient.delete<{ message: string }>(
-        `http://localhost:7000/admin/product/${productId}`, {
+        `http://localhost:7000/admin/product/${productId}`,
+        {
           headers: {
             Authorization: `Bearer ${userStore.token}`,
           },
-        }
+        },
       );
 
       return {

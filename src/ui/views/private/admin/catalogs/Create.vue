@@ -128,6 +128,8 @@ import { useRouter } from 'vue-router';
 import { backendClient } from '@/api/backend-client';
 import type { CatalogSend } from '@/interfaces/catalogs/catalogs.interface';
 import { CatalogService } from '@/services/catalogs-services';
+import { CategoryLevelEnum } from '@/enums/category-level.enum';
+
 
 //Constantes de Breadcrumb
 const home = ref({
@@ -148,14 +150,14 @@ const formData = reactive({
   category_level: '',
 });
 
-const categoryOptions = [
-  { label: 'Nivel 1', value: 'Nivel 1' },
-  { label: 'Nivel 2', value: 'Nivel 2' },
-  { label: 'Nivel 3', value: 'Nivel 3' },
-];
+const categoryOptions = Object.values(CategoryLevelEnum).map((val) => ({
+  label: val,
+  value: val,
+}));
+
 
 const validateForm = () => {
-  return formData.name && formData.description && formData.category;
+  return formData.name && formData.description && formData.category_level;
 };
 
 const prepareCatalog = (): CatalogSend => {

@@ -1,4 +1,4 @@
-import type { TypeResult } from '@/interfaces/products/types.interface';
+import type { TypeResult, Type } from '@/interfaces/products/types.interface';
 import type { AxiosInstance } from 'axios';
 
 export class TypeService {
@@ -10,14 +10,18 @@ export class TypeService {
 
   async getTypes(): Promise<TypeResult> {
     try {
-      const response = await this.authBackendClient.get<TypeResult>(`http://localhost:7000/products/types`);
-      return response.data;
+      const response = await this.authBackendClient.get<Type[]>(`http://localhost:7000/products/types`);
+      return {
+        result: true,
+        message: 'Success',
+        data: response.data,
+      };
     } catch (error: unknown) {
       if (error instanceof Error && 'response' in error) {
         const axiosError = error as any; // Cast a 'any' o un tipo más específico si usas Axios
         return {
           result: false,
-          message: 'Error al obtener el producto',
+          message: 'Error al obtener los tipos de producto',
           error: {
             statusCode: axiosError.response?.status || 500,
             key: axiosError.response?.statusText || 'INTERNAL_SERVER_ERROR',

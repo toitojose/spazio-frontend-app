@@ -166,11 +166,11 @@
               :multiple="true"
               accept="image/*"
               :maxFileSize="1000000"
-              name="demo[]"
+              name="file"
               :url="''"
               :auto="true"
               :showUploadButton="false"
-              @upload="uploadImage($event)">
+              @select="onSelectFiles">
               <template #empty>
                 <div class="flex h-full flex-col items-center justify-center">
                   <i class="pi pi-image mb-2 text-3xl"></i>
@@ -185,7 +185,8 @@
             <PButton
               type="submit"
               severity="secondary"
-              label="Guardar" />
+              label="Guardar"
+              :loading="isLoading" />
           </div>
         </form>
       </template>
@@ -226,6 +227,8 @@ const toast = useToast();
 const submitted = ref(false);
 const createService = new ProductService(backendClient);
 const typeService = new TypeService(backendClient);
+const isLoading = ref(false);
+const selectedFiles = ref<File[]>([]);
 
 const typeOptions = ref<{ label: string; value: string }[]>([]);
 
@@ -244,21 +247,17 @@ const formData = reactive({
 
 onMounted(async () => {
   const response = await typeService.getTypes();
-  if (response) {
-    typeOptions.value = response.map((t) => ({
+  if (response.data) {
+    typeOptions.value = response.data.map((t) => ({
       label: t.name, // o la propiedad correspondiente
-      value: t.name,
+      value: String(t.id),
     }));
   }
 });
 
-const isValidUrl = (url: string) => {
-  try {
-    new URL(url);
-    return true;
-  } catch {
-    return false;
-  }
+// Almacena las imágenes seleccionadas
+const onSelectFiles = (event: { files: File[] }) => {
+  selectedFiles.value = event.files;
 };
 
 const validateForm = () => {
@@ -279,42 +278,18 @@ const prepareImage = (): ImageURL[] => {
 const prepareProduct = (): ProductSend => {
   const result: ProductSend = {
     name: formData.name,
-    resume: formData.resume,
     description: formData.description,
     purchasePrice: formData.purchasePrice,
     salePrice: formData.salePrice,
-    type: formData.type,
-    status: formData.status,
-    imageURL: prepareImage(),
+    productType: Number(formData.type),
+    stock: 0,
   };
   return result;
 };
 
-const uploadImage = async (event: any) => {
-  event.files.forEach((file: any, index: number) => {
-    // Simular una URL de imagen de prueba para cada archivo subido
-    const fakeUrl = `https://via.placeholder.com/150?text=Image+${formData.imageURL.length + 1}`;
-
-    // Agregar la URL simulada al array de imágenes
-    formData.imageURL.push({
-      id: formData.imageURL.length + 1, // ID único
-      url: fakeUrl,
-    });
-  });
-
-  toast.add({
-    severity: 'info',
-    summary: 'Imagen subida',
-    detail: 'Se han agregado imágenes de prueba',
-    life: 3000,
-  });
-
-  console.log('Imágenes simuladas:', formData.imageURL);
-  toast.add({ severity: 'info', summary: 'Success', detail: 'File Uploaded', life: 3000 });
-};
-
 const onSubmit = async () => {
   submitted.value = true;
+  isLoading.value = true;
 
   if (validateForm()) {
     try {
@@ -337,9 +312,11 @@ const onSubmit = async () => {
       toast.add({
         severity: 'error',
         summary: 'Error',
-        detail: 'Error al guardar el producto',
+        detail: 'Ocurrió un error al guardar el producto', //Tecnical debt
         life: 3000,
       });
+    } finally {
+      isLoading.value = false;
     }
   } else {
     toast.add({
