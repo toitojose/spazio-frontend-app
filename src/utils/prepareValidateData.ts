@@ -37,7 +37,7 @@ export const prepareInitialFormData = (user: User | null, role: RolesEnum = Role
     lastName: user.lastName || '',
     secondLastName: user.secondLastName || '',
     idNumber: user.idNumber || '',
-    mobile: user.phone || '',
+    mobile: user.mobile || '',
     landline: user.landline || '',
     email: user.email || '',
     roleType: role,
