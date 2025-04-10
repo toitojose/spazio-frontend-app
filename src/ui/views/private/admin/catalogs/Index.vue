@@ -177,38 +177,31 @@ const onInsertProducts = (id: string) => {
 
 const confirmDelete = () => {
   if (catalogIdToDelete.value) {
-    toast.add({
-      severity: 'success',
-      summary: 'Éxito',
-      detail: 'Producto eliminado correctamente',
-      life: 3000,
-    });
-    loadCatalogs(); // Recarga la lista de productos
-    showDeleteDialog.value = false; // Cierra el diálogo
-    catalogIdToDelete.value = null; // Limpia el ID
-    /*catalogservice
-        .delete(productIdToDelete.value)
-        .then(() => {
-          toast.add({
-            severity: 'success',
-            summary: 'Éxito',
-            detail: 'Producto eliminado correctamente',
-            life: 3000,
-          });
-          loadcatalogs(); // Recarga la lista de productos
-        })
-        .catch(() => {
-          toast.add({
-            severity: 'error',
-            summary: 'Error',
-            detail: 'No se pudo eliminar el producto',
-            life: 3000,
-          });
-        })
-        .finally(() => {
-          showDeleteDialog.value = false; // Cierra el diálogo
-          productIdToDelete.value = null; // Limpia el ID
-        });*/
+    catalogService
+      .delete(Number(catalogIdToDelete.value))
+      .then(() => {
+        toast.add({
+          severity: 'success',
+          summary: 'Éxito',
+          detail: 'Producto eliminado correctamente',
+          life: 3000,
+        });
+        loadCatalogs(); // Recarga la lista de productos
+        showDeleteDialog.value = false; // Cierra el diálogo
+        catalogIdToDelete.value = null; // Limpia el ID
+      })
+      .catch(() => {
+        toast.add({
+          severity: 'error',
+          summary: 'Error',
+          detail: 'No se pudo eliminar el producto',
+          life: 3000,
+        });
+      })
+      .finally(() => {
+        showDeleteDialog.value = false; // Cierra el diálogo
+        catalogIdToDelete.value = null; // Limpia el ID
+      });
   }
 };
 </script>

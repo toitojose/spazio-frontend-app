@@ -167,8 +167,8 @@
               accept="image/*"
               :maxFileSize="1000000"
               name="file"
-              :url="''"
-              :auto="true"
+              :auto="false"
+              :customUpload="true"
               :showUploadButton="false"
               @select="onSelectFiles">
               <template #empty>
@@ -214,6 +214,7 @@ import type { ImageURL, ProductSend } from '@/interfaces/products/product.interf
 import { backendClient } from '@/api/backend-client';
 import { ProductService } from '@/services/product-service';
 import { TypeService } from '@/services/type-service';
+import { ImageService } from '@/services/imagesProduct-services';
 
 //Constantes de Breadcrumb
 const home = ref({
@@ -227,6 +228,7 @@ const toast = useToast();
 const submitted = ref(false);
 const createService = new ProductService(backendClient);
 const typeService = new TypeService(backendClient);
+const imageService = new ImageService(backendClient);
 const isLoading = ref(false);
 const selectedFiles = ref<File[]>([]);
 
@@ -262,12 +264,7 @@ const onSelectFiles = (event: { files: File[] }) => {
 
 const validateForm = () => {
   return (
-    formData.name &&
-    formData.resume &&
-    formData.description &&
-    formData.purchasePrice > 0 &&
-    formData.salePrice > 0 &&
-    formData.type
+    formData.name && formData.resume && formData.description && formData.purchasePrice > 0 && formData.salePrice > 0
   );
 };
 
@@ -281,50 +278,103 @@ const prepareProduct = (): ProductSend => {
     description: formData.description,
     purchasePrice: formData.purchasePrice,
     salePrice: formData.salePrice,
-    productType: Number(formData.type),
     stock: 0,
+    productType: Number(formData.type),
+    status: formData.status ? 'ACTIVE' : 'INACTIVE',
   };
   return result;
+};
+
+const isRatioValid = () => {
+  const ratio = ((formData.salePrice - formData.purchasePrice) / formData.purchasePrice) * 100;
+  return ratio >= 65;
 };
 
 const onSubmit = async () => {
   submitted.value = true;
   isLoading.value = true;
 
-  if (validateForm()) {
-    try {
-      const response = await createService.create(prepareProduct());
-      // Agrgar verificacion del success
-      if (response.message === 'success') {
-        console.log(response);
-        toast.add({
-          severity: 'success',
-          summary: 'Éxito',
-          detail: 'Producto guardado correctamente',
-          life: 3000,
-        });
-        setTimeout(() => {
-          router.push('/admin/products');
-          submitted.value = false;
-        }, 1000);
-      }
-    } catch (error) {
-      toast.add({
-        severity: 'error',
-        summary: 'Error',
-        detail: 'Ocurrió un error al guardar el producto', //Tecnical debt
-        life: 3000,
-      });
-    } finally {
-      isLoading.value = false;
-    }
-  } else {
+  // Validación general
+  if (!validateForm()) {
     toast.add({
       severity: 'error',
-      summary: 'Error',
+      summary: 'Campos incompletos',
       detail: 'Por favor, complete todos los campos requeridos',
       life: 3000,
     });
+    isLoading.value = false;
+    return;
+  }
+
+  // Validación de ratio
+  if (!isRatioValid()) {
+    toast.add({
+      severity: 'error',
+      summary: 'Error en precios',
+      detail: 'El ratio (utilidad) debe ser al menos del 65%',
+      life: 3000,
+    });
+    isLoading.value = false;
+    return;
+  }
+
+  try {
+    const response = await createService.create(prepareProduct());
+
+    if (response.result && response.data) {
+      const productId = response.data[0].id;
+
+      toast.add({
+        severity: 'success',
+        summary: 'Producto creado',
+        detail: 'El producto fue guardado exitosamente',
+        life: 3000,
+      });
+
+      // Si hay imágenes, subirlas
+      if (selectedFiles.value.length > 0) {
+        const uploadResult = await imageService.uploadImages(productId, selectedFiles.value);
+
+        if (uploadResult.result) {
+          toast.add({
+            severity: 'success',
+            summary: 'Imágenes subidas',
+            detail: 'Todas las imágenes fueron subidas correctamente',
+            life: 3000,
+          });
+        } else {
+          toast.add({
+            severity: 'warn',
+            summary: 'Producto sin imágenes',
+            detail: 'El producto se creó, pero hubo errores al subir las imágenes',
+            life: 4000,
+          });
+        }
+      }
+
+      setTimeout(() => {
+        router.push('/admin/products');
+        submitted.value = false;
+      }, 1000);
+    } else {
+      // Algo falló en la respuesta del backend
+      toast.add({
+        severity: 'error',
+        summary: 'Error del servidor',
+        detail: 'No se pudo crear el producto. Intente más tarde.',
+        life: 4000,
+      });
+    }
+  } catch (error) {
+    console.error('Error al crear producto:', error);
+    toast.add({
+      severity: 'error',
+      summary: 'Error de conexión',
+      detail: 'Ocurrió un error inesperado al guardar el producto',
+      life: 4000,
+    });
+  } finally {
+    isLoading.value = false;
   }
 };
 </script>

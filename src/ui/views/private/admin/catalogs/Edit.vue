@@ -128,6 +128,7 @@ import { useRouter, useRoute } from 'vue-router';
 import { backendClient } from '@/api/backend-client';
 import type { Catalog, CatalogResult, CatalogSendUpdate } from '@/interfaces/catalogs/catalogs.interface';
 import { CatalogService } from '@/services/catalogs-services';
+import { CategoryLevelEnum } from '@/enums/category-level.enum';
 
 const router = useRouter();
 const toast = useToast();
@@ -180,11 +181,10 @@ watch(
   },
 );
 
-const categoryOptions = [
-  { label: 'Nivel 1', value: 'Nivel 1' },
-  { label: 'Nivel 2', value: 'Nivel 2' },
-  { label: 'Nivel 3', value: 'Nivel 3' },
-];
+const categoryOptions = Object.values(CategoryLevelEnum).map((val) => ({
+  label: val,
+  value: val,
+}));
 
 const validateForm = () => {
   return formData.name && formData.description && formData.category_level;

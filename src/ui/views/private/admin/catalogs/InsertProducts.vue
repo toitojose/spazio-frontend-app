@@ -46,9 +46,9 @@
       size="small">
       <template #header>
         <div class="flex justify-between gap-10">
-          <Dropdown
+          <Select
             v-model="selectedTipo"
-            :options="tipos"
+            :options="typeOptions"
             optionLabel="label"
             optionValue="value"
             placeholder="Filtrar por tipo"
@@ -81,18 +81,18 @@
         filterPlaceholder="Buscar por nombre" />
 
       <Column
-        field="resume"
+        field="description"
         header="Resumen"
         sortable
         filter
-        filterPlaceholder="Buscar por resumen" />
+        filterPlaceholder="Buscar por descripción" />
 
       <Column
         field="precioVenta"
         header="C/Venta"
         sortable>
         <template #body="{ data }">
-          {{ formatCurrency(data.salePrice) }}
+          {{ formatCurrency(data.sale_price) }}
         </template>
       </Column>
 
@@ -103,7 +103,7 @@
       </Column>
 
       <Column
-        header="Pedidos"
+        header="Cajes"
         sortable>
         <template #body="{ data }"> 0 </template>
       </Column>
@@ -136,9 +136,11 @@ import {
   Dialog as PDialog,
   Breadcrumb,
   Dropdown,
+  Select,
 } from 'primevue';
 import DataTable from 'primevue/datatable';
 import Column from 'primevue/column';
+import { TypeService } from '@/services/type-service.ts';
 
 const router = useRouter();
 const route = useRoute();
@@ -146,6 +148,7 @@ const toast = useToast();
 const submitted = ref(false);
 const productService = new ProductService(backendClient);
 const catalogService = new CatalogService(backendClient);
+const typeService = new TypeService(backendClient);
 const productos: Product[] | undefined = [];
 const products = ref(productos);
 const selectedProducts = ref();
@@ -155,28 +158,36 @@ const filters = ref({
   global: { value: '', matchMode: FilterMatchMode.CONTAINS },
 });
 
-const selectedTipo = ref(null);
-const tipos = [
-  { label: 'Todos', value: null },
-  { label: 'Físico', value: 'fisico' },
-  { label: 'Digital', value: 'digital' },
-  { label: 'Servicio', value: 'servicio' },
-];
+const selectedTipo = ref<string | null>(null);
+const typeOptions = ref<{ label: string; value: string }[]>([]);
 
-const filterByTipo = () => {
-  if (selectedTipo.value) {
-    filters.value['tipo'] = {
-      value: selectedTipo.value,
-      matchMode: FilterMatchMode.EQUALS,
-    };
-  } else {
-    delete filters.value['tipo']; // limpia si selecciona "Todos"
+
+const filterByTipo = async () => {
+  try {
+    if (selectedTipo.value) {
+      const response = await typeService.getProductsByTypeId(Number(selectedTipo.value));
+      products.value = response.data ?? [];
+      console.log(response.data);
+    } else {
+      // Si es "Todos", carga todos los productos
+      await loadProducts();
+    }
+  } catch (error) {
+    console.error('Error al filtrar productos por tipo:', error);
+    toast.add({
+      severity: 'error',
+      summary: 'Error',
+      detail: 'No se pudieron cargar los productos por tipo',
+      life: 3000,
+    });
   }
 };
+
 
 onMounted(() => {
   loadProducts();
   loadCatalog();
+  loadTypes();
 });
 
 const formData = reactive({
@@ -186,11 +197,35 @@ const formData = reactive({
   category: '',
 });
 
+const loadTypes = async () => {
+  try {
+    const response = await typeService.getTypes();
+
+    if (response.data) {
+      typeOptions.value = [
+        { label: 'Todos', value: '' },
+        ...response.data.map((t: any) => ({
+          label: t.name,
+          value: String(t.id),
+        })),
+      ];
+    }
+  } catch (error) {
+    console.error('❌ Error al cargar tipos de producto:', error);
+    toast.add({
+      severity: 'error',
+      summary: 'Error',
+      detail: 'No se pudieron cargar los tipos de productos',
+      life: 3000,
+    });
+  }
+};
+
 const loadProducts = async () => {
   try {
     const response = await productService.products();
     products.value = response.data ?? [];
-    console.log("'*****'", response.data);
+    console.log('********** ', response);
   } catch (error) {
     console.error('Error loading products:', error);
   }
@@ -224,7 +259,7 @@ watch(
 );
 
 const validateForm = () => {
-  return selectedProducts > 0;
+  return selectedProducts.value && selectedProducts.value.length > 0;
 };
 
 const onSave = (data: string) => {
@@ -273,7 +308,8 @@ const onSave = (data: string) => {
   }*/
 };
 
-const formatCurrency = (value: number) => {
+const formatCurrency = (value?: number) => {
+  if (typeof value !== 'number') return '$0.00'; // Valor por defecto o mensaje
   return value.toLocaleString('en-US', { style: 'currency', currency: 'USD' });
 };
 

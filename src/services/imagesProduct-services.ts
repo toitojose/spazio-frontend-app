@@ -1,6 +1,7 @@
 import type { ImageResult } from '@/interfaces/products/imagesProduct.interface';
 import type { AxiosInstance } from 'axios';
-
+import { useUserStore } from '@/store/user.ts';
+const userStore = useUserStore();
 export class ImageService {
   private authBackendClient: AxiosInstance;
 
@@ -48,12 +49,15 @@ export class ImageService {
 
     try {
       for (const file of files) {
+        console.log('📤 Subiendo archivo:', file);
+        if (!file || file.size === 0 || !file.type.startsWith('image/')) continue;
+
         const formData = new FormData();
-        formData.append('file', file);
+        formData.append('file', file); // 👈 nombre exacto que espera el backend
 
         const response = await this.authBackendClient.post(`http://localhost:7000/upload/${productId}`, formData, {
           headers: {
-            'Content-Type': 'multipart/form-data',
+            Authorization: `Bearer ${userStore.token}`,
           },
         });
 
@@ -66,6 +70,7 @@ export class ImageService {
         data: uploadedImages,
       };
     } catch (error: unknown) {
+      console.error('❌ Error al subir imagen:', error);
       return this.handleError(error, 'Error subiendo una o más imágenes');
     }
   }
