@@ -122,15 +122,13 @@ onMounted(() => {
   if (storedScenario) {
     selectedScenario.value = scenarios.find((s) => s.name === storedScenario) || null;
 
-    if (renterProgressStore.isStepCompleted(currentStep)) {
-      // Ya completó este paso, así que activamos el flujo correspondiente
+    if (renterProgressStore.isStepCompleted(currentStep.value)) {
       if (storedScenario === RenterStatusEnum.EXPLORING_OPTIONS) {
         nextRoute.value = '/renter/identity-verification';
-        navButtons.value = true;
       } else if (storedScenario === RenterStatusEnum.RENTING_WITH_CONTRACT) {
         nextRoute.value = '/renter/general-information';
-        navButtons.value = true;
       }
+      navButtons.value = true;
     }
   }
 });
