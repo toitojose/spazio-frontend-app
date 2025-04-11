@@ -268,10 +268,6 @@ const validateForm = () => {
   );
 };
 
-const prepareImage = (): ImageURL[] => {
-  return formData.imageURL;
-};
-
 const prepareProduct = (): ProductSend => {
   const result: ProductSend = {
     name: formData.name,

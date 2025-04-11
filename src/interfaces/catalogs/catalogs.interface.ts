@@ -22,18 +22,30 @@ export interface Catalog {
   updated_at: string;
   start_date: string;
   end_date: string;
+  products: number[];
   deleted_at?: string | null;
 }
 export interface CatalogSend {
   name: string;
   description: string;
-  category_level: string;
-  is_public: boolean;
-  start_date: string;
-  end_date: string;
+  categoryLevel: number;
+  isPublic: boolean;
+  startDate: string;
+  endDate: string;
+  products: number[];
 }
 
 export interface CatalogSendUpdate {
+  name: string;
+  description: string;
+  categoryLevel: number;
+  isPublic: boolean;
+  startDate: string;
+  endDate: string;
+  status: 'ACTIVE' | 'INACTIVE' | 'DRAFT';
+}
+
+export interface CatalogSendUpdateProducts {
   name: string;
   description: string;
   categoryLevel: number;

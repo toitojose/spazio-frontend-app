@@ -114,7 +114,7 @@
     <PButton
       severity="secondary"
       label="Guardar"
-      @click="() => onSave(data)" />
+      @click="() => onSave()" />
   </div>
 </template>
 
@@ -125,7 +125,7 @@ import { FilterMatchMode } from '@primevue/core/api';
 import { ProductService } from '@/services/product-service.ts';
 import type { Product } from '@/interfaces/products/product.interface';
 import { CatalogService } from '@/services/catalogs-services';
-import type { Catalog } from '@/interfaces/catalogs/catalogs.interface';
+import type { Catalog, CatalogSendUpdateProducts } from '@/interfaces/catalogs/catalogs.interface';
 import { backendClient } from '@/api/backend-client';
 import {
   Button as PButton,
@@ -161,7 +161,6 @@ const filters = ref({
 const selectedTipo = ref<string | null>(null);
 const typeOptions = ref<{ label: string; value: string }[]>([]);
 
-
 const filterByTipo = async () => {
   try {
     if (selectedTipo.value) {
@@ -183,7 +182,6 @@ const filterByTipo = async () => {
   }
 };
 
-
 onMounted(() => {
   loadProducts();
   loadCatalog();
@@ -193,8 +191,10 @@ onMounted(() => {
 const formData = reactive({
   name: '',
   description: '',
-  isPublic: true,
-  category: '',
+  is_public: true,
+  category_level: 0,
+  start_date: null as Date | null,
+  end_date: null as Date | null,
 });
 
 const loadTypes = async () => {
@@ -225,7 +225,6 @@ const loadProducts = async () => {
   try {
     const response = await productService.products();
     products.value = response.data ?? [];
-    console.log('********** ', response);
   } catch (error) {
     console.error('Error loading products:', error);
   }
@@ -237,8 +236,12 @@ const loadCatalog = async () => {
     const catalogResponse: Catalog | undefined = response.data;
     formData.name = catalogResponse?.name ? catalogResponse.name : '';
     formData.description = catalogResponse?.description ? catalogResponse.description : '';
-
-    console.log('********** ', response);
+    formData.category_level = catalogResponse?.category_level ? Number(catalogResponse.category_level) : 0;
+    formData.is_public = catalogResponse?.is_public ?? true;
+    formData.start_date = catalogResponse?.start_date ? new Date(catalogResponse.start_date) : null;
+    formData.end_date = catalogResponse?.end_date ? new Date(catalogResponse.end_date) : null;
+    selectedProducts.value = catalogResponse?.products;
+    console.log('🚀 ~ file: InsertProducts.vue ~ line 134 ~ loadCatalog ~ catalogResponse', catalogResponse);
   } catch (error) {
     console.error('Error loading products:', error);
   }
@@ -259,42 +262,47 @@ watch(
 );
 
 const validateForm = () => {
+  console.log('validateForm', selectedProducts.value);
   return selectedProducts.value && selectedProducts.value.length > 0;
 };
 
-const onSave = (data: string) => {
-  toast.add({
-    severity: 'success',
-    summary: 'Éxito',
-    detail: 'Producto guardado correctamente',
-    life: 3000,
-  });
-  setTimeout(() => {
-    router.push('/admin/catalogs');
-    submitted.value = false;
-  }, 1000);
-  /*
+const prepareCatalog = (): CatalogSendUpdateProducts => {
+  const toUtcISOString = (date: Date | null): string => {
+    return date ? new Date(date.getTime() - date.getTimezoneOffset() * 60000).toISOString().split('.')[0] + 'Z' : '';
+  };
+
+  const result: CatalogSendUpdateProducts = {
+    name: formData.name,
+    description: formData.description,
+    isPublic: formData.is_public,
+    categoryLevel: Number(formData.category_level),
+    startDate: toUtcISOString(formData.start_date),
+    endDate: toUtcISOString(formData.end_date),
+    products: selectedProducts.value.map((p: Product) => p.id),
+  };
+  return result;
+};
+
+const onSave = async () => {
+  submitted.value = true;
 
   if (validateForm()) {
     try {
-      const response = await createCatalog.create(prepareCatalog());
-      console.log(response);
-      //Verificar el success
-      toast.add({
-        severity: 'success',
-        summary: 'Éxito',
-        detail: 'Producto guardado correctamente',
-        life: 3000,
-      });
-      setTimeout(() => {
-        router.push('/admin/catalogs');
-        submitted.value = false;
-      }, 1000);
+      const response = await catalogService.updateProducts(prepareCatalog(), Number(catalogId.value));
+      if (response.result) {
+        toast.add({ severity: 'success', summary: 'Éxito', detail: 'Productos asociados correctamente', life: 3000 });
+        setTimeout(() => {
+          router.push('/admin/catalogs');
+          submitted.value = false;
+        }, 1000);
+      } else {
+        throw new Error(response.message || 'Error desconocido');
+      }
     } catch (error) {
       toast.add({
         severity: 'error',
         summary: 'Error',
-        detail: 'Error al guardar el producto',
+        detail: 'Error al asociar los productos',
         life: 3000,
       });
     }
@@ -302,10 +310,10 @@ const onSave = (data: string) => {
     toast.add({
       severity: 'error',
       summary: 'Error',
-      detail: 'Por favor, complete todos los campos requeridos',
+      detail: 'Por favor, selecciona al menos un producto',
       life: 3000,
     });
-  }*/
+  }
 };
 
 const formatCurrency = (value?: number) => {

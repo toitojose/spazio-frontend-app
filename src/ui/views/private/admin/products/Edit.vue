@@ -162,16 +162,15 @@
 
           <!-- 🔵 Columna 2: Subida de imágenes -->
           <div class="flex flex-col items-center">
-            <Toast />
             <FileUpload
               :multiple="true"
               accept="image/*"
               :maxFileSize="1000000"
-              name="demo[]"
-              :url="''"
-              :auto="true"
+              name="file"
+              :auto="false"
+              :customUpload="true"
               :showUploadButton="false"
-              @upload="uploadImage($event)">
+              @select="onSelectFiles">
               <template #empty>
                 <div class="flex h-full flex-col items-center justify-center">
                   <i class="pi pi-image mb-2 text-3xl"></i>
@@ -179,9 +178,20 @@
                 </div>
               </template>
             </FileUpload>
+            <div class="mt-4 grid grid-cols-2 gap-2">
+              <div
+                v-for="img in formData.imageURL"
+                :key="img.id"
+                class="rounded border p-2 text-center">
+                <img
+                  :src="img.url"
+                  loading="lazy"
+                  class="h-24 w-full rounded object-cover" />
+                <small class="mt-1 block text-gray-500">Producto: {{ img.id }}</small>
+              </div>
+            </div>
           </div>
 
-          <!-- 🟠 Botón alineado -->
           <div class="col-span-2 flex justify-end">
             <PButton
               type="submit"
@@ -202,7 +212,6 @@ import {
   FloatLabel,
   InputNumber,
   Checkbox,
-  Toast,
   FileUpload,
   Breadcrumb,
   Select,
@@ -213,16 +222,21 @@ import { useToast } from 'primevue/usetoast';
 import { useRouter, useRoute } from 'vue-router';
 import type { ImageURL, Product, ProductSendUpdate } from '@/interfaces/products/product.interface';
 import { backendClient } from '@/api/backend-client';
-import { ProductService } from '@/services/product-service.js';
+import { ProductService } from '@/services/product-service';
 import { TypeService } from '@/services/type-service';
+import { ImageService } from '@/services/imagesProduct-services';
 
 const router = useRouter();
 const toast = useToast();
 const submitted = ref(false);
 const productService = new ProductService(backendClient);
 const typeService = new TypeService(backendClient);
+const imagesProductService = new ImageService(backendClient);
+const imageService = new ImageService(backendClient);
 const route = useRoute();
 const productId = ref(route.params.id);
+const isLoading = ref(false);
+const selectedFiles = ref<File[]>([]);
 
 const typeOptions = ref<{ label: string; value: string }[]>([]);
 
@@ -243,8 +257,9 @@ onMounted(async () => {
   try {
     await loadProductTypes();
     await loadProduct();
+    await loadImages();
   } catch (err) {
-    console.error('🔴 Error al montar componente:', err);
+    console.error('Error al montar componente:', err);
     toast.add({ severity: 'error', summary: 'Error', detail: 'Error al cargar el formulario', life: 4000 });
   }
 });
@@ -268,7 +283,7 @@ const loadProduct = async () => {
       formData.type = foundType ? foundType.value : '';
     }
   } catch (error) {
-    console.error('🔴 Error loading product:', error);
+    console.error('Error loading product:', error);
     toast.add({ severity: 'error', summary: 'Error', detail: 'No se pudo cargar el producto', life: 4000 });
   }
 };
@@ -280,8 +295,25 @@ const loadProductTypes = async () => {
       typeOptions.value = response.data.map((t) => ({ label: t.name, value: String(t.id) }));
     }
   } catch (error) {
-    console.error('🔴 Error loading types:', error);
+    console.error('Error loading types:', error);
     toast.add({ severity: 'error', summary: 'Error', detail: 'No se pudieron cargar los tipos', life: 4000 });
+  }
+};
+
+const loadImages = async () => {
+  try {
+    const response = await imagesProductService.getImages(Number(productId.value));
+    console.log('Images ', response.data);
+
+    const images = (response.data as any).photos;
+
+    formData.imageURL = images.map((img: any) => ({
+      id: img.id,
+      url: img.url,
+    }));
+  } catch (error) {
+    console.error('Error loading types:', error);
+    toast.add({ severity: 'error', summary: 'Error', detail: 'No se pudieron cargar las imágenes', life: 4000 });
   }
 };
 
@@ -299,14 +331,15 @@ watch(
   },
 );
 
+// Almacena las imágenes seleccionadas
+const onSelectFiles = (event: { files: File[] }) => {
+  selectedFiles.value = event.files;
+};
+
 const validateForm = () => {
   return (
     formData.name && formData.resume && formData.description && formData.purchasePrice > 0 && formData.salePrice > 0
   );
-};
-
-const prepareImage = (): ImageURL[] => {
-  return formData.imageURL;
 };
 
 const prepareProduct = (): ProductSendUpdate => {
@@ -324,37 +357,43 @@ const prepareProduct = (): ProductSendUpdate => {
   return result;
 };
 
-const uploadImage = async (event: any) => {
-  event.files.forEach((file: any, index: number) => {
-    // Simular una URL de imagen de prueba para cada archivo subido
-    const fakeUrl = `https://via.placeholder.com/150?text=Image+${formData.imageURL.length + 1}`;
-
-    // Agregar la URL simulada al array de imágenes
-    formData.imageURL.push({
-      id: formData.imageURL.length + 1, // ID único
-      url: fakeUrl,
-    });
-  });
-
-  toast.add({
-    severity: 'info',
-    summary: 'Imagen subida',
-    detail: 'Se han agregado imágenes de prueba',
-    life: 3000,
-  });
-
-  console.log('Imágenes simuladas:', formData.imageURL);
-  toast.add({ severity: 'info', summary: 'Success', detail: 'File Uploaded', life: 3000 });
-};
-
 const onSubmit = async () => {
   submitted.value = true;
+  isLoading.value = true;
 
   if (validateForm()) {
     try {
       const response = await productService.update(prepareProduct());
-      if (response.result) {
-        toast.add({ severity: 'success', summary: 'Éxito', detail: 'Producto actualizado correctamente', life: 3000 });
+      if (response.result && response.data) {
+        const productId = response.data[0].id;
+
+        toast.add({
+          severity: 'success',
+          summary: 'Producto actualizado',
+          detail: 'Producto actualizado correctamente',
+          life: 3000,
+        });
+        // Si hay imágenes, subirlas
+        if (selectedFiles.value.length > 0) {
+          const uploadResult = await imageService.uploadImages(productId, selectedFiles.value);
+
+          if (uploadResult.result) {
+            toast.add({
+              severity: 'success',
+              summary: 'Imágenes subidas',
+              detail: 'Todas las imágenes fueron subidas correctamente',
+              life: 3000,
+            });
+          } else {
+            toast.add({
+              severity: 'warn',
+              summary: 'Producto sin imágenes',
+              detail: 'El producto se creó, pero hubo errores al subir las imágenes',
+              life: 4000,
+            });
+          }
+        }
+
         setTimeout(() => {
           router.push('/admin/products');
           submitted.value = false;
@@ -363,7 +402,7 @@ const onSubmit = async () => {
         throw new Error(response.message || 'Error desconocido');
       }
     } catch (error: any) {
-      console.error('🔴 Error en envío:', error);
+      console.error('Error en envío:', error);
       toast.add({
         severity: 'error',
         summary: 'Error',

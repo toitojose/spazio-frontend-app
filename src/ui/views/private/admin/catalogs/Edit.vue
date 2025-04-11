@@ -95,6 +95,53 @@
               >
             </div>
 
+            <!-- Fechas -->
+            <div class="flex w-full gap-4">
+              <div class="flex w-full flex-col gap-1">
+                <label
+                  for="start_date"
+                  class="text-sm font-medium"
+                  >Fecha de inicio</label
+                >
+                <DatePicker
+                  id="start_date"
+                  v-model="formData.start_date"
+                  showIcon
+                  showTime
+                  hourFormat="12"
+                  dateFormat="yy-mm-dd"
+                  :class="{ 'p-invalid': submitted && !formData.start_date }"
+                  class="w-full" />
+                <small
+                  v-if="submitted && !formData.start_date"
+                  class="p-error text-red-500">
+                  La fecha de inicio es requerida
+                </small>
+              </div>
+
+              <div class="flex w-full flex-col gap-1">
+                <label
+                  for="endDate"
+                  class="text-sm font-medium"
+                  >Fecha de fin</label
+                >
+                <DatePicker
+                  id="endDate"
+                  v-model="formData.end_date"
+                  showIcon
+                  showTime
+                  hourFormat="12"
+                  dateFormat="yy-mm-dd"
+                  :class="{ 'p-invalid': submitted && !formData.end_date }"
+                  class="w-full" />
+                <small
+                  v-if="submitted && !formData.end_date"
+                  class="p-error text-red-500">
+                  La fecha de fin es requerida
+                </small>
+              </div>
+            </div>
+
             <!-- Estado -->
             <div class="flex w-full flex-col gap-1">
               <div class="flex items-center gap-2">
@@ -124,6 +171,7 @@
 import { Card, InputText, Button as PButton, FloatLabel, Dropdown, Checkbox, Breadcrumb } from 'primevue';
 import { reactive, ref, onMounted, watch } from 'vue';
 import { useToast } from 'primevue/usetoast';
+import DatePicker from 'primevue/datepicker';
 import { useRouter, useRoute } from 'vue-router';
 import { backendClient } from '@/api/backend-client';
 import type { Catalog, CatalogResult, CatalogSendUpdate } from '@/interfaces/catalogs/catalogs.interface';
@@ -141,7 +189,9 @@ const formData = reactive({
   name: '',
   description: '',
   is_public: true,
-  category_level: '',
+  category_level: 0,
+  start_date: null as Date | null,
+  end_date: null as Date | null,
 });
 
 onMounted(() => {
@@ -156,12 +206,9 @@ const loadCatalog = async () => {
     formData.name = catalogResponse?.name ? catalogResponse.name : '';
     formData.description = catalogResponse?.description ? catalogResponse.description : '';
     formData.is_public = catalogResponse?.is_public ?? true;
-
-    // 🟢 Setear el campo type con el valor obtenido de la base de datos
-    if (catalogResponse?.category_level) {
-      const foundOption = categoryOptions.find((option) => option.value === catalogResponse.category_level);
-      formData.category_level = foundOption ? foundOption.value : '';
-    }
+    formData.category_level = Number(catalogResponse?.category_level) || CategoryLevelEnum.LEVEL1;
+    formData.start_date = catalogResponse?.start_date ? new Date(catalogResponse.start_date) : null;
+    formData.end_date = catalogResponse?.end_date ? new Date(catalogResponse.end_date) : null;
   } catch (error) {
     console.error('Error loading products:', error);
   }
@@ -181,22 +228,29 @@ watch(
   },
 );
 
-const categoryOptions = Object.values(CategoryLevelEnum).map((val) => ({
-  label: val,
-  value: val,
-}));
+const categoryOptions = [
+  { label: 'NIVEL 1', value: CategoryLevelEnum.LEVEL1 },
+  { label: 'NIVEL 2', value: CategoryLevelEnum.LEVEL2 },
+  { label: 'NIVEL 3', value: CategoryLevelEnum.LEVEL3 },
+  { label: 'NIVEL 4', value: CategoryLevelEnum.LEVEL4 },
+];
 
 const validateForm = () => {
-  return formData.name && formData.description && formData.category_level;
+  return formData.name && formData.description && formData.category_level && formData.start_date && formData.end_date;
 };
 
 const prepareCatalog = (): CatalogSendUpdate => {
+  const toUtcISOString = (date: Date | null): string => {
+    return date ? new Date(date.getTime() - date.getTimezoneOffset() * 60000).toISOString().split('.')[0] + 'Z' : '';
+  };
+
   const result: CatalogSendUpdate = {
-    id: Number(catalogId.value),
     name: formData.name,
     description: formData.description,
-    is_public: formData.is_public,
-    category_level: formData.category_level,
+    isPublic: formData.is_public,
+    categoryLevel: Number(formData.category_level),
+    startDate: toUtcISOString(formData.start_date),
+    endDate: toUtcISOString(formData.end_date),
   };
   return result;
 };
@@ -206,20 +260,18 @@ const onSubmit = async () => {
 
   if (validateForm()) {
     try {
-      const response = await catalogService.update(prepareCatalog());
+      const response = await catalogService.update(prepareCatalog(), Number(catalogId.value));
       console.log(response);
-      /*dinamizar la respuesta */
-      toast.add({
-        severity: 'success',
-        summary: 'Éxito',
-        detail: 'Producto guardado correctamente',
-        life: 3000,
-      });
-      setTimeout(() => {
-        router.push('/admin/catalogs');
-        submitted.value = false;
-      }, 1000);
-    } catch (error) {
+      if (response.result) {
+        toast.add({ severity: 'success', summary: 'Éxito', detail: 'Catálogo actualizado correctamente', life: 3000 });
+        setTimeout(() => {
+          router.push('/admin/catalogs');
+          submitted.value = false;
+        }, 1000);
+      } else {
+        throw new Error(response.message || 'Error desconocido');
+      }
+    } catch (error: any) {
       toast.add({
         severity: 'error',
         summary: 'Error',

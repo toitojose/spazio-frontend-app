@@ -86,7 +86,14 @@
         header="Categoría"
         sortable>
         <template #body="{ data }">
-          {{ data.category_level }}
+          {{
+            {
+              1: 'NIVEL 1',
+              2: 'NIVEL 2',
+              3: 'NIVEL 3',
+              4: 'NIVEL 4',
+            }[data.category_level]
+          }}
         </template>
       </Column>
 
