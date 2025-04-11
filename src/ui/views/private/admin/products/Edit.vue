@@ -131,7 +131,7 @@
             <!-- Tipo -->
             <div class="flex w-full flex-col gap-1">
               <FloatLabel variant="on">
-                <Dropdown
+                <Select
                   id="type"
                   v-model="formData.type"
                   :options="typeOptions"
@@ -205,6 +205,7 @@ import {
   Toast,
   FileUpload,
   Breadcrumb,
+  Select,
 } from 'primevue';
 import Editor from 'primevue/editor';
 import { reactive, ref, onMounted, watch } from 'vue';
@@ -213,13 +214,17 @@ import { useRouter, useRoute } from 'vue-router';
 import type { ImageURL, Product, ProductSendUpdate } from '@/interfaces/products/product.interface';
 import { backendClient } from '@/api/backend-client';
 import { ProductService } from '@/services/product-service.js';
+import { TypeService } from '@/services/type-service';
 
 const router = useRouter();
 const toast = useToast();
 const submitted = ref(false);
 const productService = new ProductService(backendClient);
+const typeService = new TypeService(backendClient);
 const route = useRoute();
 const productId = ref(route.params.id);
+
+const typeOptions = ref<{ label: string; value: string }[]>([]);
 
 const formData = reactive({
   name: '',
@@ -234,30 +239,49 @@ const formData = reactive({
   imageURL: [] as ImageURL[],
 });
 
-onMounted(() => {
-  loadProduct();
+onMounted(async () => {
+  try {
+    await loadProductTypes();
+    await loadProduct();
+  } catch (err) {
+    console.error('🔴 Error al montar componente:', err);
+    toast.add({ severity: 'error', summary: 'Error', detail: 'Error al cargar el formulario', life: 4000 });
+  }
 });
 
 const loadProduct = async () => {
   try {
-    console.log('++++++++ ', productId.value);
     const response = await productService.productsById(Number(productId.value));
-    /*Verificar el success de la respuesta */
     const productResponse: Product | undefined = Array.isArray(response.data) ? response.data[0] : response.data;
-    formData.name = productResponse?.name ? productResponse.name : '';
-    formData.description = productResponse?.description ? productResponse.description : '';
-    formData.purchasePrice = productResponse?.purchase_price ? productResponse.purchase_price : 0;
-    formData.salePrice = productResponse?.sale_price ? productResponse.sale_price : 0;
-    formData.ratio = productResponse?.ratio ? productResponse.ratio : 0;
-    console.log('********** ', response.data);
 
-    // 🟢 Setear el campo type con el valor obtenido de la base de datos
-    if (productResponse?.type) {
-      const foundType = typeOptions.find((option) => option.value === productResponse.type);
-      formData.type = foundType ? foundType.value : ''; // Asignar el valor si existe, sino un string vacío
+    if (!productResponse) throw new Error('Producto no encontrado');
+
+    formData.name = productResponse.name || '';
+    formData.resume = productResponse.description || '';
+    formData.description = productResponse.description || '';
+    formData.purchasePrice = productResponse.purchase_price || 0;
+    formData.salePrice = productResponse.sale_price || 0;
+    formData.ratio = productResponse.ratio || 0;
+
+    if (productResponse.productType) {
+      const foundType = typeOptions.value.find((option) => option.value === String(productResponse.productType?.id));
+      formData.type = foundType ? foundType.value : '';
     }
   } catch (error) {
-    console.error('Error loading products:', error);
+    console.error('🔴 Error loading product:', error);
+    toast.add({ severity: 'error', summary: 'Error', detail: 'No se pudo cargar el producto', life: 4000 });
+  }
+};
+
+const loadProductTypes = async () => {
+  try {
+    const response = await typeService.getTypes();
+    if (response.data) {
+      typeOptions.value = response.data.map((t) => ({ label: t.name, value: String(t.id) }));
+    }
+  } catch (error) {
+    console.error('🔴 Error loading types:', error);
+    toast.add({ severity: 'error', summary: 'Error', detail: 'No se pudieron cargar los tipos', life: 4000 });
   }
 };
 
@@ -275,21 +299,9 @@ watch(
   },
 );
 
-const typeOptions = [
-  { label: 'General', value: 'General' },
-  { label: 'Electrónico', value: 'Electrónico' },
-  { label: 'Ropa', value: 'Ropa' },
-  { label: 'Hogar', value: 'Hogar' },
-];
-
 const validateForm = () => {
   return (
-    formData.name &&
-    formData.resume &&
-    formData.description &&
-    formData.purchasePrice > 0 &&
-    formData.salePrice > 0 &&
-    formData.type
+    formData.name && formData.resume && formData.description && formData.purchasePrice > 0 && formData.salePrice > 0
   );
 };
 
@@ -301,13 +313,13 @@ const prepareProduct = (): ProductSendUpdate => {
   const result: ProductSendUpdate = {
     id: Number(productId.value),
     name: formData.name,
-    resume: formData.description,
     description: formData.description,
     purchasePrice: formData.purchasePrice,
     salePrice: formData.salePrice,
-    type: formData.type,
-    status: formData.status,
-    imageURL: prepareImage(),
+    stock: 0,
+    productType: Number(formData.type),
+    status: formData.status ? 'ACTIVE' : 'INACTIVE',
+    //imageURL: prepareImage(),
   };
   return result;
 };
@@ -341,25 +353,22 @@ const onSubmit = async () => {
   if (validateForm()) {
     try {
       const response = await productService.update(prepareProduct());
-      console.log(response);
-      /*Verificar el success de la respuesta */
-      /*Probar el caso de error tambien*/
-      toast.add({
-        severity: 'success',
-        summary: 'Éxito',
-        detail: 'Producto guardado correctamente',
-        life: 3000,
-      });
-      setTimeout(() => {
-        router.push('/admin/products');
-        submitted.value = false;
-      }, 1000);
-    } catch (error) {
+      if (response.result) {
+        toast.add({ severity: 'success', summary: 'Éxito', detail: 'Producto actualizado correctamente', life: 3000 });
+        setTimeout(() => {
+          router.push('/admin/products');
+          submitted.value = false;
+        }, 1000);
+      } else {
+        throw new Error(response.message || 'Error desconocido');
+      }
+    } catch (error: any) {
+      console.error('🔴 Error en envío:', error);
       toast.add({
         severity: 'error',
         summary: 'Error',
-        detail: 'Error al guardar el producto',
-        life: 3000,
+        detail: error?.message || 'Error al guardar el producto',
+        life: 4000,
       });
     }
   } else {

@@ -71,11 +71,10 @@
         filterPlaceholder="Buscar por resumen" />
 
       <Column
-        field="tipo"
+        field="productType"
         header="Tipo"
         sortable>
-        <template #body="{ data }">General</template>
-        <!-- Temporal -->
+        <template #body="{ data }">{{ data.productType.name }}</template>
       </Column>
 
       <Column
@@ -112,8 +111,8 @@
         header="Estado"
         sortable>
         <template #body="{ data }">
-          <i class="pi pi-circle-fill text-green-500"></i>
-          <!-- Simulamos todos como activos -->
+          <span v-if="data.status"><i class="pi pi-circle-fill text-green-500"></i></span>
+          <span v-else><i class="pi pi-circle-fill text-red-500"></i></span>
         </template>
       </Column>
 
@@ -177,7 +176,8 @@ onMounted(() => {
   loadProducts();
 });
 
-const formatCurrency = (value: number) => {
+const formatCurrency = (value?: number) => {
+  if (typeof value !== 'number') return '$0.00'; // Valor por defecto o mensaje
   return value.toLocaleString('en-US', { style: 'currency', currency: 'USD' });
 };
 
@@ -201,17 +201,8 @@ const onDelete = (id: string) => {
 
 const confirmDelete = () => {
   if (productIdToDelete.value) {
-    toast.add({
-      severity: 'success',
-      summary: 'Éxito',
-      detail: 'Producto eliminado correctamente',
-      life: 3000,
-    });
-    loadProducts(); // Recarga la lista de productos
-    showDeleteDialog.value = false; // Cierra el diálogo
-    productIdToDelete.value = null; // Limpia el ID
-    /*productService
-      .delete(productIdToDelete.value)
+    productService
+      .delete(Number(productIdToDelete.value))
       .then(() => {
         toast.add({
           severity: 'success',
@@ -220,6 +211,8 @@ const confirmDelete = () => {
           life: 3000,
         });
         loadProducts(); // Recarga la lista de productos
+        showDeleteDialog.value = false; // Cierra el diálogo
+        productIdToDelete.value = null; // Limpia el ID
       })
       .catch(() => {
         toast.add({
@@ -232,7 +225,7 @@ const confirmDelete = () => {
       .finally(() => {
         showDeleteDialog.value = false; // Cierra el diálogo
         productIdToDelete.value = null; // Limpia el ID
-      });*/
+      });
   }
 };
 </script>

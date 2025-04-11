@@ -24,17 +24,18 @@ export interface ProductSend {
   salePrice: number;
   stock: number;
   productType: number;
+  status: 'ACTIVE' | 'INACTIVE' | 'DRAFT'; // Valores validos para status
 }
 
 export interface ProductSendUpdate {
   id: number;
-  name: number;
+  name: string;
   description: string;
   purchasePrice: number;
   salePrice: number;
   stock: number;
   productType: number;
-  status: string;
+  status: 'ACTIVE' | 'INACTIVE' | 'DRAFT'; // Valores validos para status
   deletedAt: string;
 }
 
@@ -46,8 +47,7 @@ export interface Product {
   sale_price: number;
   stock: number;
   ratio: number;
-  status: string;
-  created_at: string;
+  status: 'ACTIVE' | 'INACTIVE' | 'DRAFT'; // Valores validos para status  created_at: string;
   updated_at: string;
   deleted_at?: string | null;
   productType: TypeProduct;
