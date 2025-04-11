@@ -96,6 +96,11 @@ export const useRenterProgressStore = defineStore('renterProgress', {
       (route: string): number => {
         return state.steps.filter((step) => step.isRequired).findIndex((step) => step.route === route);
       },
+    getStepIndexByRoute:
+      (state) =>
+      (route: string): number => {
+        return state.steps.findIndex((step) => step.route === route);
+      },
   },
   persist: true,
 });

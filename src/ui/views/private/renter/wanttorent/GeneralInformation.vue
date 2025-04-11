@@ -1,6 +1,6 @@
 <template>
   <ProcessLayout
-    :current-step="currentStep"
+    :current-step="currentStepToSteps"
     :show-navigation-buttons="navButtons"
     @prevStep="handlePreviousStep"
     @nextStep="handleNextStep">
@@ -54,10 +54,12 @@ import { useUserStore } from '@/store/user.ts';
 import { UserClient } from '@/api/UserClient.ts';
 import { UserService } from '@/services/user-service.ts';
 import { useToast } from 'primevue/usetoast';
+import { RenterStatusEnum } from '@/enums/renter-status.enum.ts';
 
 const route = useRoute();
 const userStore = useUserStore();
-const currentStep = computed(() => renterProgressStore.getVisibleStepIndex(route.path));
+const currentStepToSteps = computed(() => renterProgressStore.getVisibleStepIndex(route.path));
+const currentStep = computed(() => renterProgressStore.getStepIndexByRoute(route.path));
 const user = computed(() => prepareInitialFormData(userStore.user, RolesEnum.RENTER));
 const userClient = new UserClient();
 const userService = new UserService(userClient);
@@ -79,7 +81,7 @@ watch(() => [user.value.firstName, user.value.lastName], updateCompletedStep);
 
 const onFormSubmit = async (data: any) => {
   try {
-    const cleanedData = prepareValidateData(data, RolesEnum.RENTER);
+    const cleanedData = prepareValidateData(data);
     if (!cleanedData) {
       alert('Error al limpiar los datos.');
       return;
@@ -88,10 +90,16 @@ const onFormSubmit = async (data: any) => {
     if (response.success && response.data) {
       // Actualizar el store
       userStore.setUser(cleanedData);
+      console.log('=>(GeneralInformation.vue:92) currentStep', currentStep.value);
       renterProgressStore.markStepCompleted(currentStep.value, true);
       renterProgressStore.updateStepSummary(currentStep.value, `${cleanedData.firstName} ${cleanedData.lastName}`);
-
       navButtons.value = true;
+      toast.add({
+        severity: 'success',
+        summary: response.message,
+        detail: 'Tus datos han sido guardados correctamente.',
+        life: 3000,
+      });
     }
   } catch (error) {
     toast.add({ severity: 'error', summary: 'Error al actualizar tu información', detail: error, life: 3000 });
@@ -101,15 +109,27 @@ const handlePreviousStep = () => {
   router.push('/renter/select-scenario');
 };
 const handleNextStep = () => {
-  if (!nextRoute.value) {
+  const scenario = renterProgressStore.selectedScenario;
+
+  if (!scenario) {
+    alert('Escenario no definido.');
+    return;
+  }
+
+  let next = null;
+
+  if (scenario === RenterStatusEnum.RENTING_WITH_CONTRACT) {
+    next = '/renter/connect-owner';
+  } else if (scenario === RenterStatusEnum.EXPLORING_OPTIONS) {
+    next = '/renter/employment-information';
+  }
+
+  if (!next) {
     alert('Ruta de siguiente paso no definida.');
     return;
   }
-  // TODO: necesito obtener de pinia que escenario selecciono,
-  //  si selecciono 'ya esta arrendando' entonces deberiamos pasar directo al step de conexion con el propietario 'renter/connect-owner'
-  //  si selecciono 'estoy buscando' entonces deberiamos pasar al step de informacion laboral 'renter/employment-information'
 
-  router.push(nextRoute.value);
+  router.push(next);
 };
 </script>
 

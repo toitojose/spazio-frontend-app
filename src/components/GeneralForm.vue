@@ -299,6 +299,6 @@ const submitForm = (event: FormSubmitEvent) => {
     return;
   }
 
-  emit('formUpdated', values as GeneralFormData); // puedes castear si sabes que el tipo es correcto
+  emit('formUpdated', values as GeneralFormData);
 };
 </script>

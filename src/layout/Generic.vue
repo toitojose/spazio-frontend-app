@@ -29,7 +29,7 @@
     <main
       id="main"
       class="wrapper min-h-screen bg-gray-100 lg:ml-20">
-      <router-view />
+      <router-view :key="$route.fullPath" />
     </main>
 
     <FooterSpazio />
@@ -145,9 +145,6 @@ const getSecondaryItems = (): PublicMenuItemInterface[] => {
 };
 const secondaryItems = ref<PublicMenuItemInterface[]>(getSecondaryItems());
 
-
-
-
 // Estados del diálogo de autenticación
 const authFormType = ref<'login' | 'signup'>('login');
 const showAuthDialog = ref(false);
@@ -191,7 +188,6 @@ const groupedMenuItems = computed(() => {
 
 //Estados dialog redirigir
 const isAdmin = ref(userStore.isAdmin());
-
 </script>
 
 <style scoped>

@@ -28,7 +28,7 @@ import { useRenterProgressStore } from '@/store/renterProgressStore.ts';
 
 const renterProgressStore = useRenterProgressStore();
 const route = useRoute();
-const currentStep = computed(() => renterProgressStore.getVisibleStepIndex(route.path));
+const currentStep = computed(() => renterProgressStore.getStepIndexByRoute(route.path));
 // Importación dinámica de los componentes de escenarios
 const searching = defineAsyncComponent(() => import('@/components/connectOwner/Searching.vue'));
 const renting = defineAsyncComponent(() => import('@/components/connectOwner/Renting.vue'));

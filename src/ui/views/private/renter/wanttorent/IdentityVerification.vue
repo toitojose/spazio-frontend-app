@@ -128,7 +128,7 @@ import { IdentityVerificationService } from '@/services/identity-verification-se
 import { useRoute } from 'vue-router';
 
 const route = useRoute();
-const currentStep = computed(() => renterProgressStore.getVisibleStepIndex(route.path));
+const currentStep = computed(() => renterProgressStore.getStepIndexByRoute(route.path));
 const userStore = useUserStore();
 const userId = computed(() => userStore.userId || null);
 

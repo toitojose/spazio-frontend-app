@@ -31,12 +31,12 @@ export interface GeneralFormData {
   mobile?: string;
   landline?: string;
   email?: string;
-  roleType: RolesEnum;
+  roleType?: RolesEnum;
 }
 
 export interface UserCreationResult {
   success: boolean;
-  message: string | string[];
+  message: string;
   error: { statusCode: number; key: string } | null;
   data?: {
     id: number;

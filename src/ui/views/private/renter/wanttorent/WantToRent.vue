@@ -83,7 +83,7 @@ const benefits = [
   },
 ];
 const route = useRoute();
-const currentStep = computed(() => renterProgressStore.getVisibleStepIndex(route.path));
+const currentStep = computed(() => renterProgressStore.getStepIndexByRoute(route.path));
 const isWaitingForAuth = ref(false);
 const openAuthDialog = inject<(formType: 'login') => void>('openAuthDialog') || null;
 
